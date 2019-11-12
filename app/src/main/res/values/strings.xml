@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Tablet adverts</string>
+    <string name="welcome">Welcome to Tablet Ads</string>
+    <string name="start_working_now">Start working now and get more income.</string>
+    <string name="have_nice_time">Have a nice working time.</string>
+    <string name="start_advertising">Start adverting</string>
+    <string name="start_updating">Update data</string>
+    <string name="languages">Languages</string>
+</resources>
