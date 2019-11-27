@@ -1,16 +1,16 @@
 package com.example.tabadvertsbusiness.models;
 
 public class Message {
-    private String messages;
+    private String message;
 
     public Message() {
     }
 
     public String getMessages() {
-        return messages;
+        return message;
     }
 
-    public void setMessages(String messages) {
-        this.messages = messages;
+    public void setMessages(String message) {
+        this.message = message;
     }
 }

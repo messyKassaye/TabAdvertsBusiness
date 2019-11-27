@@ -1,0 +1,114 @@
+package com.example.tabadvertsbusiness;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.tabadvertsbusiness.auth.DriverDashboard;
+import com.example.tabadvertsbusiness.http.MainHttpAdapter;
+import com.example.tabadvertsbusiness.http.interfaces.LoginService;
+import com.example.tabadvertsbusiness.models.LoginResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
+public class LoginActivity extends AppCompatActivity {
+
+    private EditText email, password;
+    private Button loginButton;
+    private TextView errorShower;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        Toolbar toolbar =(Toolbar)findViewById(R.id.my_toolbar);
+        toolbar.setTitle("Tab adverts business");
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleBackPress();
+            }
+        });
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        email = (EditText)findViewById(R.id.input_email);
+        password = (EditText)findViewById(R.id.input_password);
+        loginButton = (Button)findViewById(R.id.btn_login);
+        errorShower = (TextView)findViewById(R.id.errorShower);
+
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String emailValue = email.getText().toString();
+                String passwordValue = password.getText().toString();
+                if(emailValue==""){
+                    errorShower.setText("Please enter your email or phone number");
+                }else if(passwordValue==""){
+                    errorShower.setText("Please enter your password");
+                }else {
+
+                    login(emailValue,passwordValue);
+                }
+            }
+        });
+
+
+
+    }
+
+    public void  handleBackPress(){
+        finish();
+    }
+
+    public void login(String email,String password){
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+                R.style.Theme_AppCompat_Light_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
+        progressDialog.show();
+
+        Retrofit retrofit= MainHttpAdapter.getAuthApi();
+        LoginService loginService = retrofit.create(LoginService.class);
+
+        Call<LoginResponse> call = loginService.login(email,password);
+        call.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (response.code()==403){
+                    progressDialog.dismiss();
+                    errorShower.setText("Incorrect email or password is used.");
+                }else if (response.body().getRole().getId()!=2){
+                    progressDialog.dismiss();
+                    errorShower.setText("This application is created for car owners only. please use our web app for your purpose");
+                }else {
+                    progressDialog.dismiss();
+                    Intent intent = new Intent(getApplicationContext(), DriverDashboard.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+}

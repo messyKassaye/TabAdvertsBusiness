@@ -9,5 +9,5 @@ import retrofit2.http.GET;
 
 public interface GitHubClient {
     @GET("hello")
-    Call<ResponseBody> reposForUser();
+    Call<Message> reposForUser();
 }

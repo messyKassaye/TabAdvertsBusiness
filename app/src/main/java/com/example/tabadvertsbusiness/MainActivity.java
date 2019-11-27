@@ -1,5 +1,6 @@
 package com.example.tabadvertsbusiness;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.CountDownTimer;
@@ -9,13 +10,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tabadvertsbusiness.http.MainHttpAdapter;
 import com.example.tabadvertsbusiness.http.interfaces.GitHubClient;
+import com.example.tabadvertsbusiness.models.GitHubRepo;
 import com.example.tabadvertsbusiness.models.Message;
 
+import java.util.List;
 import java.util.Timer;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -29,13 +34,14 @@ public class MainActivity extends AppCompatActivity {
 
     private Timer timer;
     TextView welcome_and_wish;
+    Button startAdvert,startUpdating;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar =(Toolbar)findViewById(R.id.my_toolbar);
-        toolbar.setTitle("");
+        toolbar.setTitle("Tab adverts business");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
 
@@ -54,7 +60,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        startUpdating = (Button)findViewById(R.id.start_updating);
+        startUpdating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -68,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_favorite:
-                // User chose the "Settings" item, show the app settings UI...
+                // LoginResponse chose the "Settings" item, show the app settings UI...
                 return true;
 
             default:
