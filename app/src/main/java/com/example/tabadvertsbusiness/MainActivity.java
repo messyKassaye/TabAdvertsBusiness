@@ -2,33 +2,18 @@ package com.example.tabadvertsbusiness;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.tabadvertsbusiness.http.MainHttpAdapter;
-import com.example.tabadvertsbusiness.http.interfaces.GitHubClient;
-import com.example.tabadvertsbusiness.models.GitHubRepo;
-import com.example.tabadvertsbusiness.models.Message;
-
-import java.util.List;
 import java.util.Timer;
-import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 

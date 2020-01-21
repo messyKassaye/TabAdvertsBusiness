@@ -2,17 +2,19 @@ package com.example.tabadvertsbusiness;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tabadvertsbusiness.auth.DriverDashboard;
+import com.example.tabadvertsbusiness.auth.view.DriverDashboard;
+import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.http.MainHttpAdapter;
 import com.example.tabadvertsbusiness.http.interfaces.LoginService;
 import com.example.tabadvertsbusiness.models.LoginResponse;
@@ -36,12 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         toolbar.setTitle("Tab adverts business");
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleBackPress();
-            }
-        });
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -72,11 +69,12 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void  handleBackPress(){
-        finish();
+    @Override
+    public void onBackPressed() {
+        this.finish();
     }
 
-    public void login(String email,String password){
+    public void login(String email, String password){
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.Theme_AppCompat_Light_Dialog);
         progressDialog.setIndeterminate(true);
@@ -98,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                     errorShower.setText("This application is created for car owners only. please use our web app for your purpose");
                 }else {
                     progressDialog.dismiss();
+                    setToken(response.body().getToken());
                     Intent intent = new Intent(getApplicationContext(), DriverDashboard.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
@@ -109,6 +108,13 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void setToken(String token){
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences(Constants.getTokenPrefence(),0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("token",token);
+        editor.commit();
     }
 
 }
