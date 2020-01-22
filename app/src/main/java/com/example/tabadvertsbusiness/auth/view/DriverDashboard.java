@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.tabadvertsbusiness.auth.view.fragments.AdvertsFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.FileFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.FinanceFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.HomeFragment;
@@ -33,7 +34,8 @@ import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 public class DriverDashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         HomeFragment.OnFragmentInteractionListener,FinanceFragment.OnFragmentInteractionListener,
-        FileFragment.OnFragmentInteractionListener,SettingFragment.OnFragmentInteractionListener{
+        FileFragment.OnFragmentInteractionListener,SettingFragment.OnFragmentInteractionListener,
+        AdvertsFragment.OnFragmentInteractionListener {
     private static final String TAG = DriverDashboard.class.getSimpleName();
     private MeViewModel viewModel;
     private TextView fullName,email;
@@ -123,6 +125,9 @@ public class DriverDashboard extends AppCompatActivity
         Fragment fragment = null;
         if (id == R.id.nav_home) {
             // Handle the camera action
+            fragment = new HomeFragment();
+        } else if(id==R.id.nav_adverts){
+            fragment = new AdvertsFragment();
         } else if (id == R.id.nav_finance) {
 
             fragment = new FinanceFragment();
