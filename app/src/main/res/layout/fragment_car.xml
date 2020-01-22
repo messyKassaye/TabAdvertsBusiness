@@ -32,8 +32,6 @@
                 <!-- Top item -->
                 <RelativeLayout
                     android:id="@+id/top_menu"
-                    android:paddingBottom="20dp"
-
                     android:layout_alignParentTop="true"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -60,6 +58,7 @@
 
                 <!--Card view body content -->
                 <androidx.recyclerview.widget.RecyclerView
+                    android:layout_below="@+id/top_menu"
                     android:id="@+id/cars_recyclerView"
                     android:scrollbars="horizontal"
                     android:layout_width="match_parent"

@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.tabadvertsbusiness.R;
+import com.example.tabadvertsbusiness.auth.helpers.ImageHelper;
 import com.example.tabadvertsbusiness.auth.model.Car;
 
 import java.util.ArrayList;
@@ -35,6 +35,7 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull CarsAdapter.ViewHolder viewHolder, int i) {
         Car car=articleArrayList.get(i);
+        viewHolder.carImage.setImageBitmap(ImageHelper.convertBase64ToImage(car.getCar_category().get(0).getImage()));
         viewHolder.plate_number.setText(car.getPlate_number());
         /*viewHolder.tvAuthorAndPublishedAt.setText("-"+article.getAuthor() +" | "+"Piblishetd At: "+article.getPublishedAt());
         viewHolder.tvDescription.setText(article.getDescription());
@@ -50,11 +51,15 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView plate_number;
+        private final ImageView carImage;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             plate_number=(TextView) itemView.findViewById(R.id.plate_number);
+            carImage = (ImageView)itemView.findViewById(R.id.taxi_image);
+
         }
     }
 }
