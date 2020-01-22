@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.tabadvertsbusiness.auth.view.fragments.AdvertsFragment;
+import com.example.tabadvertsbusiness.auth.view.fragments.CarFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.FileFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.FinanceFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.HomeFragment;
@@ -35,7 +36,7 @@ public class DriverDashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         HomeFragment.OnFragmentInteractionListener,FinanceFragment.OnFragmentInteractionListener,
         FileFragment.OnFragmentInteractionListener,SettingFragment.OnFragmentInteractionListener,
-        AdvertsFragment.OnFragmentInteractionListener {
+        AdvertsFragment.OnFragmentInteractionListener, CarFragment.OnFragmentInteractionListener {
     private static final String TAG = DriverDashboard.class.getSimpleName();
     private MeViewModel viewModel;
     private TextView fullName,email;

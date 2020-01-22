@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".auth.view.fragments.CarFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--Notification snack banner if this tablet is not assigned for any car -->
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/car_coordinator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+        <!--Cars recycler view layout -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- Top item -->
+                <RelativeLayout
+                    android:id="@+id/top_menu"
+                    android:paddingBottom="20dp"
+
+                    android:layout_alignParentTop="true"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="@string/my_cars"
+                        android:textAllCaps="true"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="@string/view_all"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:id="@+id/view_all_cars"
+                        android:layout_marginRight="10dp"
+                        android:textAllCaps="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </RelativeLayout>
+
+                <!--Card view body content -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/cars_recyclerView"
+                    android:scrollbars="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</FrameLayout>

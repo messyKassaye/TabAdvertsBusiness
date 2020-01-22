@@ -14,12 +14,17 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
+    <string name="menu_home">Dashboard</string>
     <string name="my_adverts">My Adverts</string>
     <string name="finances">Finance</string>
     <string name="files">Files</string>
     <string name="setting">Setting</string>
     <string name="logout">Logout</string>
+
+    <string name="my_cars">My cars</string>
+    <string name="view_all">View all</string>
+
+
 
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
