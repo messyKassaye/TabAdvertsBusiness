@@ -27,21 +27,18 @@ import com.example.tabadvertsbusiness.auth.view_model.TabletViewModel;
 
 import java.util.ArrayList;
 
-import static com.example.tabadvertsbusiness.auth.utils.Status.ERROR;
-import static com.example.tabadvertsbusiness.auth.utils.Status.LOADING;
-import static com.example.tabadvertsbusiness.auth.utils.Status.SUCCESS;
 
 public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
 
     private Context context;
-    ArrayList<Car> articleArrayList;
+    ArrayList<Car> carsArraylist;
     private TabletRepository tabletRepository;
     private ProgressDialog progressDialog;
     private TabletViewModel viewModel;
 
     public CarsAdapter(Context context, ArrayList<Car> articleArrayList) {
         this.context = context;
-        this.articleArrayList = articleArrayList;
+        this.carsArraylist = articleArrayList;
         this.tabletRepository = new TabletRepository();
         progressDialog = LoadingDialog.loadingDialog(context,"Assigning....");
 
@@ -60,7 +57,7 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CarsAdapter.ViewHolder viewHolder, int i) {
-        Car car=articleArrayList.get(i);
+        Car car=carsArraylist.get(i);
         Tablet tablet = new Tablet();
 
         String serial_number = Build.SERIAL;
@@ -91,7 +88,7 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return articleArrayList.size();
+        return carsArraylist.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

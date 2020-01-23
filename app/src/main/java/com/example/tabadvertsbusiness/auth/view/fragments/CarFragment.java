@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.adapter.CarsAdapter;
+import com.example.tabadvertsbusiness.auth.adapter.ShimmerRecyclerViewAdapter;
 import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 import com.google.android.material.snackbar.Snackbar;
@@ -54,15 +55,15 @@ public class CarFragment extends Fragment {
     private View snackBarLayout;
     private Snackbar snackbar;
 
-    private LinearLayoutManager layoutManager;
     private RecyclerView recyclerView;
     private ArrayList<Car> arrayList = new ArrayList<>();
     private CarsAdapter adapter;
 
     //shimmer pre-loading
-    public LinearLayout skeletonLayout;
-    public ShimmerLayout shimmer;
-    public LayoutInflater inflater;
+    private RecyclerView skeletonLayout;
+    private ShimmerLayout shimmer;
+    private ShimmerRecyclerViewAdapter shimmerRecyclerViewAdapter;
+    private ArrayList<Car> shimmerList = new ArrayList<>();
 
 
     public CarFragment() {
@@ -100,15 +101,15 @@ public class CarFragment extends Fragment {
         //pre loading for shimmer
         shimmer = getView().findViewById(R.id.shimmerSkeleton);
         skeletonLayout = getView().findViewById(R.id.skeletonLayout);
-        inflater = (LayoutInflater) getActivity()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        skeletonLayout.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        skeletonLayout.setItemAnimator(new DefaultItemAnimator());
+        shimmerRecyclerViewAdapter = new ShimmerRecyclerViewAdapter(getActivity(),shimmerList);
         this.showSkeleton(true);
 
 
 
 
         //cars recycler view
-        layoutManager = new LinearLayoutManager(getActivity());
         recyclerView = (RecyclerView)getView().findViewById(R.id.cars_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -118,14 +119,14 @@ public class CarFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(getActivity()).get(MeViewModel.class);
-        /*viewModel.me().observe(getActivity(),meResponse -> {
+        viewModel.me().observe(getActivity(),meResponse -> {
             if(meResponse!=null){
                 this.showSkeleton(false);
                 List<Car> list = meResponse.getData().getRelations().getCars();
                 arrayList.addAll(list);
                 adapter.notifyDataSetChanged();
             }
-        });*/
+        });
     }
 
     @Override
@@ -202,20 +203,10 @@ public class CarFragment extends Fragment {
 
         if (show) {
 
-            skeletonLayout.removeAllViews();
-
-            int skeletonRows = getSkeletonRowCount(getContext());
-            for (int i = 0; i <= skeletonRows; i++) {
-                ViewGroup rowLayout = (ViewGroup) inflater
-                        .inflate(R.layout.skeleton_row_layout, null);
-                skeletonLayout.addView(rowLayout);
-            }
+            skeletonLayout.setAdapter(shimmerRecyclerViewAdapter);
+            shimmerRecyclerViewAdapter.notifyDataSetChanged();
             shimmer.setVisibility(View.VISIBLE);
-            shimmer.startShimmerAnimation();
-            skeletonLayout.setVisibility(View.VISIBLE);
-            skeletonLayout.bringToFront();
         } else {
-            shimmer.stopShimmerAnimation();
             shimmer.setVisibility(View.GONE);
         }
     }

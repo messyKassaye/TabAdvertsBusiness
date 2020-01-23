@@ -11,10 +11,10 @@
     app:shimmer_color="@android:color/darker_gray"
     app:shimmer_mask_width="0.2">
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/skeletonLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"/>
+        android:scrollbars="horizontal"/>
 
 </io.supercharge.shimmerlayout.ShimmerLayout>
