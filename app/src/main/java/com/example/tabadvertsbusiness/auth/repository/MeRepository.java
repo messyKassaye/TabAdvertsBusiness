@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tabadvertsbusiness.auth.response.MeResponse;
-import com.example.tabadvertsbusiness.auth.retrofit.MeInterface;
+import com.example.tabadvertsbusiness.auth.retrofit.interfaces.MeInterface;
 import com.example.tabadvertsbusiness.auth.retrofit.RetrofitRequest;
 
 import retrofit2.Call;

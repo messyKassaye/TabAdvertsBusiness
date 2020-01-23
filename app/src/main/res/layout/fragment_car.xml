@@ -57,6 +57,7 @@
                 </RelativeLayout>
 
                 <!--Card view body content -->
+                <include layout="@layout/shimmer_layout"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_below="@+id/top_menu"
                     android:id="@+id/cars_recyclerView"

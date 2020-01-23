@@ -1,11 +1,21 @@
 package com.example.tabadvertsbusiness.models;
 
-public class LoginResponse {
-    private String token;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
+public class LoginResponse {
+
+
+    @SerializedName("status")
     private boolean status;
 
+    @SerializedName("role")
+    @Expose
     private Role role;
+
+    @SerializedName("token")
+    @Expose
+    private String token;
 
     public String getToken() {
         return token;

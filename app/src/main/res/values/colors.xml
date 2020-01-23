@@ -6,4 +6,5 @@
     <color name="textColor">#ffffff</color>
     <color name="errorColor">#FF9494</color>
     <color name="white_color">#FFFFFF</color>
+    <color name="sub_title_color">#d3d3d3</color>
 </resources>

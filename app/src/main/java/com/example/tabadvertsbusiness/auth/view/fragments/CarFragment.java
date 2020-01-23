@@ -1,6 +1,7 @@
 package com.example.tabadvertsbusiness.auth.view.fragments;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,19 +14,22 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.example.tabadvertsbusiness.R;
-import com.example.tabadvertsbusiness.auth.CarsAdapter;
+import com.example.tabadvertsbusiness.auth.adapter.CarsAdapter;
 import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.supercharge.shimmerlayout.ShimmerLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +58,12 @@ public class CarFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<Car> arrayList = new ArrayList<>();
     private CarsAdapter adapter;
+
+    //shimmer pre-loading
+    public LinearLayout skeletonLayout;
+    public ShimmerLayout shimmer;
+    public LayoutInflater inflater;
+
 
     public CarFragment() {
         // Required empty public constructor
@@ -87,6 +97,13 @@ public class CarFragment extends Fragment {
         (snackbar.getView()).getLayoutParams().width =ViewGroup.LayoutParams.MATCH_PARENT;
         snackbar.show();
 
+        //pre loading for shimmer
+        shimmer = getView().findViewById(R.id.shimmerSkeleton);
+        skeletonLayout = getView().findViewById(R.id.skeletonLayout);
+        inflater = (LayoutInflater) getActivity()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.showSkeleton(true);
+
 
 
 
@@ -101,14 +118,14 @@ public class CarFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(getActivity()).get(MeViewModel.class);
-        viewModel.me().observe(getActivity(),meResponse -> {
+        /*viewModel.me().observe(getActivity(),meResponse -> {
             if(meResponse!=null){
+                this.showSkeleton(false);
                 List<Car> list = meResponse.getData().getRelations().getCars();
-                System.out.println("cars: "+list.size());
                 arrayList.addAll(list);
                 adapter.notifyDataSetChanged();
             }
-        });
+        });*/
     }
 
     @Override
@@ -165,5 +182,41 @@ public class CarFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+    public int getSkeletonRowCount(Context context) {
+        int pxHeight = getDeviceHeight(context);
+        int skeletonRowHeight = (int) getResources()
+                .getDimension(R.dimen.row_layout_height); //converts to pixel
+        return (int) Math.ceil(pxHeight / skeletonRowHeight);
+    }
+    public int getDeviceHeight(Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return metrics.heightPixels;
+    }
+
+
+    public void showSkeleton(boolean show) {
+
+        if (show) {
+
+            skeletonLayout.removeAllViews();
+
+            int skeletonRows = getSkeletonRowCount(getContext());
+            for (int i = 0; i <= skeletonRows; i++) {
+                ViewGroup rowLayout = (ViewGroup) inflater
+                        .inflate(R.layout.skeleton_row_layout, null);
+                skeletonLayout.addView(rowLayout);
+            }
+            shimmer.setVisibility(View.VISIBLE);
+            shimmer.startShimmerAnimation();
+            skeletonLayout.setVisibility(View.VISIBLE);
+            skeletonLayout.bringToFront();
+        } else {
+            shimmer.stopShimmerAnimation();
+            shimmer.setVisibility(View.GONE);
+        }
     }
 }

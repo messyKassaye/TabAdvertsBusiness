@@ -19,6 +19,11 @@ import com.example.tabadvertsbusiness.http.MainHttpAdapter;
 import com.example.tabadvertsbusiness.http.interfaces.LoginService;
 import com.example.tabadvertsbusiness.models.LoginResponse;
 
+import org.json.JSONObject;
+
+import java.net.SocketTimeoutException;
+import java.util.concurrent.TimeoutException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,30 +89,42 @@ public class LoginActivity extends AppCompatActivity {
         Retrofit retrofit= MainHttpAdapter.getAuthApi();
         LoginService loginService = retrofit.create(LoginService.class);
 
-        Call<LoginResponse> call = loginService.login(email,password);
-        call.enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if (response.code()==403){
-                    progressDialog.dismiss();
-                    errorShower.setText("Incorrect email or password is used.");
-                }else if (response.body().getRole().getId()!=2){
-                    progressDialog.dismiss();
-                    errorShower.setText("This application is created for car owners only. please use our web app for your purpose");
-                }else {
-                    progressDialog.dismiss();
-                    setToken(response.body().getToken());
-                    Intent intent = new Intent(getApplicationContext(), DriverDashboard.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }
-            }
+       Call<LoginResponse> call = loginService.login(email,password);
+            call.enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    if (response.code()==403){
+                        progressDialog.dismiss();
+                        errorShower.setText("Incorrect email or password is used.");
+                    }else if(response.code()==200){
+                        if(response.body().getRole().getId()!=2){
+                            progressDialog.dismiss();
+                            errorShower.setText("This application is created for car owners only. please use our web app for your purpose");
+                        }else {
+                            progressDialog.dismiss();
+                            setToken(response.body().getToken());
+                            Intent intent = new Intent(getApplicationContext(), DriverDashboard.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
 
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG).show();
-            }
-        });
+                    }else {
+                        progressDialog.dismiss();
+                        errorShower.setText("Something is not Good. This is not your mistake please get support from http://tabadvet.com/support");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    if(t instanceof SocketTimeoutException){
+                        progressDialog.dismiss();
+                        errorShower.setText("It takes much time. Please check your connection");
+                    }
+                }
+            });
+
+
+
     }
 
     public void setToken(String token){

@@ -6,6 +6,8 @@ public class Car {
     private int id;
     private String plate_number;
     private List<CarCategory> car_category;
+    private List<Advert> adverts;
+    private List<Place> working_place;
 
     public int getId() {
         return id;
@@ -29,5 +31,21 @@ public class Car {
 
     public void setCar_category(List<CarCategory> car_category) {
         this.car_category = car_category;
+    }
+
+    public List<Advert> getAdverts() {
+        return adverts;
+    }
+
+    public void setAdverts(List<Advert> adverts) {
+        this.adverts = adverts;
+    }
+
+    public List<Place> getWorking_place() {
+        return working_place;
+    }
+
+    public void setWorking_place(List<Place> working_place) {
+        this.working_place = working_place;
     }
 }

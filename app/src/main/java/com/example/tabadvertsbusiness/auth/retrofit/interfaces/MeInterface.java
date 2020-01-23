@@ -1,4 +1,4 @@
-package com.example.tabadvertsbusiness.auth.retrofit;
+package com.example.tabadvertsbusiness.auth.retrofit.interfaces;
 
 import com.example.tabadvertsbusiness.auth.response.MeResponse;
 
