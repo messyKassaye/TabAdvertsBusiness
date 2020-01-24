@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity android:name=".auth.view.activities.AddNewCarActivity"></activity>
         <activity
             android:name=".auth.view.DriverDashboard"
             android:label="@string/title_activity_driver_dashboard"

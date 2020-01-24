@@ -27,6 +27,12 @@
     <string name="assign_this_car">Assign this car to this Tablet</string>
     <string name="assign">Assign</string>
 
+    <string name="car_is_not_registered">There is no registered car found by your name. Add your car now</string>
+    <string name="add_new_car">Add new car</string>
+    <string name="car_category">Select your car category</string>
+    <string name="register_car">Register car</string>
+    <string name="plate_number">Enter plate number</string>
+    <string name="car_registration_info">Register your taxi or your public transport car now and get more income</string>
 
 
     <string name="menu_gallery">Gallery</string>

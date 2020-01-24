@@ -1,6 +1,7 @@
 package com.example.tabadvertsbusiness.auth.view.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
@@ -18,12 +19,15 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.adapter.CarsAdapter;
 import com.example.tabadvertsbusiness.auth.adapter.ShimmerRecyclerViewAdapter;
 import com.example.tabadvertsbusiness.auth.model.Car;
+import com.example.tabadvertsbusiness.auth.view.activities.AddNewCarActivity;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -65,6 +69,10 @@ public class CarFragment extends Fragment {
     private ShimmerRecyclerViewAdapter shimmerRecyclerViewAdapter;
     private ArrayList<Car> shimmerList = new ArrayList<>();
 
+    //
+    public FrameLayout frameLayout;
+    public LayoutInflater inflater;
+
 
     public CarFragment() {
         // Required empty public constructor
@@ -96,7 +104,6 @@ public class CarFragment extends Fragment {
         snackBarLayout = getView().findViewById(R.id.car_coordinator);
         snackbar = Snackbar.make(snackBarLayout,"Assign this tablet to one of the following your car.",Snackbar.LENGTH_INDEFINITE);
         (snackbar.getView()).getLayoutParams().width =ViewGroup.LayoutParams.MATCH_PARENT;
-        snackbar.show();
 
         //pre loading for shimmer
         shimmer = getView().findViewById(R.id.shimmerSkeleton);
@@ -123,8 +130,14 @@ public class CarFragment extends Fragment {
             if(meResponse!=null){
                 this.showSkeleton(false);
                 List<Car> list = meResponse.getData().getRelations().getCars();
-                arrayList.addAll(list);
-                adapter.notifyDataSetChanged();
+                if(list.size()>0){
+                    arrayList.addAll(list);
+                    adapter.notifyDataSetChanged();
+                    snackbar.show();
+                }else {
+                    this.addNewCar();
+                }
+
             }
         });
     }
@@ -209,5 +222,26 @@ public class CarFragment extends Fragment {
         } else {
             shimmer.setVisibility(View.GONE);
         }
+    }
+
+    public void addNewCar(){
+
+        frameLayout = getView().findViewById(R.id.cars_container);
+        this.inflater = (LayoutInflater) getActivity()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        frameLayout.removeAllViews();
+
+        ViewGroup noCarFound = (ViewGroup) inflater.inflate(R.layout.no_car_found, null);
+        Button registerButton = (Button)noCarFound.findViewById(R.id.add_new_car);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddNewCarActivity.class);
+                getActivity().startActivity(intent);
+
+            }
+        });
+        frameLayout.addView(noCarFound);
+
     }
 }

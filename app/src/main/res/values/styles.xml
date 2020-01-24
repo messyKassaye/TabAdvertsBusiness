@@ -12,6 +12,10 @@
         <item name="android:textColorHint">@android:color/white</item>
     </style>
 
+    <style name="EditTextHintNormal" parent="TextAppearance.AppCompat">
+        <item name="android:textColorHint">#242424</item>
+    </style>
+
     <style name="NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

@@ -26,6 +26,7 @@
             android:layout_height="wrap_content">
 
             <RelativeLayout
+                android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -58,14 +59,19 @@
 
                 <!--Card view body content -->
                 <include layout="@layout/shimmer_layout"/>
-                <androidx.recyclerview.widget.RecyclerView
+                <FrameLayout
+                    android:id="@+id/cars_container"
                     android:layout_below="@+id/top_menu"
-                    android:id="@+id/cars_recyclerView"
-                    android:scrollbars="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/cars_recyclerView"
+                        android:scrollbars="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                </androidx.recyclerview.widget.RecyclerView>
+                    </androidx.recyclerview.widget.RecyclerView>
+                </FrameLayout>
 
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
