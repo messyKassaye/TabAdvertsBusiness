@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tabadvertsbusiness.auth.view.DownloaderDashboard;
 import com.example.tabadvertsbusiness.auth.view.DriverDashboard;
 import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.http.MainHttpAdapter;
@@ -98,15 +99,23 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         errorShower.setText("Incorrect email or password is used.");
                     }else if(response.code()==200){
-                        if(response.body().getRole().getId()!=2){
+                        if(response.body().getRole().getId()!=2&&response.body().getRole().getId()!=4){
                             progressDialog.dismiss();
                             errorShower.setText("This application is created for car owners only. please use our web app for your purpose");
                         }else {
-                            progressDialog.dismiss();
-                            setToken(response.body().getToken());
-                            Intent intent = new Intent(getApplicationContext(), DriverDashboard.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+                            if(response.body().getRole().getId()==2){
+                                progressDialog.dismiss();
+                                setToken(response.body().getToken());
+                                Intent intent = new Intent(getApplicationContext(), DriverDashboard.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }else if (response.body().getRole().getId()==4){
+                                progressDialog.dismiss();
+                                setToken(response.body().getToken());
+                                Intent intent = new Intent(getApplicationContext(), DownloaderDashboard.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
                         }
 
                     }else {
