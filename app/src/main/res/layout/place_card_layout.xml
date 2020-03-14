@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="1dp"
+    app:cardBackgroundColor="@color/colorPrimaryDark"
+    app:contentPadding="10dp"
+    android:layout_margin="10dp"
+    android:layout_width="150dp"
+    android:layout_height="50dp">
+
+    <TextView
+        android:id="@+id/city_name"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+</androidx.cardview.widget.CardView>

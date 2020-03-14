@@ -61,9 +61,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String emailValue = email.getText().toString();
                 String passwordValue = password.getText().toString();
-                if(emailValue==""){
+                if(emailValue.equals("")){
                     errorShower.setText("Please enter your email or phone number");
-                }else if(passwordValue==""){
+                }else if(passwordValue.equals("")){
                     errorShower.setText("Please enter your password");
                 }else {
 

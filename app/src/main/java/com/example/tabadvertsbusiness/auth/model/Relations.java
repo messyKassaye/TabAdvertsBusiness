@@ -7,7 +7,7 @@ import java.util.List;
 public class Relations {
     private List<Role> role;
     private List<Car> cars;
-
+    private List<Place> place;
     public List<Role> getRole() {
         return role;
     }
@@ -22,5 +22,14 @@ public class Relations {
 
     public void setCars(List<Car> cars) {
         this.cars = cars;
+    }
+
+
+    public List<Place> getPlace() {
+        return place;
+    }
+
+    public void setPlace(List<Place> place) {
+        this.place = place;
     }
 }

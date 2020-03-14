@@ -35,6 +35,8 @@
     <string name="car_registration_info">Register your taxi or your public transport car now and get more income</string>
 
 
+    <string name="add_email">Please add your email address</string>
+    <string name="add_password">Please add your password</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
@@ -45,6 +47,9 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <string name="information">Note.This is application is prepared for tab advert business like advertising videos and downloading files only.</string>
+    <string name="set_place_now">Set my address</string>
+    <string name="select_your_city">Select your city</string>
     <string name="edit_profile">Edit</string>
 
     <!-- TODO: Remove or change this placeholder text -->
