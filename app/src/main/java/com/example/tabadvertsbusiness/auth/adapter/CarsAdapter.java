@@ -80,7 +80,6 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                viewModel.store(tablet);
-
             }
         });
 

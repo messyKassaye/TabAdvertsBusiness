@@ -44,13 +44,31 @@
     <LinearLayout
         android:layout_below="@+id/downloader_toolbar"
         android:id="@+id/mainLayout"
+        android:padding="10dp"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <GridLayout
-            android:id="@+id/gridLayout"
+            android:id="@+id/downloaderGridLayout"
+            android:orientation="vertical"
+            android:useDefaultMargins="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <fragment
+                android:id="@+id/new_download"
+                android:name="com.example.tabadvertsbusiness.auth.view.downloaderView.NewDownloadFragment"
+                android:layout_height="wrap_content"
+                android:layout_width="500dp"
+                />
+
+            <fragment
+                android:id="@+id/download_size"
+                android:name="com.example.tabadvertsbusiness.auth.view.downloaderView.TotalDownloadSizeFragment"
+                android:layout_height="wrap_content"
+                android:layout_width="500dp"
+                />
+        </GridLayout>
     </LinearLayout>
 
 </RelativeLayout>

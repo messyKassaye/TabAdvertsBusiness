@@ -50,7 +50,12 @@
     <string name="information">Note.This is application is prepared for tab advert business like advertising videos and downloading files only.</string>
     <string name="set_place_now">Set my address</string>
     <string name="select_your_city">Select your city</string>
+    <string name="register_my_place">Register my place</string>
+    <string name="place_error">Please select your current resident city</string>
+    <string name="selected">Selected</string>
     <string name="edit_profile">Edit</string>
+
+    <string name="new_download">New download</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

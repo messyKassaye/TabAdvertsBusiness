@@ -8,16 +8,22 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.commons.MainDialog;
+import com.example.tabadvertsbusiness.auth.view.downloaderView.NewDownloadFragment;
+import com.example.tabadvertsbusiness.auth.view.downloaderView.TotalDownloadSizeFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.AddressFragment;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 import com.google.android.material.button.MaterialButton;
 
-public class DownloaderDashboard extends AppCompatActivity implements AddressFragment.OnFragmentInteractionListener {
+public class DownloaderDashboard extends AppCompatActivity implements
+        AddressFragment.OnFragmentInteractionListener ,
+        NewDownloadFragment.OnFragmentInteractionListener,
+        TotalDownloadSizeFragment.OnFragmentInteractionListener {
     MeViewModel viewModel;
     Toolbar toolbar,dialogToolbar;
     LinearLayout mainLayout,workingPlaceLayout;
@@ -25,6 +31,8 @@ public class DownloaderDashboard extends AppCompatActivity implements AddressFra
     TextView setPlaceInfo;
     MaterialButton setMyPlaceBtn;
     MainDialog dialog;
+
+    GridLayout gridLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +49,16 @@ public class DownloaderDashboard extends AppCompatActivity implements AddressFra
 
 
         setPlaceInfo = findViewById(R.id.set_place_info);
+
+
+        gridLayout = findViewById(R.id.downloaderGridLayout);
+        gridLayout.setColumnCount(getColumnCount());
+        if(getColumnCount()>=12){
+            gridLayout.setOrientation(GridLayout.HORIZONTAL);
+        }else {
+            gridLayout.setOrientation(GridLayout.VERTICAL);
+        }
+        System.out.println("layout: "+getColumnCount());
 
         //view model initialization
         this.init();
@@ -93,7 +111,12 @@ public class DownloaderDashboard extends AppCompatActivity implements AddressFra
 
     public void setPlace(){
        dialog.display(getSupportFragmentManager(),"Set your address",R.layout.set_address_dialog_layout);
+    }
 
+    public void closeDialog(){
+         this.dialog.dismiss();
+         workingPlaceLayout.setVisibility(View.GONE);
+         mainLayout.setVisibility(View.VISIBLE);
     }
 
     @Override

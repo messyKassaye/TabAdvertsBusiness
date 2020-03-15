@@ -1,6 +1,7 @@
 package com.example.tabadvertsbusiness.auth.commons;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.tabadvertsbusiness.R;
+import com.example.tabadvertsbusiness.auth.view.DownloaderDashboard;
 import com.example.tabadvertsbusiness.auth.view.fragments.AddressFragment;
 
 public class MainDialog extends DialogFragment {
@@ -22,6 +24,10 @@ public class MainDialog extends DialogFragment {
     private String title;
     private int id;
     private View view;
+
+    public MainDialog newInstance(){
+        return this;
+    }
     public void display(FragmentManager fragmentManager,String title,int id) {
         this.title = title;
         this.id = id;
@@ -71,5 +77,9 @@ public class MainDialog extends DialogFragment {
                 .findFragmentById(R.id.address_fragment);
         if (f != null)
             getFragmentManager().beginTransaction().remove(f).commit();
+    }
+
+    public void closeDialog(){
+        this.dismissAllowingStateLoss();
     }
 }
