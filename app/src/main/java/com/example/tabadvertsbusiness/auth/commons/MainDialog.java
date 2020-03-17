@@ -13,7 +13,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.tabadvertsbusiness.R;
-import com.example.tabadvertsbusiness.auth.view.DownloaderDashboard;
 import com.example.tabadvertsbusiness.auth.view.fragments.AddressFragment;
 
 public class MainDialog extends DialogFragment {

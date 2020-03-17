@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/colorPrimary"
-    android:layout_width="match_parent"
+    android:layout_width="280dp"
     android:layout_height="wrap_content"
     app:contentPadding="10dp"
     tools:context=".auth.view.downloaderView.NewDownloadFragment">
@@ -14,19 +14,43 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:text="@string/new_download"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <include layout="@layout/horiz_divider"/>
+
         <LinearLayout
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <TextView
-                android:text="@string/new_download"
+                android:id="@+id/download_more_data"
+                android:gravity="center"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
+                android:text="@string/download_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-        </LinearLayout>
 
-        <include layout="@layout/horiz_divider"/>
+
+            <Button
+                android:id="@+id/downloadNow"
+                android:textColor="@android:color/white"
+                android:background="@drawable/button_shape"
+                android:text="Download now"
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </Button>
+        </LinearLayout>
 
     </LinearLayout>
 

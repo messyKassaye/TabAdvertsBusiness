@@ -118,7 +118,7 @@ public class CarFragment extends Fragment {
 
         //cars recycler view
         recyclerView = (RecyclerView)getView().findViewById(R.id.cars_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         //recycler view adapter

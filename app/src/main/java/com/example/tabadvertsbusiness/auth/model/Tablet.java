@@ -1,10 +1,12 @@
 package com.example.tabadvertsbusiness.auth.model;
 
+import java.util.List;
+
 public class Tablet {
     private int id;
     private String serial_number;
+    private Car cars;
     private int car_id;
-
     public int getId() {
         return id;
     }
@@ -19,6 +21,14 @@ public class Tablet {
 
     public void setSerial_number(String serial_number) {
         this.serial_number = serial_number;
+    }
+
+    public Car getCars() {
+        return cars;
+    }
+
+    public void setCars(Car cars) {
+        this.cars = cars;
     }
 
     public int getCar_id() {

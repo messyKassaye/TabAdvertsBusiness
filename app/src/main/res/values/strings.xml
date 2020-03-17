@@ -18,6 +18,7 @@
     <string name="my_adverts">My Adverts</string>
     <string name="finances">Finance</string>
     <string name="files">Files</string>
+    <string name="about_tablet">About this tablet</string>
     <string name="setting">Setting</string>
     <string name="logout">Logout</string>
 
@@ -56,6 +57,18 @@
     <string name="edit_profile">Edit</string>
 
     <string name="new_download">New download</string>
+    <string name="download_more">
+        Download your file now and start selling
+    </string>
+    <string name="total_download_size">Total download file size</string>
+    <string name="file_size">0 MB</string>
+    <string name="your_download">Your total download size</string>
+    <string name="download_history">Your download history</string>
+
+    <string name="assigned_text">This tablet is assigned to below car.</string>
+    <string name="workinPlaceInfo">
+        This tablet is assigned to the above car but, the car working place is not set yet. Please set car working place by clicking set place
+    </string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

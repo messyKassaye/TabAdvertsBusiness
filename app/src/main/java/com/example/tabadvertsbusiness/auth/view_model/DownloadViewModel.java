@@ -7,27 +7,24 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tabadvertsbusiness.auth.model.Tablet;
+import com.example.tabadvertsbusiness.auth.repository.DownloadRespository;
 import com.example.tabadvertsbusiness.auth.repository.TabletRepository;
-import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
-import com.example.tabadvertsbusiness.auth.response.TabletResponse;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
-import com.example.tabadvertsbusiness.auth.utils.Status;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
 
-public class TabletViewModel extends AndroidViewModel {
-    private TabletRepository tabletRepository;
+public class DownloadViewModel extends AndroidViewModel {
+
+    private DownloadRespository downloadRespository;
     private final CompositeDisposable disposables = new CompositeDisposable();
     private final MutableLiveData<ApiResponse> responseLiveData = new MutableLiveData<>();
-    public TabletViewModel(@NonNull Application application) {
+    public DownloadViewModel(@NonNull Application application) {
         super(application);
 
-        tabletRepository = new TabletRepository();
-
+        downloadRespository = new DownloadRespository();
     }
 
     public MutableLiveData<ApiResponse> storeResponse() {
@@ -37,9 +34,9 @@ public class TabletViewModel extends AndroidViewModel {
     /*
      * method to call normal login api with $(mobileNumber + password)
      * */
-    public void store(Tablet tablet) {
+    public void store() {
 
-        Observable.just(tabletRepository.store(tablet)
+        Observable.just(downloadRespository.store()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe((d) -> responseLiveData.setValue(ApiResponse.loading()))
@@ -48,10 +45,6 @@ public class TabletViewModel extends AndroidViewModel {
                         throwable -> responseLiveData.setValue(ApiResponse.error(throwable))
                 ));
 
-    }
-
-    public Call<TabletResponse> show(String id){
-        return tabletRepository.show(id);
     }
 
     @Override

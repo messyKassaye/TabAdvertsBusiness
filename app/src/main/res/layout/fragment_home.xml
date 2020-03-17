@@ -13,18 +13,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
-        <!--Car fragment -->
-        <FrameLayout
-            android:id="@+id/car_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
-        <!--Advert fragment -->
-        <FrameLayout
-            android:id="@+id/advert_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+        <TextView
+            android:id="@+id/home_text"
+            android:text="Home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </ScrollView>

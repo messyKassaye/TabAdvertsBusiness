@@ -14,15 +14,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.tabadvertsbusiness.R;
+import com.example.tabadvertsbusiness.auth.commons.Helpers;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
 import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.model.Tablet;
 import com.example.tabadvertsbusiness.auth.repository.TabletRepository;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
+import com.example.tabadvertsbusiness.auth.view.DriverDashboard;
+import com.example.tabadvertsbusiness.auth.view.fragments.AbouThisTabletFragment;
 import com.example.tabadvertsbusiness.auth.view_model.TabletViewModel;
 
 import java.util.ArrayList;
@@ -36,6 +40,7 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
     private ProgressDialog progressDialog;
     private TabletViewModel viewModel;
 
+    private CardView cardView;
     public CarsAdapter(Context context, ArrayList<Car> articleArrayList) {
         this.context = context;
         this.carsArraylist = articleArrayList;
@@ -63,6 +68,9 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
         String serial_number = Build.SERIAL;
         tablet.setSerial_number(serial_number);
         tablet.setCar_id(car.getId());
+        viewHolder.cardView.setLayoutParams(
+                new RecyclerView.LayoutParams(Helpers.deviceWidth((AppCompatActivity) context),
+                        RecyclerView.LayoutParams.WRAP_CONTENT));
         viewHolder.carImage.setText(String.valueOf(car.getCar_category().get(0).getName().charAt(0)));
         viewHolder.plate_number.setText("Plate number: "+car.getPlate_number());
         viewHolder.carType.setText(car.getCar_category().get(0).getName());
@@ -75,11 +83,16 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
 
         }
 
+        if(car.getWorking_tablet().size()>0){
+            viewHolder.assignButton.setVisibility(View.GONE);
+            viewHolder.assigned_text.setText("I'm assigned to : "+car.getWorking_tablet()
+                    .get(0).getSerial_number()+" tablet");
+        }
 
         viewHolder.assignButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               viewModel.store(tablet);
+                viewModel.store(tablet);
             }
         });
 
@@ -99,12 +112,14 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
         private final Button setWorkingPlace;
         private final Button assignButton;
         private final TextView assigned_text;
+        private final CardView cardView;
 
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            cardView = (CardView)itemView.findViewById(R.id.cars_card);
             plate_number=(TextView) itemView.findViewById(R.id.plate_number);
             carImage = (TextView)itemView.findViewById(R.id.taxi_image);
             carType = (TextView)itemView.findViewById(R.id.car_type);
@@ -136,7 +151,7 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
 
             case ERROR:
                 progressDialog.dismiss();
-                Toast.makeText(context,"Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,apiResponse.data.getMessage(), Toast.LENGTH_LONG).show();
                 break;
 
             default:
@@ -149,6 +164,10 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
      * */
     private void renderSuccessResponse(SuccessResponse response) {
         if(response.isStatus()){
+            Toast.makeText(context,response.getMessage(),Toast.LENGTH_LONG).show();
+            DriverDashboard dashboard = (DriverDashboard)context;
+            dashboard.replaceFragment();
+        }else {
             Toast.makeText(context,response.getMessage(),Toast.LENGTH_LONG).show();
         }
 

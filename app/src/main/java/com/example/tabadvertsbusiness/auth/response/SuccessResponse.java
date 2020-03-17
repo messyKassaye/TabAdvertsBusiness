@@ -12,6 +12,10 @@ public class SuccessResponse {
     @Expose
     private String message;
 
+    @SerializedName("file_path")
+    @Expose
+    private String file_path;
+
     public boolean isStatus() {
         return status;
     }
@@ -26,5 +30,13 @@ public class SuccessResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getFile_path() {
+        return file_path;
+    }
+
+    public void setFile_path(String file_path) {
+        this.file_path = file_path;
     }
 }

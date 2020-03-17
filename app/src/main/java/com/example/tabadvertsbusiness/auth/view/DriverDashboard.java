@@ -7,12 +7,16 @@ import androidx.lifecycle.ViewModelProviders;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.tabadvertsbusiness.auth.response.TabletResponse;
+import com.example.tabadvertsbusiness.auth.view.fragments.AbouThisTabletFragment;
+import com.example.tabadvertsbusiness.auth.view.fragments.AddressFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.AdvertsFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.CarFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.FileFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.FinanceFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.HomeFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.SettingFragment;
+import com.example.tabadvertsbusiness.auth.view_model.TabletViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -32,16 +36,24 @@ import android.widget.TextView;
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class DriverDashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         HomeFragment.OnFragmentInteractionListener,FinanceFragment.OnFragmentInteractionListener,
         FileFragment.OnFragmentInteractionListener,SettingFragment.OnFragmentInteractionListener,
-        AdvertsFragment.OnFragmentInteractionListener, CarFragment.OnFragmentInteractionListener {
+        AdvertsFragment.OnFragmentInteractionListener, CarFragment.OnFragmentInteractionListener,
+        AbouThisTabletFragment.OnFragmentInteractionListener, AddressFragment.OnFragmentInteractionListener {
     private static final String TAG = DriverDashboard.class.getSimpleName();
     private MeViewModel viewModel;
     private TextView fullName,email;
     private NavigationView navigationView;
     private String serial_number;
+    private TabletViewModel tabletViewModel;
+    private ProgressBar progressBar;
+    private Response<TabletResponse> tabletResponseResponse;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,13 +72,15 @@ public class DriverDashboard extends AppCompatActivity
             }
         });
 
-        if (savedInstanceState == null) {
-            Fragment newFragment = new HomeFragment();
+        progressBar = findViewById(R.id.progress_circular);
+
+        /*if (savedInstanceState == null) {
+            Fragment newFragment = new CarFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.add(R.id.content_frame, newFragment);
             ft.addToBackStack(null);
             ft.commit();
-        }
+        }*/
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -78,8 +92,33 @@ public class DriverDashboard extends AppCompatActivity
         //identifying the device
         serial_number = android.os.Build.SERIAL;
 
+
         //initialize view model
         this.initialize();
+
+        tabletViewModel.show(serial_number).enqueue(new Callback<TabletResponse>() {
+            @Override
+            public void onResponse(Call<TabletResponse> call, Response<TabletResponse> response) {
+                progressBar.setVisibility(View.GONE);
+                tabletResponseResponse= response;
+                if(response.body().getData().size()<=0){
+                    addRegisterTabletFragment();
+                }else {
+                    if(response.body().getData().get(0).getCars().getWorking_place().size()<=0){
+                        addAboutThisTabletFragment();
+                    }else {
+                        addHomeFragment();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TabletResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+
+            }
+        });
 
 
         View headerView = navigationView.getHeaderView(0);
@@ -104,6 +143,37 @@ public class DriverDashboard extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.driver_dashboard, menu);
         return true;
+    }
+
+    public void addRegisterTabletFragment(){
+        Fragment newFragment = new CarFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.content_frame, newFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void addHomeFragment(){
+        Fragment newFragment = new HomeFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.content_frame, newFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void addAboutThisTabletFragment(){
+        Fragment newFragment = new AbouThisTabletFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.content_frame, newFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void replaceFragment(){
+        Fragment fragment = new AbouThisTabletFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, fragment);
+        ft.commit();
     }
 
     @Override
@@ -140,8 +210,10 @@ public class DriverDashboard extends AppCompatActivity
 
         } else if (id == R.id.nav_setting) {
             fragment = new SettingFragment();
-        } else if (id == R.id.nav_logout) {
-
+        } else if (id == R.id.nav_about_tablet) {
+            fragment = new AbouThisTabletFragment();
+        }else if(id==R.id.nav_cars){
+            fragment = new CarFragment();
         }
 
         if (fragment != null) {
@@ -157,6 +229,7 @@ public class DriverDashboard extends AppCompatActivity
 
     public void initialize(){
         viewModel = ViewModelProviders.of(this).get(MeViewModel.class);
+        tabletViewModel = ViewModelProviders.of(this).get(TabletViewModel.class);
     }
 
     public void setView(){

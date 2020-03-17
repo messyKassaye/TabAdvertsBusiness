@@ -50,6 +50,7 @@
         android:layout_height="wrap_content">
         <GridLayout
             android:id="@+id/downloaderGridLayout"
+            android:scrollbars="vertical"
             android:orientation="vertical"
             android:useDefaultMargins="true"
             android:layout_width="match_parent"
@@ -59,14 +60,20 @@
                 android:id="@+id/new_download"
                 android:name="com.example.tabadvertsbusiness.auth.view.downloaderView.NewDownloadFragment"
                 android:layout_height="wrap_content"
-                android:layout_width="500dp"
+                android:layout_width="300dp"
                 />
 
             <fragment
                 android:id="@+id/download_size"
                 android:name="com.example.tabadvertsbusiness.auth.view.downloaderView.TotalDownloadSizeFragment"
                 android:layout_height="wrap_content"
-                android:layout_width="500dp"
+                android:layout_width="300dp"
+                />
+
+            <fragment
+                android:name="com.example.tabadvertsbusiness.auth.view.downloaderView.DownloadHistoryFragment"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
                 />
         </GridLayout>
     </LinearLayout>

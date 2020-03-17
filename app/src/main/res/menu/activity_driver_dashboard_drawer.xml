@@ -14,6 +14,11 @@
             android:title="@string/my_adverts"
             />
         <item
+            android:id="@+id/nav_cars"
+            android:icon="@drawable/ic_directions_car_black_24dp"
+            android:title="@string/my_cars"
+            />
+        <item
             android:id="@+id/nav_finance"
             android:icon="@drawable/ic_attach_money_black_24dp"
             android:title="@string/finances" />
@@ -25,6 +30,10 @@
 
     <item android:title="More">
         <menu>
+            <item
+                android:id="@+id/nav_about_tablet"
+                android:icon="@drawable/ic_tablet_black_24dp"
+                android:title="@string/about_tablet" />
             <item
                 android:id="@+id/nav_setting"
                 android:icon="@drawable/ic_settings_black_24dp"

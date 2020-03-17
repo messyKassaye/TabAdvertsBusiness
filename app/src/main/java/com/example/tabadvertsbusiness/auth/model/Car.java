@@ -8,7 +8,7 @@ public class Car {
     private List<CarCategory> car_category;
     private List<Advert> adverts;
     private List<Place> working_place;
-
+    private List<Tablet> working_tablet;
     public int getId() {
         return id;
     }
@@ -31,6 +31,14 @@ public class Car {
 
     public void setCar_category(List<CarCategory> car_category) {
         this.car_category = car_category;
+    }
+
+    public List<Tablet> getWorking_tablet() {
+        return working_tablet;
+    }
+
+    public void setWorking_tablet(List<Tablet> working_tablet) {
+        this.working_tablet = working_tablet;
     }
 
     public List<Advert> getAdverts() {

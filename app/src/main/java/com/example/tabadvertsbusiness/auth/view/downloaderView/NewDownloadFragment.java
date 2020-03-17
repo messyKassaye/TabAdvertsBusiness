@@ -1,16 +1,38 @@
 package com.example.tabadvertsbusiness.auth.view.downloaderView;
 
+import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
+import android.webkit.URLUtil;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
+import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
+import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
+import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
+import com.example.tabadvertsbusiness.auth.view.DownloaderDashboard;
+import com.example.tabadvertsbusiness.auth.view_model.DownloadViewModel;
+import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
+import com.example.tabadvertsbusiness.constants.Constants;
+
+import java.io.File;
+
+import static android.content.Context.DOWNLOAD_SERVICE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +54,11 @@ public class NewDownloadFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private Button download;
+    private DownloadViewModel viewModel;
+    private ProgressDialog progressDialog;
+
+    private String filePath;
     public NewDownloadFragment() {
         // Required empty public constructor
     }
@@ -68,6 +95,23 @@ public class NewDownloadFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_new_download, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        viewModel = viewModel = ViewModelProviders.of(getActivity()).get(DownloadViewModel.class);
+        progressDialog = LoadingDialog.loadingDialog(getActivity(),"We are Zipping your file....");
+        viewModel.storeResponse().observe(getActivity(), this::consumeResponse);
+        download = getView().findViewById(R.id.downloadNow);
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewModel.store();
+            }
+        });
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -107,5 +151,73 @@ public class NewDownloadFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+    private void consumeResponse(ApiResponse apiResponse) {
+
+        switch (apiResponse.status) {
+
+            case LOADING:
+                progressDialog.show();
+                break;
+
+            case SUCCESS:
+                progressDialog.dismiss();
+                renderSuccessResponse(apiResponse.data);
+                break;
+
+            case ERROR:
+                progressDialog.dismiss();
+                Toast.makeText(getActivity(),"Error", Toast.LENGTH_SHORT).show();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    /*
+     * method to handle success response
+     * */
+    private void renderSuccessResponse(SuccessResponse response) {
+        if(response.isStatus()){
+            this.filePath = response.getFile_path();
+            beginDownload(Constants.getDownloadPath()+"Zips/"+response.getFile_path(),response.getFile_path());
+        }else {
+            System.out.println("myError: "+response.isStatus());
+        }
+    }
+
+    private void beginDownload(String file_link,String fileName){
+        File file=new File(getContext().getExternalFilesDir(null),fileName);
+
+        //checking if android version is equal and greater than noughat
+
+        //now if download complete file not visible now lets show it
+        DownloadManager.Request request=null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            request=new DownloadManager.Request(Uri.parse(file_link))
+                    .setTitle("Tab adverts download")
+                    .setDescription("Downloading...")
+                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                    .setDestinationUri(Uri.fromFile(file))
+                    .setRequiresCharging(false)
+                    .setAllowedOverMetered(true)
+                    .setAllowedOverRoaming(true);
+        }
+        else{
+            request=new DownloadManager.Request(Uri.parse(file_link))
+                    .setTitle("Tab adverts download")
+                    .setDescription("Downloading...")
+                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                    .setDestinationUri(Uri.fromFile(file))
+                    .setAllowedOverRoaming(true);
+        }
+
+        DownloadManager downloadManager=(DownloadManager)getContext().getSystemService(DOWNLOAD_SERVICE);
+        long downloadId =downloadManager.enqueue(request);
+        System.out.println(downloadId);
+
     }
 }

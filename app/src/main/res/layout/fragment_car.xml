@@ -8,8 +8,9 @@
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:orientation="vertical"
+        android:padding="5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <!--Notification snack banner if this tablet is not assigned for any car -->
         <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -22,11 +23,11 @@
 
         <!--Cars recycler view layout -->
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
+            android:layout_width="500dp"
             android:layout_height="wrap_content">
 
             <RelativeLayout
-                android:padding="10dp"
+                android:padding="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -45,15 +46,6 @@
                         android:gravity="left"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
-                    <TextView
-                        android:text="@string/view_all"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:id="@+id/view_all_cars"
-                        android:layout_marginRight="10dp"
-                        android:textAllCaps="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
 
                 </RelativeLayout>
 

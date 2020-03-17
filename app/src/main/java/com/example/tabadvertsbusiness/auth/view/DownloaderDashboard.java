@@ -8,12 +8,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.commons.MainDialog;
+import com.example.tabadvertsbusiness.auth.view.downloaderView.DownloadHistoryFragment;
 import com.example.tabadvertsbusiness.auth.view.downloaderView.NewDownloadFragment;
 import com.example.tabadvertsbusiness.auth.view.downloaderView.TotalDownloadSizeFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.AddressFragment;
@@ -23,7 +25,8 @@ import com.google.android.material.button.MaterialButton;
 public class DownloaderDashboard extends AppCompatActivity implements
         AddressFragment.OnFragmentInteractionListener ,
         NewDownloadFragment.OnFragmentInteractionListener,
-        TotalDownloadSizeFragment.OnFragmentInteractionListener {
+        TotalDownloadSizeFragment.OnFragmentInteractionListener,
+        DownloadHistoryFragment.OnFragmentInteractionListener {
     MeViewModel viewModel;
     Toolbar toolbar,dialogToolbar;
     LinearLayout mainLayout,workingPlaceLayout;
@@ -58,7 +61,6 @@ public class DownloaderDashboard extends AppCompatActivity implements
         }else {
             gridLayout.setOrientation(GridLayout.VERTICAL);
         }
-        System.out.println("layout: "+getColumnCount());
 
         //view model initialization
         this.init();

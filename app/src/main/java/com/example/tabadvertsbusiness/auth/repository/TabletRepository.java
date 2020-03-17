@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.tabadvertsbusiness.auth.model.Tablet;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
+import com.example.tabadvertsbusiness.auth.response.TabletResponse;
 import com.example.tabadvertsbusiness.auth.retrofit.RetrofitRequest;
 import com.example.tabadvertsbusiness.auth.retrofit.interfaces.TabletInterface;
 import com.google.gson.JsonElement;
@@ -24,5 +25,9 @@ public class TabletRepository {
 
     public Observable<SuccessResponse> store(Tablet tablet){
         return tabletInterface.store(tablet);
+    }
+
+    public Call<TabletResponse> show(String id){
+        return  tabletInterface.show(id);
     }
 }
