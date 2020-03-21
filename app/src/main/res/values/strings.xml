@@ -15,7 +15,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Dashboard</string>
-    <string name="my_adverts">My Adverts</string>
+    <string name="my_adverts">My adverts</string>
     <string name="finances">Finance</string>
     <string name="files">Files</string>
     <string name="about_tablet">About this tablet</string>
@@ -60,15 +60,33 @@
     <string name="download_more">
         Download your file now and start selling
     </string>
+
+    <string name="select_car_type">Select your car type</string>
+    <string name="select_car_category">Select your car category</string>
+    <string name="select_car_work_place">Select your car work place/city</string>
+
     <string name="total_download_size">Total download file size</string>
     <string name="file_size">0 MB</string>
     <string name="your_download">Your total download size</string>
     <string name="download_history">Your download history</string>
+    <string name="no_registered_car">There is no registered car by your name. Register your car now and generate more income</string>
 
     <string name="assigned_text">This tablet is assigned to below car.</string>
     <string name="workinPlaceInfo">
         This tablet is assigned to the above car but, the car working place is not set yet. Please set car working place by clicking set place
     </string>
+
+    <string name="register_car_place">Register car work place</string>
+    <string name="select_car_city">Select city</string>
+    <string name="driver_download_more">Download your files now and start advertising.</string>
+    <string name="receieve_files">Receive files from others and start adverting now.</string>
+    <string name="receiveFiles">Receive files</string>
+    <string name="receieveFileButton">Receive file now</string>
+
+    <string name="today_advert">Today\'s advert</string>
+    <string name="yesterday_advert">Yesterday\'s advert</string>
+    <string name="all_advert">All adverts</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

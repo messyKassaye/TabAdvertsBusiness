@@ -29,6 +29,7 @@ import com.example.tabadvertsbusiness.auth.adapter.ShimmerRecyclerViewAdapter;
 import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.view.activities.AddNewCarActivity;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -58,6 +59,8 @@ public class CarFragment extends Fragment {
     private MeViewModel viewModel;
     private View snackBarLayout;
     private Snackbar snackbar;
+
+    private FloatingActionButton fab;
 
     private RecyclerView recyclerView;
     private ArrayList<Car> arrayList = new ArrayList<>();
@@ -104,6 +107,14 @@ public class CarFragment extends Fragment {
         snackBarLayout = getView().findViewById(R.id.car_coordinator);
         snackbar = Snackbar.make(snackBarLayout,"Assign this tablet to one of the following your car.",Snackbar.LENGTH_INDEFINITE);
         (snackbar.getView()).getLayoutParams().width =ViewGroup.LayoutParams.MATCH_PARENT;
+
+        fab = getView().findViewById(R.id.add_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         //pre loading for shimmer
         shimmer = getView().findViewById(R.id.shimmerSkeleton);

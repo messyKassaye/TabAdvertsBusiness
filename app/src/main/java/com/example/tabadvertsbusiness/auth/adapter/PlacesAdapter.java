@@ -56,7 +56,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
                 viewHolder.selectedLayout.setVisibility(View.VISIBLE);
                 viewHolder.cardView.setCardBackgroundColor(Color.GREEN);
                 placeService.setPlaceId((int)view.getTag());
-                System.out.println("Id: "+placeService.getPlaceId());
             }
         });
     }

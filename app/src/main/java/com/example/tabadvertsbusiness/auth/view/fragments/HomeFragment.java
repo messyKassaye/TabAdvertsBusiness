@@ -6,14 +6,18 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 
 import com.example.tabadvertsbusiness.R;
+import com.example.tabadvertsbusiness.auth.commons.Helpers;
+import com.example.tabadvertsbusiness.auth.services.CommonServices;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +38,7 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private CommonServices commonServices;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -62,6 +67,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
+
     }
 
     @Override
@@ -79,6 +85,8 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

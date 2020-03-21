@@ -1,6 +1,7 @@
 package com.example.tabadvertsbusiness.auth.view.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.commons.Helpers;
@@ -21,12 +24,12 @@ import com.example.tabadvertsbusiness.auth.commons.Helpers;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FileFragment.OnFragmentInteractionListener} interface
+ * {@link TodaysAdvertFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FileFragment#newInstance} factory method to
+ * Use the {@link TodaysAdvertFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FileFragment extends Fragment {
+public class TodaysAdvertFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -37,10 +40,12 @@ public class FileFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private CardView advertCard;
+    private TextView headerTitle;
+    private TextView totalAdvert;
 
-    private CardView cardView;
 
-    public FileFragment() {
+    public TodaysAdvertFragment() {
         // Required empty public constructor
     }
 
@@ -50,11 +55,11 @@ public class FileFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FileFragment.
+     * @return A new instance of fragment TodaysAdvertFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FileFragment newInstance(String param1, String param2) {
-        FileFragment fragment = new FileFragment();
+    public static TodaysAdvertFragment newInstance(String param1, String param2) {
+        TodaysAdvertFragment fragment = new TodaysAdvertFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -75,18 +80,21 @@ public class FileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_file, container, false);
+        return inflater.inflate(R.layout.fragment_todays_advert, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        cardView = getView().findViewById(R.id.filesCard);
-        cardView.setLayoutParams(
-                new FrameLayout.LayoutParams(Helpers.deviceWidth((AppCompatActivity)getContext()),
-                        FrameLayout.LayoutParams.WRAP_CONTENT)
-        );
+        advertCard = getView().findViewById(R.id.advertCard);
+        advertCard.setCardBackgroundColor(Color.parseColor("#2E8B57"));
+
+        headerTitle = getView().findViewById(R.id.headerTitle);
+        headerTitle.setText(R.string.today_advert);
+
+        totalAdvert= getView().findViewById(R.id.totalAdvert);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -19,11 +19,13 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.commons.Helpers;
+import com.example.tabadvertsbusiness.auth.commons.MainDialog;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
 import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.model.Tablet;
 import com.example.tabadvertsbusiness.auth.repository.TabletRepository;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
+import com.example.tabadvertsbusiness.auth.services.PlaceService;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
 import com.example.tabadvertsbusiness.auth.view.DriverDashboard;
 import com.example.tabadvertsbusiness.auth.view.fragments.AbouThisTabletFragment;
@@ -41,6 +43,8 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
     private TabletViewModel viewModel;
 
     private CardView cardView;
+    private MainDialog mainDialog;
+    private PlaceService placeService;
     public CarsAdapter(Context context, ArrayList<Car> articleArrayList) {
         this.context = context;
         this.carsArraylist = articleArrayList;
@@ -51,6 +55,8 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
         viewModel = ViewModelProviders.of(activity).get(TabletViewModel.class);
 
         viewModel.storeResponse().observe(activity, this::consumeResponse);
+
+
     }
 
     @NonNull
@@ -64,6 +70,10 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull CarsAdapter.ViewHolder viewHolder, int i) {
         Car car=carsArraylist.get(i);
         Tablet tablet = new Tablet();
+
+        mainDialog = new MainDialog();
+
+        placeService = new PlaceService(this.context);
 
         String serial_number = Build.SERIAL;
         tablet.setSerial_number(serial_number);
@@ -85,7 +95,7 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
 
         if(car.getWorking_tablet().size()>0){
             viewHolder.assignButton.setVisibility(View.GONE);
-            viewHolder.assigned_text.setText("I'm assigned to : "+car.getWorking_tablet()
+            viewHolder.assigned_text.setText("assigned to : "+car.getWorking_tablet()
                     .get(0).getSerial_number()+" tablet");
         }
 
@@ -93,6 +103,17 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 viewModel.store(tablet);
+            }
+        });
+
+        viewHolder.setWorkingPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                placeService.setType(2);
+                placeService.setCarId(car.getId());
+
+                mainDialog.display(((AppCompatActivity) context).getSupportFragmentManager(),
+                        "Set your car work place",R.layout.set_address_dialog_layout);
             }
         });
 

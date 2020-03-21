@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginTop="2dp"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context=".auth.view.fragments.DriverDownloadFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.cardview.widget.CardView
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/filesCard"
-        app:cardBackgroundColor="#FF8C00"
+        android:id="@+id/driverDownloadCard"
+        app:cardBackgroundColor="@color/colorPrimary"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         tools:context=".auth.view.downloaderView.NewDownloadFragment">
@@ -22,7 +21,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:text="@string/receiveFiles"
+                android:text="@string/new_download"
                 android:layout_gravity="start"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
@@ -41,7 +40,7 @@
                     android:id="@+id/download_more_data"
                     android:layout_gravity="center"
                     android:textColor="@android:color/white"
-                    android:text="@string/receieve_files"
+                    android:text="@string/driver_download_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -50,7 +49,7 @@
                     android:id="@+id/driverDownloadNow"
                     android:textColor="@android:color/white"
                     android:background="@drawable/button_shape"
-                    android:text="@string/receieveFileButton"
+                    android:text="Download now"
                     android:textAllCaps="false"
                     android:padding="10dp"
                     android:layout_marginTop="10dp"

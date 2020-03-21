@@ -9,6 +9,8 @@ public class Car {
     private List<Advert> adverts;
     private List<Place> working_place;
     private List<Tablet> working_tablet;
+    private int place_id;
+
     public int getId() {
         return id;
     }
@@ -55,5 +57,13 @@ public class Car {
 
     public void setWorking_place(List<Place> working_place) {
         this.working_place = working_place;
+    }
+
+    public int getPlace_id() {
+        return place_id;
+    }
+
+    public void setPlace_id(int place_id) {
+        this.place_id = place_id;
     }
 }

@@ -18,4 +18,12 @@ public class Helpers {
         return size.x;
     }
 
+    public static int getColumn(AppCompatActivity context){
+        float scalefactor = context.getResources().getDisplayMetrics().density * 100;
+        int width = context.getWindowManager().getDefaultDisplay().getWidth();
+        int columns = (int) ((float)width / (float) scalefactor);
+
+        return columns;
+    }
+
 }

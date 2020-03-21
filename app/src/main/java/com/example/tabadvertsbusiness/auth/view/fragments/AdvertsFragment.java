@@ -4,13 +4,22 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.tabadvertsbusiness.R;
+import com.example.tabadvertsbusiness.auth.adapter.AdvertsAdapter;
+import com.example.tabadvertsbusiness.auth.services.CommonServices;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,7 +29,10 @@ import com.example.tabadvertsbusiness.R;
  * Use the {@link AdvertsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AdvertsFragment extends Fragment {
+public class AdvertsFragment extends Fragment implements
+        TodaysAdvertFragment.OnFragmentInteractionListener,
+        YesterdaysAdvertFragment.OnFragmentInteractionListener,
+        AllAdvertsFragment.OnFragmentInteractionListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,6 +43,9 @@ public class AdvertsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private LinearLayout advertLayout;
+    private CommonServices commonServices;
 
     public AdvertsFragment() {
         // Required empty public constructor
@@ -70,6 +85,16 @@ public class AdvertsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_adverts, container, false);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        commonServices = new CommonServices(getContext());
+
+
+
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -92,6 +117,11 @@ public class AdvertsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
     /**

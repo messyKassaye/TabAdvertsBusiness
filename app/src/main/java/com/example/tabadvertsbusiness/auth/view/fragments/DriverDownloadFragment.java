@@ -1,33 +1,32 @@
-package com.example.tabadvertsbusiness.auth.view.downloaderView;
+package com.example.tabadvertsbusiness.auth.view.fragments;
 
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
-import android.webkit.URLUtil;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
+import com.example.tabadvertsbusiness.auth.commons.Helpers;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
-import com.example.tabadvertsbusiness.auth.view.DownloaderDashboard;
 import com.example.tabadvertsbusiness.auth.view_model.DownloadViewModel;
-import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 import com.example.tabadvertsbusiness.constants.Constants;
 
 import java.io.File;
@@ -37,12 +36,12 @@ import static android.content.Context.DOWNLOAD_SERVICE;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NewDownloadFragment.OnFragmentInteractionListener} interface
+ * {@link DriverDownloadFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NewDownloadFragment#newInstance} factory method to
+ * Use the {@link DriverDownloadFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewDownloadFragment extends Fragment {
+public class DriverDownloadFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -53,13 +52,13 @@ public class NewDownloadFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private CardView cardView;
+    private Button driverDownloadButton;
 
-    private Button download;
-    private DownloadViewModel viewModel;
+    private DownloadViewModel downloadViewModel;
     private ProgressDialog progressDialog;
-
     private String filePath;
-    public NewDownloadFragment() {
+    public DriverDownloadFragment() {
         // Required empty public constructor
     }
 
@@ -69,11 +68,11 @@ public class NewDownloadFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment NewDownloadFragment.
+     * @return A new instance of fragment DriverDownloadFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewDownloadFragment newInstance(String param1, String param2) {
-        NewDownloadFragment fragment = new NewDownloadFragment();
+    public static DriverDownloadFragment newInstance(String param1, String param2) {
+        DriverDownloadFragment fragment = new DriverDownloadFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -94,24 +93,30 @@ public class NewDownloadFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_download, container, false);
+        return inflater.inflate(R.layout.fragment_driver_download, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel = viewModel = ViewModelProviders.of(getActivity()).get(DownloadViewModel.class);
+        downloadViewModel = ViewModelProviders.of(getActivity()).get(DownloadViewModel.class);
         progressDialog = LoadingDialog.loadingDialog(getActivity(),"We are Zipping your file....");
-        viewModel.storeResponse().observe(getActivity(), this::consumeResponse);
-        download = getView().findViewById(R.id.downloadNow);
-        download.setOnClickListener(new View.OnClickListener() {
+        downloadViewModel.storeResponse().observe(getActivity(), this::consumeResponse);
+
+        cardView = getView().findViewById(R.id.driverDownloadCard);
+        cardView.setLayoutParams(
+               new FrameLayout.LayoutParams(Helpers.deviceWidth((AppCompatActivity)getContext()),
+                       FrameLayout.LayoutParams.WRAP_CONTENT)
+        );
+
+        driverDownloadButton = getView().findViewById(R.id.driverDownloadNow);
+        driverDownloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewModel.store();
+               downloadViewModel.store();
             }
         });
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -153,7 +158,6 @@ public class NewDownloadFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-
     private void consumeResponse(ApiResponse apiResponse) {
 
         switch (apiResponse.status) {
@@ -185,7 +189,7 @@ public class NewDownloadFragment extends Fragment {
             this.filePath = response.getFile_path();
             beginDownload(Constants.getDownloadPath()+"Zips/"+response.getFile_path(),response.getFile_path());
         }else {
-            System.out.println("myError: "+response.isStatus());
+            Toast.makeText(getContext(),response.getMessage(),Toast.LENGTH_LONG).show();
         }
     }
 

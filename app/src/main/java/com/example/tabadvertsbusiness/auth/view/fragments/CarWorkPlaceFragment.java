@@ -2,16 +2,12 @@ package com.example.tabadvertsbusiness.auth.view.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,19 +21,15 @@ import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.adapter.PlacesAdapter;
-import com.example.tabadvertsbusiness.auth.commons.MainDialog;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
 import com.example.tabadvertsbusiness.auth.model.Address;
-import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.model.Place;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
 import com.example.tabadvertsbusiness.auth.services.PlaceService;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
 import com.example.tabadvertsbusiness.auth.view.DownloaderDashboard;
 import com.example.tabadvertsbusiness.auth.view_model.AddressViewModel;
-import com.example.tabadvertsbusiness.auth.view_model.CarViewModel;
 import com.example.tabadvertsbusiness.auth.view_model.PlacesViewModel;
-import com.example.tabadvertsbusiness.auth.view_model.TabletViewModel;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -46,12 +38,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AddressFragment.OnFragmentInteractionListener} interface
+ * {@link CarWorkPlaceFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AddressFragment#newInstance} factory method to
+ * Use the {@link CarWorkPlaceFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddressFragment extends Fragment {
+public class CarWorkPlaceFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -62,6 +54,7 @@ public class AddressFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
     private PlacesViewModel viewModel;
 
     private RecyclerView recyclerView;
@@ -72,14 +65,10 @@ public class AddressFragment extends Fragment {
     private TextView errorTextView;
     private PlaceService placeService;
 
-    private int type;
-
     private AddressViewModel addressViewModel;
     private ProgressDialog progressDialog;
-    private DownloaderDashboard dialog;
 
-    private CarViewModel carViewModel;
-    public AddressFragment() {
+    public CarWorkPlaceFragment() {
         // Required empty public constructor
     }
 
@@ -89,11 +78,11 @@ public class AddressFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AddressFragment.
+     * @return A new instance of fragment CarWorkPlaceFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddressFragment newInstance(String param1, String param2) {
-        AddressFragment fragment = new AddressFragment();
+    public static CarWorkPlaceFragment newInstance(String param1, String param2) {
+        CarWorkPlaceFragment fragment = new CarWorkPlaceFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -108,7 +97,6 @@ public class AddressFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
@@ -117,7 +105,6 @@ public class AddressFragment extends Fragment {
 
 
         viewModel = ViewModelProviders.of(getActivity()).get(PlacesViewModel.class);
-        carViewModel = ViewModelProviders.of(getActivity()).get(CarViewModel.class);
 
         recyclerView = getView().findViewById(R.id.places_recyler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
@@ -140,35 +127,15 @@ public class AddressFragment extends Fragment {
 
         addressViewModel = ViewModelProviders.of(getActivity()).get(AddressViewModel.class);
         progressDialog = LoadingDialog.loadingDialog(getActivity(),"Assigning....");
-        addressViewModel.storeResponse().observe(getActivity(), this::consumeResponse);
 
-        dialog = new DownloaderDashboard();
         placeService = new PlaceService(getActivity());
-
-        type = placeService.getType();
-
-
         errorTextView = (TextView)getView().findViewById(R.id.my_place_error);
         registerButton = (MaterialButton)getView().findViewById(R.id.register_my_place);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                switch (type){
-                    case 1:
-                        Address address = new Address();
-                        address.setPlace_id(placeService.getPlaceId());
-                        addressViewModel.store(address);
 
-                    case 2:
-                        System.out.println("Car");
-                        Car car = new Car();
-                        car.setId(placeService.getCarId());
-                        car.setPlace_id(placeService.getPlaceId());
-                        carViewModel.update(car,placeService.getCarId());
-
-
-                }
             }
         });
     }
@@ -177,12 +144,8 @@ public class AddressFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        return inflater.inflate(R.layout.fragment_address, container, false);
+        return inflater.inflate(R.layout.fragment_car_work_place, container, false);
     }
-
-
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -203,39 +166,9 @@ public class AddressFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-
-        FragmentManager fm = getFragmentManager();
-
-        Fragment xmlFragment = fm.findFragmentById(R.id.address);
-        if (xmlFragment != null) {
-            fm.beginTransaction().remove(xmlFragment).commit();
-        }
-
-        super.onDestroyView();
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
     private void consumeResponse(ApiResponse apiResponse) {
@@ -266,8 +199,23 @@ public class AddressFragment extends Fragment {
      * */
     private void renderSuccessResponse(SuccessResponse response) {
         if(response.isStatus()){
-          DownloaderDashboard dashboard = (DownloaderDashboard) getActivity();
-          dashboard.closeDialog();
+            DownloaderDashboard dashboard = (DownloaderDashboard) getActivity();
+            dashboard.closeDialog();
         }
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 }

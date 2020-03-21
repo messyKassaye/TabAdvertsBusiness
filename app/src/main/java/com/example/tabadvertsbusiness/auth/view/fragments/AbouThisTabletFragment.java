@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.example.tabadvertsbusiness.auth.commons.Helpers;
 import com.example.tabadvertsbusiness.auth.commons.MainDialog;
 import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.response.TabletResponse;
+import com.example.tabadvertsbusiness.auth.services.PlaceService;
 import com.example.tabadvertsbusiness.auth.view_model.TabletViewModel;
 
 import java.util.List;
@@ -69,6 +71,8 @@ public class AbouThisTabletFragment extends Fragment {
     private TabletViewModel tabletViewModel;
 
     private LinearLayout assignedLayout,tabletNotAssingedLayout;
+    private ProgressBar progressBar;
+    private PlaceService placeService;
     public AbouThisTabletFragment() {
 
         // Required empty public constructor
@@ -105,18 +109,23 @@ public class AbouThisTabletFragment extends Fragment {
         assignedLayout = getView().findViewById(R.id.assignedTabletLayout);
         tabletNotAssingedLayout = getView().findViewById(R.id.tablet_not_assigned_layout);
 
+        placeService = new PlaceService(getContext());
+
+        progressBar = getView().findViewById(R.id.aboutBar);
+
         tabletViewModel = ViewModelProviders.of(getActivity()).get(TabletViewModel.class);
         String serial_number = Build.SERIAL;
         tabletViewModel.show(serial_number).enqueue(new Callback<TabletResponse>() {
             @Override
             public void onResponse(Call<TabletResponse> call, Response<TabletResponse> response) {
+                progressBar.setVisibility(View.GONE);
                 if(response.body().getData().size()<=0){
                     tabletNotAssingedLayout.setVisibility(View.GONE);
                     Toast.makeText(getContext(),"There is no un assigned car",Toast.LENGTH_LONG).show();
                 }else {
                     assignTablet(response);
                     assignedLayout.setVisibility(View.VISIBLE);
-                    Toast.makeText(getContext(),response.body().getData().toString(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),response.body().getData().get(0).getSerial_number().toString(),Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -166,6 +175,7 @@ public class AbouThisTabletFragment extends Fragment {
         setWorkingPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                placeService.setType(2);
                 mainDialog.display(
                         getActivity().getSupportFragmentManager(),
                         "Set car working place",
