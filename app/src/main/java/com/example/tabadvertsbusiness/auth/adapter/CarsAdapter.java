@@ -78,6 +78,7 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
         String serial_number = Build.SERIAL;
         tablet.setSerial_number(serial_number);
         tablet.setCar_id(car.getId());
+
         viewHolder.cardView.setLayoutParams(
                 new RecyclerView.LayoutParams(Helpers.deviceWidth((AppCompatActivity) context),
                         RecyclerView.LayoutParams.WRAP_CONTENT));

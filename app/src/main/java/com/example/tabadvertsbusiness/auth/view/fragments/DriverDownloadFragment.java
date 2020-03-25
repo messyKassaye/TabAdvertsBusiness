@@ -3,6 +3,7 @@ package com.example.tabadvertsbusiness.auth.view.fragments;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.commons.Helpers;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
+import com.example.tabadvertsbusiness.auth.receiver.DownloadCompletedBroadcastReceiver;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
 import com.example.tabadvertsbusiness.auth.view_model.DownloadViewModel;
@@ -58,6 +60,7 @@ public class DriverDownloadFragment extends Fragment {
     private DownloadViewModel downloadViewModel;
     private ProgressDialog progressDialog;
     private String filePath;
+    private DownloadCompletedBroadcastReceiver receiver;
     public DriverDownloadFragment() {
         // Required empty public constructor
     }
@@ -99,6 +102,7 @@ public class DriverDownloadFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         downloadViewModel = ViewModelProviders.of(getActivity()).get(DownloadViewModel.class);
         progressDialog = LoadingDialog.loadingDialog(getActivity(),"We are Zipping your file....");
@@ -194,7 +198,11 @@ public class DriverDownloadFragment extends Fragment {
     }
 
     private void beginDownload(String file_link,String fileName){
-        File file=new File(getContext().getExternalFilesDir(null),fileName);
+
+        receiver = new DownloadCompletedBroadcastReceiver(getContext(),fileName);
+        getContext().registerReceiver(receiver,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+        File file=new File(getContext().getExternalFilesDir(null)+"/advertData",fileName);
 
         //now if download complete file not visible now lets show it
         DownloadManager.Request request=null;

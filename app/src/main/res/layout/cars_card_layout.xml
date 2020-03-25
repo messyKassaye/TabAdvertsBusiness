@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/cars_card"
     android:elevation="1dp"
-    android:layout_margin="5dp"
+    android:layout_marginBottom="20dp"
     android:orientation="vertical"
     android:layout_width="290dp"
     android:layout_height="210dp">
