@@ -118,7 +118,14 @@ public class DriverDownloadFragment extends Fragment {
         driverDownloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               downloadViewModel.store();
+                File cacheDir = getActivity().getCacheDir();
+                if (cacheDir.getUsableSpace() * 100 / cacheDir.getTotalSpace() <= 10) { // Alternatively, use cacheDir.getFreeSpace()
+                    Toast.makeText(getActivity(),"You have low space. Please delete some file or use external devices",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    downloadViewModel.store();
+                }
+
             }
         });
     }
@@ -226,8 +233,7 @@ public class DriverDownloadFragment extends Fragment {
         }
 
         DownloadManager downloadManager=(DownloadManager)getContext().getSystemService(DOWNLOAD_SERVICE);
-        long downloadId =downloadManager.enqueue(request);
-        System.out.println(downloadId);
+        downloadManager.enqueue(request);
 
     }
 }

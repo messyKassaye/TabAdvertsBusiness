@@ -23,6 +23,5 @@ public class DownloadCompletedBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         unzipper.unzip();
-
     }
 }

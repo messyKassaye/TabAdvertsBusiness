@@ -4,10 +4,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.tabadvertsbusiness.auth.response.TabletResponse;
+import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
 import com.example.tabadvertsbusiness.auth.services.CommonServices;
 import com.example.tabadvertsbusiness.auth.view.fragments.AbouThisTabletFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.AddressFragment;
@@ -67,6 +69,7 @@ public class DriverDashboard extends AppCompatActivity
     private Response<TabletResponse> tabletResponseResponse;
 
     private CommonServices commonServices;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +77,8 @@ public class DriverDashboard extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Driver dashboard");
         setSupportActionBar(toolbar);
+
+        TabletAdsRoomDatabase.getDatabase(this);
 
         File file = getFilesDir();
         System.out.println("file: "+file.getName());
