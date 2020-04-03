@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
@@ -27,11 +29,14 @@ import com.example.tabadvertsbusiness.auth.commons.Helpers;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
 import com.example.tabadvertsbusiness.auth.receiver.DownloadCompletedBroadcastReceiver;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
+import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
+import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertRoomVIewModel;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
 import com.example.tabadvertsbusiness.auth.view_model.DownloadViewModel;
 import com.example.tabadvertsbusiness.constants.Constants;
 
 import java.io.File;
+import java.util.List;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 
@@ -61,6 +66,7 @@ public class DriverDownloadFragment extends Fragment {
     private ProgressDialog progressDialog;
     private String filePath;
     private DownloadCompletedBroadcastReceiver receiver;
+    private AdvertRoomVIewModel vIewModel;
     public DriverDownloadFragment() {
         // Required empty public constructor
     }
@@ -114,6 +120,8 @@ public class DriverDownloadFragment extends Fragment {
                        FrameLayout.LayoutParams.WRAP_CONTENT)
         );
 
+        vIewModel = ViewModelProviders.of(getActivity()).get(AdvertRoomVIewModel.class);
+
         driverDownloadButton = getView().findViewById(R.id.driverDownloadNow);
         driverDownloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +134,12 @@ public class DriverDownloadFragment extends Fragment {
                     downloadViewModel.store();
                 }
 
+            }
+        });
+        vIewModel.index().observe(this, new Observer<List<AdvertRoom>>() {
+            @Override
+            public void onChanged(List<AdvertRoom> advertRooms) {
+                System.out.println("List: "+advertRooms.size());
             }
         });
     }
@@ -206,9 +220,6 @@ public class DriverDownloadFragment extends Fragment {
 
     private void beginDownload(String file_link,String fileName){
 
-        receiver = new DownloadCompletedBroadcastReceiver(getContext(),fileName);
-        getContext().registerReceiver(receiver,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-
         File file=new File(getContext().getExternalFilesDir(null)+"/advertData",fileName);
 
         //now if download complete file not visible now lets show it
@@ -233,7 +244,11 @@ public class DriverDownloadFragment extends Fragment {
         }
 
         DownloadManager downloadManager=(DownloadManager)getContext().getSystemService(DOWNLOAD_SERVICE);
-        downloadManager.enqueue(request);
+       long downloadId= downloadManager.enqueue(request);
+        receiver = new DownloadCompletedBroadcastReceiver(getContext(),fileName,downloadId);
+        getContext().registerReceiver(receiver,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+
 
     }
 }

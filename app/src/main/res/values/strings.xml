@@ -48,7 +48,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
-    <string name="information">Note.This is application is prepared for tab advert business like advertising videos and downloading files only.</string>
+    <string name="information">Note.This is application is prepared for tab advertRoom business like advertising videos and downloading files only.</string>
     <string name="set_place_now">Set my address</string>
     <string name="select_your_city">Select your city</string>
     <string name="register_my_place">Register my place</string>
@@ -83,8 +83,8 @@
     <string name="receiveFiles">Receive files</string>
     <string name="receieveFileButton">Receive file now</string>
 
-    <string name="today_advert">Today\'s advert</string>
-    <string name="yesterday_advert">Yesterday\'s advert</string>
+    <string name="today_advert">Today\'s advertRoom</string>
+    <string name="yesterday_advert">Yesterday\'s advertRoom</string>
     <string name="all_advert">All adverts</string>
 
 

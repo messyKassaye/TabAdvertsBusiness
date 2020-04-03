@@ -1,10 +1,12 @@
 package com.example.tabadvertsbusiness.auth.roomDB.DAO;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.tabadvertsbusiness.auth.roomDB.entity.Advert;
+import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
 
 import java.util.List;
 
@@ -12,11 +14,12 @@ import java.util.List;
 public interface AdvertDAO {
 
     @Query("select * from adverts")
-    public List<Advert> index();
+    public LiveData<List<AdvertRoom>> index();
 
-   /* @Insert()
-    public void store(Advert advert);
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    public void store(AdvertRoom advertRoom);
 
+    /*
     public void update(int id);
 
     public void show(int id);

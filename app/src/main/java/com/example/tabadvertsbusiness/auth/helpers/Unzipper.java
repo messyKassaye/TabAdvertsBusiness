@@ -5,6 +5,14 @@ import android.net.Uri;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.example.tabadvertsbusiness.auth.roomDB.DAO.AdvertDAO;
+import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
+import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
+import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertRoomVIewModel;
 import com.example.tabadvertsbusiness.constants.Constants;
 import com.google.gson.JsonObject;
 
@@ -35,6 +43,7 @@ public class Unzipper {
         this.context = context;
 
         ROOT_LOCATION = context.getExternalFilesDir(null)+"/advertData";
+
         _dirChecker("");
     }
 
@@ -104,6 +113,17 @@ public class Unzipper {
 
             JSONObject userInfo = jsonObject.getJSONObject("userInfo");
             JSONArray advertData = jsonObject.getJSONArray("advertData");
+            for (int i=0;i<=advertData.length();i++){
+                JSONObject advertJSON = advertData.getJSONObject(i);
+                AdvertRoom advertRoom = new AdvertRoom();
+                advertRoom.setId(advertJSON.getInt("id"));
+                advertRoom.setFileName(advertJSON.getString("fileName"));
+                advertRoom.setPrivilege(advertJSON.getString("privilege"));
+                advertRoom.setMaximumViewPerDay(advertJSON.getInt("maximumViewPerDay"));
+                AdvertDAO advertDAO = TabletAdsRoomDatabase.getDatabase(context).getAdvertDAO();
+                advertDAO.store(advertRoom);
+
+            }
 
         }catch (Exception e){
             e.printStackTrace();

@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "adverts")
-public class Advert {
+public class AdvertRoom {
     @PrimaryKey
     private int id;
 
