@@ -13,14 +13,14 @@ import java.util.List;
 
 public class AdvertRoomRepository {
     private AdvertDAO advertDAO;
-    private List<AdvertRoom> advertRooms;
+    private LiveData<List<AdvertRoom>> advertRooms;
    public AdvertRoomRepository(Application application){
         TabletAdsRoomDatabase roomDatabase = TabletAdsRoomDatabase.getDatabase(application);
         advertDAO = roomDatabase.getAdvertDAO();
 
         advertRooms = advertDAO.index();
     }
-    public List<AdvertRoom> index(){
+    public LiveData<List<AdvertRoom>> index(){
     return advertRooms;
     }
 

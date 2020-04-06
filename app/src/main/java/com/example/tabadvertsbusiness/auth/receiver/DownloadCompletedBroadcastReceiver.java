@@ -4,10 +4,14 @@ import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.MainActivity;
 import com.example.tabadvertsbusiness.auth.helpers.Unzipper;
+import com.example.tabadvertsbusiness.auth.roomDB.DAO.DownloadDAO;
+import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
+import com.example.tabadvertsbusiness.auth.roomDB.entity.Download;
 
 import java.io.File;
 
@@ -35,12 +39,31 @@ public class DownloadCompletedBroadcastReceiver extends BroadcastReceiver {
             File downloadedFile = new File(context.getExternalFilesDir(null)+"/advertData/"+fileName);
             if(downloadedFile.exists()){
                 unzipper.unzip();
+                Download download = new Download();
+                download.setFileName(fileName);
+                download.setDownloadStatus("Completed");
+                download.setProcess("Processed");
+                saveDownloadStatus(download);
             }else {
-                System.out.println("Download is not completed");
+                Download download = new Download();
+                download.setFileName(fileName);
+                download.setDownloadStatus("Not completed");
+                download.setProcess("Not processed");
+                saveDownloadStatus(download);
             }
 
         }
         //
+    }
+
+    public void saveDownloadStatus(Download download){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                DownloadDAO downloadDAO = TabletAdsRoomDatabase.getDatabase(context).getDownloadDAO();
+                downloadDAO.store(download);
+            }
+        });
     }
 
     public boolean isDownloading() {

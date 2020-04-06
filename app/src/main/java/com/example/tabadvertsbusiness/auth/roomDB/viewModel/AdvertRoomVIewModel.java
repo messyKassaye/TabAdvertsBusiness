@@ -13,7 +13,7 @@ import java.util.List;
 
 public class AdvertRoomVIewModel extends AndroidViewModel {
     private AdvertRoomRepository repository;
-    private List<AdvertRoom> advertRoomList;
+    private LiveData<List<AdvertRoom>>advertRoomList;
 
     public AdvertRoomVIewModel(@NonNull Application application) {
         super(application);
@@ -22,7 +22,7 @@ public class AdvertRoomVIewModel extends AndroidViewModel {
         advertRoomList = repository.index();
     }
 
-    public List<AdvertRoom> index(){
+    public LiveData<List<AdvertRoom>> index(){
         return advertRoomList;
     }
 

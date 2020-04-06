@@ -12,7 +12,7 @@
         app:cardBackgroundColor="@color/colorPrimary"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
-        tools:context=".auth.view.downloaderView.NewDownloadFragment">
+        tools:context=".auth.view.downloaderView.NewsDownloadFragment">
 
         <!-- TODO: Update blank fragment layout -->
         <LinearLayout

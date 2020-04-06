@@ -3,7 +3,6 @@ package com.example.tabadvertsbusiness.auth.view.downloaderView;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,12 +11,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
-import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -25,9 +21,7 @@ import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
-import com.example.tabadvertsbusiness.auth.view.DownloaderDashboard;
 import com.example.tabadvertsbusiness.auth.view_model.DownloadViewModel;
-import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 import com.example.tabadvertsbusiness.constants.Constants;
 
 import java.io.File;
@@ -37,12 +31,12 @@ import static android.content.Context.DOWNLOAD_SERVICE;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NewDownloadFragment.OnFragmentInteractionListener} interface
+ * {@link NewsDownloadFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NewDownloadFragment#newInstance} factory method to
+ * Use the {@link NewsDownloadFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewDownloadFragment extends Fragment {
+public class NewsDownloadFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -59,7 +53,7 @@ public class NewDownloadFragment extends Fragment {
     private ProgressDialog progressDialog;
 
     private String filePath;
-    public NewDownloadFragment() {
+    public NewsDownloadFragment() {
         // Required empty public constructor
     }
 
@@ -69,11 +63,11 @@ public class NewDownloadFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment NewDownloadFragment.
+     * @return A new instance of fragment NewsDownloadFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewDownloadFragment newInstance(String param1, String param2) {
-        NewDownloadFragment fragment = new NewDownloadFragment();
+    public static NewsDownloadFragment newInstance(String param1, String param2) {
+        NewsDownloadFragment fragment = new NewsDownloadFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -108,7 +102,7 @@ public class NewDownloadFragment extends Fragment {
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewModel.store();
+                //viewModel.store();
             }
         });
 

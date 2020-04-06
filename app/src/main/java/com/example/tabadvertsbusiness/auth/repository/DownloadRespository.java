@@ -1,5 +1,6 @@
 package com.example.tabadvertsbusiness.auth.repository;
 
+import com.example.tabadvertsbusiness.auth.model.DownloadedAdverts;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
 import com.example.tabadvertsbusiness.auth.retrofit.RetrofitRequest;
 import com.example.tabadvertsbusiness.auth.retrofit.interfaces.DownloadInterface;
@@ -14,7 +15,7 @@ public class DownloadRespository  {
         downloadInterface = RetrofitRequest.getApiInstance().create(DownloadInterface.class);
     }
 
-    public Observable<SuccessResponse> store(){
-        return downloadInterface.store();
+    public Observable<SuccessResponse> store(DownloadedAdverts downloadedAdverts){
+        return downloadInterface.store(downloadedAdverts);
     }
 }

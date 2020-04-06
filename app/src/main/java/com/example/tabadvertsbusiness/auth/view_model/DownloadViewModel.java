@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.tabadvertsbusiness.auth.model.DownloadedAdverts;
 import com.example.tabadvertsbusiness.auth.model.Tablet;
 import com.example.tabadvertsbusiness.auth.repository.DownloadRespository;
 import com.example.tabadvertsbusiness.auth.repository.TabletRepository;
@@ -34,9 +35,9 @@ public class DownloadViewModel extends AndroidViewModel {
     /*
      * method to call normal login api with $(mobileNumber + password)
      * */
-    public void store() {
+    public void store(DownloadedAdverts downloadedAdverts) {
 
-        Observable.just(downloadRespository.store()
+        Observable.just(downloadRespository.store(downloadedAdverts)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe((d) -> responseLiveData.setValue(ApiResponse.loading()))

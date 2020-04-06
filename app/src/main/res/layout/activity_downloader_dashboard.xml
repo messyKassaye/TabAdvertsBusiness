@@ -58,7 +58,7 @@
 
             <fragment
                 android:id="@+id/new_download"
-                android:name="com.example.tabadvertsbusiness.auth.view.downloaderView.NewDownloadFragment"
+                android:name="com.example.tabadvertsbusiness.auth.view.downloaderView.NewsDownloadFragment"
                 android:layout_height="wrap_content"
                 android:layout_width="300dp"
                 />
