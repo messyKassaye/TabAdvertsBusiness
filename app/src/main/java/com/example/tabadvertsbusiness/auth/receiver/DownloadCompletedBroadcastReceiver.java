@@ -17,6 +17,7 @@ public class DownloadCompletedBroadcastReceiver extends BroadcastReceiver {
    private Unzipper unzipper;
    private File file;
    private Long downloadID;
+   private boolean downloading = false;
     public DownloadCompletedBroadcastReceiver(Context context, String fileName,Long downloadId) {
         this.context = context;
         this.fileName = fileName;
@@ -40,5 +41,13 @@ public class DownloadCompletedBroadcastReceiver extends BroadcastReceiver {
 
         }
         //
+    }
+
+    public boolean isDownloading() {
+        return downloading;
+    }
+
+    public void setDownloading(boolean downloading) {
+        this.downloading = downloading;
     }
 }

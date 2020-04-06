@@ -14,9 +14,9 @@ import java.util.List;
 public interface AdvertDAO {
 
     @Query("select * from adverts")
-    public LiveData<List<AdvertRoom>> index();
+    public List<AdvertRoom> index();
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert
     public void store(AdvertRoom advertRoom);
 
     /*

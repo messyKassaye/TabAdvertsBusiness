@@ -6,10 +6,12 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.example.tabadvertsbusiness.auth.response.TabletResponse;
 import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
+import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
 import com.example.tabadvertsbusiness.auth.services.CommonServices;
 import com.example.tabadvertsbusiness.auth.view.fragments.AbouThisTabletFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.AddressFragment;
@@ -25,6 +27,7 @@ import com.example.tabadvertsbusiness.auth.view.fragments.SettingFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.TodaysAdvertFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.YesterdaysAdvertFragment;
 import com.example.tabadvertsbusiness.auth.view_model.TabletViewModel;
+import com.example.tabadvertsbusiness.constants.Constants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -45,6 +48,7 @@ import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 
 import java.io.File;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -100,7 +104,13 @@ public class DriverDashboard extends AppCompatActivity
         //identifying the device
         serial_number = android.os.Build.SERIAL;
 
-
+        //SQLite database creation starts here
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                TabletAdsRoomDatabase.getDatabase(getBaseContext());
+            }
+        });
         //initialize view model
         this.initialize();
 

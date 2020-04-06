@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,15 +28,20 @@ import android.widget.Toast;
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.commons.Helpers;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
+import com.example.tabadvertsbusiness.auth.model.AdvertDownload;
 import com.example.tabadvertsbusiness.auth.receiver.DownloadCompletedBroadcastReceiver;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
+import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertRoomVIewModel;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
 import com.example.tabadvertsbusiness.auth.view_model.DownloadViewModel;
 import com.example.tabadvertsbusiness.constants.Constants;
 
+import org.json.JSONArray;
+
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
@@ -66,7 +72,9 @@ public class DriverDownloadFragment extends Fragment {
     private ProgressDialog progressDialog;
     private String filePath;
     private DownloadCompletedBroadcastReceiver receiver;
-    private AdvertRoomVIewModel vIewModel;
+
+    private List<AdvertRoom> downloadHistory =new ArrayList<>();
+
     public DriverDownloadFragment() {
         // Required empty public constructor
     }
@@ -119,9 +127,13 @@ public class DriverDownloadFragment extends Fragment {
                new FrameLayout.LayoutParams(Helpers.deviceWidth((AppCompatActivity)getContext()),
                        FrameLayout.LayoutParams.WRAP_CONTENT)
         );
-
-        vIewModel = ViewModelProviders.of(getActivity()).get(AdvertRoomVIewModel.class);
-
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Size: "+TabletAdsRoomDatabase.getDatabase(getContext())
+                        .getAdvertDAO().index().size());
+            }
+        });
         driverDownloadButton = getView().findViewById(R.id.driverDownloadNow);
         driverDownloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,17 +143,27 @@ public class DriverDownloadFragment extends Fragment {
                     Toast.makeText(getActivity(),"You have low space. Please delete some file or use external devices",
                             Toast.LENGTH_LONG).show();
                 } else {
-                    downloadViewModel.store();
+
+                    if (getDownloadHistory().size()<=0){
+                        downloadViewModel.store();
+                    }else {
+                        List<AdvertRoom> downloadedAdverts = getDownloadHistory();
+                        JSONArray jsonArray = new JSONArray();
+                        for (int i=0;i<downloadedAdverts.size();i++){
+                            jsonArray.put(downloadedAdverts.get(i).getId());
+                        }
+                        AdvertDownload advertDownload = new AdvertDownload();
+                        advertDownload.setAdverts(jsonArray.toString());
+                    }
+
                 }
 
             }
         });
-        vIewModel.index().observe(this, new Observer<List<AdvertRoom>>() {
-            @Override
-            public void onChanged(List<AdvertRoom> advertRooms) {
-                System.out.println("List: "+advertRooms.size());
-            }
-        });
+
+
+
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -181,6 +203,17 @@ public class DriverDownloadFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public List<AdvertRoom> getDownloadHistory(){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                downloadHistory = TabletAdsRoomDatabase.getDatabase(getContext()).getAdvertDAO().index();
+            }
+        });
+
+        return downloadHistory;
     }
 
     private void consumeResponse(ApiResponse apiResponse) {
@@ -244,10 +277,10 @@ public class DriverDownloadFragment extends Fragment {
         }
 
         DownloadManager downloadManager=(DownloadManager)getContext().getSystemService(DOWNLOAD_SERVICE);
-       long downloadId= downloadManager.enqueue(request);
+        long downloadId= downloadManager.enqueue(request);
         receiver = new DownloadCompletedBroadcastReceiver(getContext(),fileName,downloadId);
+        receiver.setDownloading(true);
         getContext().registerReceiver(receiver,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-
 
 
     }

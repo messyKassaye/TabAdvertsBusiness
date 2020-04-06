@@ -2,6 +2,7 @@ package com.example.tabadvertsbusiness.auth.helpers;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -116,12 +117,17 @@ public class Unzipper {
             for (int i=0;i<=advertData.length();i++){
                 JSONObject advertJSON = advertData.getJSONObject(i);
                 AdvertRoom advertRoom = new AdvertRoom();
-                advertRoom.setId(advertJSON.getInt("id"));
+                advertRoom.setAdvertId(advertJSON.getInt("id"));
                 advertRoom.setFileName(advertJSON.getString("fileName"));
                 advertRoom.setPrivilege(advertJSON.getString("privilege"));
                 advertRoom.setMaximumViewPerDay(advertJSON.getInt("maximumViewPerDay"));
-                AdvertDAO advertDAO = TabletAdsRoomDatabase.getDatabase(context).getAdvertDAO();
-                advertDAO.store(advertRoom);
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        TabletAdsRoomDatabase.getDatabase(context).
+                                getAdvertDAO().store(advertRoom);
+                    }
+                });
 
             }
 

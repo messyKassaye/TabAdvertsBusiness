@@ -6,8 +6,11 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "adverts")
 public class AdvertRoom {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
+
+    @ColumnInfo(name = "advertId")
+    private int advertId;
 
     @ColumnInfo(name = "maximumViewPerDay")
     private int maximumViewPerDay;
@@ -23,6 +26,14 @@ public class AdvertRoom {
 
     public int getId() {
         return id;
+    }
+
+    public int getAdvertId() {
+        return advertId;
+    }
+
+    public void setAdvertId(int advertId) {
+        this.advertId = advertId;
     }
 
     public void setId(int id) {

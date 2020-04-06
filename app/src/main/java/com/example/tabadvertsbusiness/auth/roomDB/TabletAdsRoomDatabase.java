@@ -9,6 +9,7 @@ import androidx.room.RoomDatabase;
 import com.example.tabadvertsbusiness.auth.roomDB.DAO.AdvertDAO;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertViewsRoom;
+import com.example.tabadvertsbusiness.constants.Constants;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,13 +21,13 @@ public abstract class TabletAdsRoomDatabase extends RoomDatabase {
     private static volatile TabletAdsRoomDatabase INSTANCE;
    public static final ExecutorService dbExecutorService = Executors.newFixedThreadPool(NUMBER_OF_THEARD);
 
-   public static TabletAdsRoomDatabase getDatabase(Context context){
+   public static synchronized TabletAdsRoomDatabase getDatabase(Context context){
         if(INSTANCE==null){
-            synchronized (TabletAdsRoomDatabase.class){
-                if (INSTANCE==null){
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            TabletAdsRoomDatabase.class,"TabletAdsDB").build();
-                }
+            if (INSTANCE==null){
+                INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                        TabletAdsRoomDatabase.class, Constants.getDbName())
+                        .fallbackToDestructiveMigration()
+                        .build();
             }
         }
         return INSTANCE;
