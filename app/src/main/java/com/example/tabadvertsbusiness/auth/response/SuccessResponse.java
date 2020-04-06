@@ -1,7 +1,10 @@
 package com.example.tabadvertsbusiness.auth.response;
 
+import com.example.tabadvertsbusiness.auth.model.Advert;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class SuccessResponse {
     @SerializedName("status")
@@ -15,6 +18,12 @@ public class SuccessResponse {
     @SerializedName("file_path")
     @Expose
     private String file_path;
+
+    @SerializedName("adverts")
+    @Expose
+    private List<Advert> adverts;
+
+
 
     public boolean isStatus() {
         return status;
@@ -38,5 +47,13 @@ public class SuccessResponse {
 
     public void setFile_path(String file_path) {
         this.file_path = file_path;
+    }
+
+    public List<Advert> getAdverts() {
+        return adverts;
+    }
+
+    public void setAdverts(List<Advert> adverts) {
+        this.adverts = adverts;
     }
 }

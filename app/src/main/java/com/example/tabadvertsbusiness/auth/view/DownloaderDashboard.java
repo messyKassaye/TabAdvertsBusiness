@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.commons.MainDialog;
 import com.example.tabadvertsbusiness.auth.view.downloaderView.DownloadHistoryFragment;
-import com.example.tabadvertsbusiness.auth.view.downloaderView.NewsDownloadFragment;
+import com.example.tabadvertsbusiness.auth.view.downloaderView.NewDownloadFragment;
 import com.example.tabadvertsbusiness.auth.view.downloaderView.TotalDownloadSizeFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.AddressFragment;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
@@ -23,7 +23,7 @@ import com.google.android.material.button.MaterialButton;
 
 public class DownloaderDashboard extends AppCompatActivity implements
         AddressFragment.OnFragmentInteractionListener ,
-        NewsDownloadFragment.OnFragmentInteractionListener,
+        NewDownloadFragment.OnFragmentInteractionListener,
         TotalDownloadSizeFragment.OnFragmentInteractionListener,
         DownloadHistoryFragment.OnFragmentInteractionListener {
     MeViewModel viewModel;

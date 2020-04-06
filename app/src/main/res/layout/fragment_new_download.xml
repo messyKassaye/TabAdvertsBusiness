@@ -6,7 +6,7 @@
     android:layout_width="280dp"
     android:layout_height="wrap_content"
     app:contentPadding="10dp"
-    tools:context=".auth.view.downloaderView.NewsDownloadFragment">
+    tools:context=".auth.view.downloaderView.NewDownloadFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout

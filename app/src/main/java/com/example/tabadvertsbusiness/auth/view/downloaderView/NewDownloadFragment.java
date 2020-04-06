@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
+import com.example.tabadvertsbusiness.auth.model.DownloadedAdverts;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
 import com.example.tabadvertsbusiness.auth.view_model.DownloadViewModel;
@@ -31,12 +32,12 @@ import static android.content.Context.DOWNLOAD_SERVICE;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NewsDownloadFragment.OnFragmentInteractionListener} interface
+ * {@link NewDownloadFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NewsDownloadFragment#newInstance} factory method to
+ * Use the {@link NewDownloadFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewsDownloadFragment extends Fragment {
+public class NewDownloadFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -53,7 +54,7 @@ public class NewsDownloadFragment extends Fragment {
     private ProgressDialog progressDialog;
 
     private String filePath;
-    public NewsDownloadFragment() {
+    public NewDownloadFragment() {
         // Required empty public constructor
     }
 
@@ -63,11 +64,11 @@ public class NewsDownloadFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment NewsDownloadFragment.
+     * @return A new instance of fragment NewDownloadFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewsDownloadFragment newInstance(String param1, String param2) {
-        NewsDownloadFragment fragment = new NewsDownloadFragment();
+    public static NewDownloadFragment newInstance(String param1, String param2) {
+        NewDownloadFragment fragment = new NewDownloadFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -102,7 +103,9 @@ public class NewsDownloadFragment extends Fragment {
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //viewModel.store();
+                DownloadedAdverts downloadedAdverts = new DownloadedAdverts();
+                downloadedAdverts.setDownloadedAdverts("");
+                viewModel.store(downloadedAdverts);
             }
         });
 

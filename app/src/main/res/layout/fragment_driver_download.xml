@@ -12,7 +12,7 @@
         app:cardBackgroundColor="@color/colorPrimary"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
-        tools:context=".auth.view.downloaderView.NewsDownloadFragment">
+        tools:context=".auth.view.downloaderView.NewDownloadFragment">
 
         <!-- TODO: Update blank fragment layout -->
         <LinearLayout
@@ -44,6 +44,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
+                <TextView
+                    android:id="@+id/downloadInfo"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
                 <Button
                     android:id="@+id/driverDownloadNow"
@@ -56,8 +62,8 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-
                 </Button>
+
             </LinearLayout>
 
         </LinearLayout>

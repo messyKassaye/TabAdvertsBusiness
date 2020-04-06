@@ -4,6 +4,7 @@ import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
@@ -31,12 +33,17 @@ import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
 import com.example.tabadvertsbusiness.auth.view_model.DownloadViewModel;
+import com.example.tabadvertsbusiness.auth.view_model.DownloadedaAdvertsViewModel;
 import com.example.tabadvertsbusiness.constants.Constants;
 
 import org.json.JSONArray;
 
 import java.io.File;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 
@@ -60,7 +67,11 @@ public class DriverDownloadFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private CardView cardView;
+    private TextView downloadInfo;
     private Button driverDownloadButton;
+
+    private DownloadedaAdvertsViewModel downloadedaAdvertsViewModel;
+    private DownloadedAdverts downloadedAdverts;
 
     private DownloadViewModel downloadViewModel;
     private ProgressDialog progressDialog;
@@ -113,51 +124,59 @@ public class DriverDownloadFragment extends Fragment {
 
 
         downloadViewModel = ViewModelProviders.of(getActivity()).get(DownloadViewModel.class);
-        progressDialog = LoadingDialog.loadingDialog(getActivity(),"We are Zipping your file....");
+        progressDialog = LoadingDialog.loadingDialog(getActivity(), "We are Zipping your file....");
         downloadViewModel.storeResponse().observe(getActivity(), this::consumeResponse);
 
         cardView = getView().findViewById(R.id.driverDownloadCard);
         cardView.setLayoutParams(
-               new FrameLayout.LayoutParams(Helpers.deviceWidth((AppCompatActivity)getContext()),
-                       FrameLayout.LayoutParams.WRAP_CONTENT)
+                new FrameLayout.LayoutParams(Helpers.deviceWidth((AppCompatActivity) getContext()),
+                        FrameLayout.LayoutParams.WRAP_CONTENT)
         );
+
+        downloadInfo = getView().findViewById(R.id.downloadInfo);
+
+
+        TabletAdsRoomDatabase.getDatabase(getActivity()).getAdvertDAO()
+                .index().observe(getActivity(), advertRooms -> {
+
+            //if there is no previous download history
+            if (advertRooms.size() <= 0) {
+                downloadedAdverts = new DownloadedAdverts();
+                downloadedAdverts.setDownloadedAdverts("");
+                //downloadViewModel.store(downloadedAdverts);
+                getNewAdverts(downloadedAdverts);
+            } else {
+                /*if there is previous download history we have to send it
+                  each adverts id to server because we shouldn't have to download again.
+                 */
+                List<AdvertRoom> advertRoomList = advertRooms;
+                JSONArray jsonArray = new JSONArray();
+                for (int i = 0; i < advertRoomList.size(); i++) {
+                    jsonArray.put(advertRoomList.get(i).getAdvertId());
+                }
+                downloadedAdverts = new DownloadedAdverts();
+                downloadedAdverts.setDownloadedAdverts(jsonArray.toString());
+                getNewAdverts(downloadedAdverts);
+            }
+        });
+
 
         driverDownloadButton = getView().findViewById(R.id.driverDownloadNow);
         driverDownloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //if device have small disk space
                 File cacheDir = getActivity().getCacheDir();
                 if (cacheDir.getUsableSpace() * 100 / cacheDir.getTotalSpace() <= 10) { // Alternatively, use cacheDir.getFreeSpace()
-                    Toast.makeText(getActivity(),"You have low space. Please delete some file or use external devices",
+                    Toast.makeText(getActivity(), "You have low space. Please delete some file or use external devices",
                             Toast.LENGTH_LONG).show();
                 } else {
-
-                    TabletAdsRoomDatabase.getDatabase(getActivity()).getAdvertDAO()
-                            .index().observe(getActivity(),advertRooms -> {
-                        if(advertRooms.size()<=0){
-                            DownloadedAdverts downloadedAdverts = new DownloadedAdverts();
-                            downloadedAdverts.setDownloadedAdverts(null);
-
-                            downloadViewModel.store(downloadedAdverts);
-                        }else {
-                            List<AdvertRoom> downloadedAdverts = advertRooms;
-                            JSONArray jsonArray = new JSONArray();
-                            for (int i=0;i<downloadedAdverts.size();i++){
-                                jsonArray.put(downloadedAdverts.get(i).getAdvertId());
-                            }
-                            DownloadedAdverts advertDownload = new DownloadedAdverts();
-                            advertDownload.setDownloadedAdverts(jsonArray.toString());
-                            downloadViewModel.store(advertDownload);
-                        }
-                    });
-
+                    downloadViewModel.store(downloadedAdverts);
 
                 }
 
             }
         });
-
-
 
 
     }
@@ -225,7 +244,7 @@ public class DriverDownloadFragment extends Fragment {
 
             case ERROR:
                 progressDialog.dismiss();
-                Toast.makeText(getActivity(),"Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
                 break;
 
             default:
@@ -237,22 +256,50 @@ public class DriverDownloadFragment extends Fragment {
      * method to handle success response
      * */
     private void renderSuccessResponse(SuccessResponse response) {
-        if(response.isStatus()){
+        if (response.isStatus()) {
             this.filePath = response.getFile_path();
-            beginDownload(Constants.getDownloadPath()+"Zips/"+response.getFile_path(),response.getFile_path());
-        }else {
-            Toast.makeText(getContext(),response.getMessage(),Toast.LENGTH_LONG).show();
+            beginDownload(Constants.getDownloadPath() + "Zips/" + response.getFile_path(), response.getFile_path());
+        } else {
+            Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
-    private void beginDownload(String file_link,String fileName){
+    public void getNewAdverts(DownloadedAdverts downloadedAdverts){
+        downloadedaAdvertsViewModel = ViewModelProviders.of(getActivity())
+                .get(DownloadedaAdvertsViewModel.class);
+       downloadedaAdvertsViewModel.store(downloadedAdverts)
+               .enqueue(new Callback<SuccessResponse>() {
+                   @Override
+                   public void onResponse(Call<SuccessResponse> call,
+                                          Response<SuccessResponse> responseBody) {
+                      SuccessResponse response = responseBody.body();
+                       if(response.isStatus()){
+                           downloadInfo.setText("Congratulations you have "+
+                                   response.getAdverts().size()+" new adverts");
+                           downloadInfo.setTextColor(Color.GREEN);
+                       }else {
+                           driverDownloadButton.setVisibility(View.GONE);
+                           downloadInfo.setText(response.getMessage());
+                           downloadInfo.setTextColor(Color.RED);
+                       }
+                   }
 
-        File file=new File(getContext().getExternalFilesDir(null)+"/advertData",fileName);
+                   @Override
+                   public void onFailure(Call<SuccessResponse> call, Throwable t) {
+
+                   }
+               });
+
+    }
+
+    private void beginDownload(String file_link, String fileName) {
+
+        File file = new File(getContext().getExternalFilesDir(null) + "/advertData", fileName);
 
         //now if download complete file not visible now lets show it
-        DownloadManager.Request request=null;
+        DownloadManager.Request request = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            request=new DownloadManager.Request(Uri.parse(file_link))
+            request = new DownloadManager.Request(Uri.parse(file_link))
                     .setTitle("Tab adverts download")
                     .setDescription("Downloading...")
                     .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
@@ -260,9 +307,8 @@ public class DriverDownloadFragment extends Fragment {
                     .setRequiresCharging(false)
                     .setAllowedOverMetered(true)
                     .setAllowedOverRoaming(true);
-        }
-        else{
-            request=new DownloadManager.Request(Uri.parse(file_link))
+        } else {
+            request = new DownloadManager.Request(Uri.parse(file_link))
                     .setTitle("Tab adverts download")
                     .setDescription("Downloading...")
                     .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
@@ -270,11 +316,11 @@ public class DriverDownloadFragment extends Fragment {
                     .setAllowedOverRoaming(true);
         }
 
-        DownloadManager downloadManager=(DownloadManager)getContext().getSystemService(DOWNLOAD_SERVICE);
-        long downloadId= downloadManager.enqueue(request);
-        receiver = new DownloadCompletedBroadcastReceiver(getContext(),fileName,downloadId);
+        DownloadManager downloadManager = (DownloadManager) getContext().getSystemService(DOWNLOAD_SERVICE);
+        long downloadId = downloadManager.enqueue(request);
+        receiver = new DownloadCompletedBroadcastReceiver(getContext(), fileName, downloadId);
         receiver.setDownloading(true);
-        getContext().registerReceiver(receiver,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        getContext().registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
 
     }
