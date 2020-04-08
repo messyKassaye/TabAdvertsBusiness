@@ -38,7 +38,7 @@ public class DownloadCompletedBroadcastReceiver extends BroadcastReceiver {
         if (downloadID == id) {
             File downloadedFile = new File(context.getExternalFilesDir(null)+"/advertData/"+fileName);
             if(downloadedFile.exists()){
-                unzipper.unzip();
+                unzipper.execute();
                 Download download = new Download();
                 download.setFileName(fileName);
                 download.setDownloadStatus("Completed");

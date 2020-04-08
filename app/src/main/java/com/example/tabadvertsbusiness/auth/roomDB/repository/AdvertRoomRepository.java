@@ -29,4 +29,8 @@ public class AdvertRoomRepository {
             advertDAO.store(advertRoom);
         });
     }
+
+    public AdvertRoom show(int id){
+       return advertDAO.show(id);
+    }
 }

@@ -1,8 +1,10 @@
 package com.example.tabadvertsbusiness.auth.helpers;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -30,16 +32,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-public class Unzipper {
+import io.reactivex.Observable;
+
+public class Unzipper extends AsyncTask<Void, Integer, Integer>{
     private File _zipFile;
     private InputStream _zipFileStream;
     private Context context;
     private  String ROOT_LOCATION;
     private static final String TAG = "UNZIPUTIL";
+    private String JSONfileName = null;
+    ProgressDialog myProgressDialog;
+    private int newFileNumber=0;
+    private int noNewFileFound =0;
 
     public Unzipper(Context context, File zipFile) {
+        super();
         _zipFile = zipFile;
         this.context = context;
 
@@ -55,11 +65,22 @@ public class Unzipper {
         _dirChecker("");
     }
 
-    public String unzip() {
-        String fileOnUnzip = null;
-        String JSONfileName= "";
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        myProgressDialog = new ProgressDialog(context);
+        myProgressDialog.setMessage("Please Wait.... Unzipping");
+        myProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        myProgressDialog.setCancelable(false);
+        myProgressDialog.show();
+    }
+
+    @Override
+    protected Integer doInBackground(Void... voids) {
+        int count = 0;
         try  {
-            Log.i(TAG, "Starting to unzip");
+            ZipFile zip = new ZipFile(_zipFile);
+            myProgressDialog.setMax(zip.size());
             InputStream fin = _zipFileStream;
             if(fin == null) {
                 fin = new FileInputStream(_zipFile);
@@ -74,41 +95,70 @@ public class Unzipper {
                     JSONfileName = ze.getName();
 
                 }
-                fileOnUnzip  = ze.getName();
                 if(ze.isDirectory()) {
                     _dirChecker(ROOT_LOCATION + "/" + ze.getName());
                 } else {
-                    FileOutputStream fout = new FileOutputStream(new File(ROOT_LOCATION, ze.getName()));
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[1024];
-                    int count;
-                    // reading and writing
-                    while((count = zin.read(buffer)) != -1)
-                    {
-                        baos.write(buffer, 0, count);
-                        byte[] bytes = baos.toByteArray();
-                        fout.write(bytes);
-                        baos.reset();
-
+                    File previouslyDownloadedFile = new File(ROOT_LOCATION+"/"+ze.getName());
+                    if(!previouslyDownloadedFile.exists()){
+                        FileOutputStream fout = new FileOutputStream(new File(ROOT_LOCATION, ze.getName()));
+                        byte[] buffer = new byte[8192];
+                        int len;
+                        // reading and writing
+                        while((len = zin.read(buffer)) != -1)
+                        {
+                            fout.write(buffer, 0, len);
+                        }
+                        fout.close();
+                        zin.closeEntry();
+                        newFileNumber++;
+                    }else {
+                        noNewFileFound++;
                     }
-                    fout.close();
-                    zin.closeEntry();
+                    count++;
+                    publishProgress(count);
                 }
 
             }
 
             zin.close();
-            handleJSONfile(JSONfileName);
-            this.deleteZipFile(_zipFile);
-            return fileOnUnzip;
+
         } catch(Exception e) {
             Log.e(TAG, "Unzip Error", e);
-            return null;
         }
 
+        return count;
     }
+
+
+    protected void onProgressUpdate(Integer... progress) {
+        myProgressDialog.setProgress(progress[0]); //Since it's an inner class, Bar should be able to be called directly
+    }
+
+    @Override
+    protected void onPostExecute(Integer integer) {
+        super.onPostExecute(integer);
+        handleJSONfile(JSONfileName);
+        deleteZipFile(_zipFile);
+
+        if(newFileNumber>0){
+            myProgressDialog.setMessage("We found "+newFileNumber+" new file");
+        }else {
+            myProgressDialog.setMessage("We couldn't found any file this file contains for you");
+        }
+        new Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        myProgressDialog.dismiss();
+                    }
+                },
+                5000);
+    }
+
+    /*public String unzip() {
+
+    }*/
+
     public void handleJSONfile(String file){
-        System.out.println("Ze: "+this.readFromFile(file));
         try {
             JSONObject jsonObject = new JSONObject(this.readFromFile(file));
 
@@ -124,8 +174,14 @@ public class Unzipper {
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
-                        TabletAdsRoomDatabase.getDatabase(context).
-                                getAdvertDAO().store(advertRoom);
+
+                       TabletAdsRoomDatabase tabletAdsRoomDatabase= TabletAdsRoomDatabase.getDatabase(context);
+                       AdvertDAO advertDAO = tabletAdsRoomDatabase.getAdvertDAO();
+
+                       AdvertRoom storedAdvert = advertDAO.show(advertRoom.getAdvertId());
+                       if(storedAdvert==null){
+                           advertDAO.store(advertRoom);
+                       }
                     }
                 });
 
@@ -190,4 +246,6 @@ public class Unzipper {
             f.mkdirs();
         }
     }
+
+
 }

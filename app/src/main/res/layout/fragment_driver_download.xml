@@ -30,7 +30,16 @@
                 android:layout_height="wrap_content"/>
             <include layout="@layout/horiz_divider"/>
 
+            <ProgressBar
+                android:id="@+id/driverDownloadProgress"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+
             <LinearLayout
+                android:id="@+id/driverDownloadLayout"
+                android:visibility="gone"
                 android:layout_marginTop="20dp"
                 android:padding="10dp"
                 android:orientation="vertical"

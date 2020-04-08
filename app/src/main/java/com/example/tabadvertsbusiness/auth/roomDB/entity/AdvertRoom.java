@@ -21,6 +21,9 @@ public class AdvertRoom {
     @ColumnInfo(name = "fileName")
     private String fileName;
 
+    @ColumnInfo(name = "filePath")
+    private String filePath;
+
     @ColumnInfo(name = "status",defaultValue = "active")
     private String status;
 
@@ -62,6 +65,14 @@ public class AdvertRoom {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public String getStatus() {

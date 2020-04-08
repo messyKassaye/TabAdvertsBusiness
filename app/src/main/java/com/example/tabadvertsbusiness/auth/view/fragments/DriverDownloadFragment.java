@@ -20,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,6 +82,9 @@ public class DriverDownloadFragment extends Fragment {
 
     private int downloadedAdvertsSize = 0;
 
+    private ProgressBar progressBar;
+    private LinearLayout mainLayout;
+
     public DriverDownloadFragment() {
         // Required empty public constructor
     }
@@ -127,6 +132,9 @@ public class DriverDownloadFragment extends Fragment {
         progressDialog = LoadingDialog.loadingDialog(getActivity(), "We are Zipping your file....");
         downloadViewModel.storeResponse().observe(getActivity(), this::consumeResponse);
 
+        mainLayout = getView().findViewById(R.id.driverDownloadLayout);
+        progressBar = getView().findViewById(R.id.driverDownloadProgress);
+
         cardView = getView().findViewById(R.id.driverDownloadCard);
         cardView.setLayoutParams(
                 new FrameLayout.LayoutParams(Helpers.deviceWidth((AppCompatActivity) getContext()),
@@ -138,12 +146,11 @@ public class DriverDownloadFragment extends Fragment {
 
         TabletAdsRoomDatabase.getDatabase(getActivity()).getAdvertDAO()
                 .index().observe(getActivity(), advertRooms -> {
-
+            System.out.println("Adverts: "+advertRooms.size());
             //if there is no previous download history
             if (advertRooms.size() <= 0) {
                 downloadedAdverts = new DownloadedAdverts();
                 downloadedAdverts.setDownloadedAdverts("");
-                //downloadViewModel.store(downloadedAdverts);
                 getNewAdverts(downloadedAdverts);
             } else {
                 /*if there is previous download history we have to send it
@@ -172,7 +179,6 @@ public class DriverDownloadFragment extends Fragment {
                             Toast.LENGTH_LONG).show();
                 } else {
                     downloadViewModel.store(downloadedAdverts);
-
                 }
 
             }
@@ -273,6 +279,8 @@ public class DriverDownloadFragment extends Fragment {
                    public void onResponse(Call<SuccessResponse> call,
                                           Response<SuccessResponse> responseBody) {
                       SuccessResponse response = responseBody.body();
+                      progressBar.setVisibility(View.GONE);
+                      mainLayout.setVisibility(View.VISIBLE);
                        if(response.isStatus()){
                            downloadInfo.setText("Congratulations you have "+
                                    response.getAdverts().size()+" new adverts");
@@ -319,7 +327,6 @@ public class DriverDownloadFragment extends Fragment {
         DownloadManager downloadManager = (DownloadManager) getContext().getSystemService(DOWNLOAD_SERVICE);
         long downloadId = downloadManager.enqueue(request);
         receiver = new DownloadCompletedBroadcastReceiver(getContext(), fileName, downloadId);
-        receiver.setDownloading(true);
         getContext().registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
 

@@ -22,6 +22,8 @@ import com.example.tabadvertsbusiness.auth.view.fragments.DriverDownloadFragment
 import com.example.tabadvertsbusiness.auth.view.fragments.FileFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.FinanceFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.HomeFragment;
+import com.example.tabadvertsbusiness.auth.view.fragments.MyAdvertsFragment;
+import com.example.tabadvertsbusiness.auth.view.fragments.MyFilesFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.RegisterNewCar;
 import com.example.tabadvertsbusiness.auth.view.fragments.SettingFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.TodaysAdvertFragment;
@@ -61,7 +63,8 @@ public class DriverDashboard extends AppCompatActivity
         AdvertsFragment.OnFragmentInteractionListener, CarFragment.OnFragmentInteractionListener,
         AbouThisTabletFragment.OnFragmentInteractionListener, DriverDownloadFragment.OnFragmentInteractionListener,
         AddressFragment.OnFragmentInteractionListener,RegisterNewCar.OnFragmentInteractionListener,
-        TodaysAdvertFragment.OnFragmentInteractionListener, YesterdaysAdvertFragment.OnFragmentInteractionListener,
+        TodaysAdvertFragment.OnFragmentInteractionListener,MyAdvertsFragment.OnFragmentInteractionListener,
+        YesterdaysAdvertFragment.OnFragmentInteractionListener, MyFilesFragment.OnFragmentInteractionListener,
         AllAdvertsFragment.OnFragmentInteractionListener{
     private static final String TAG = DriverDashboard.class.getSimpleName();
     private MeViewModel viewModel;
@@ -195,11 +198,11 @@ public class DriverDashboard extends AppCompatActivity
             // Handle the camera action
             fragment = new HomeFragment();
         } else if(id==R.id.nav_adverts){
-            fragment = new AdvertsFragment();
+            fragment = new MyAdvertsFragment();
         } else if (id == R.id.nav_about_tablet) {
             fragment = new AbouThisTabletFragment();
         }else if(id==R.id.nav_file){
-            fragment = new FileFragment();
+            fragment = new MyFilesFragment();
         }
 
         if (fragment != null) {

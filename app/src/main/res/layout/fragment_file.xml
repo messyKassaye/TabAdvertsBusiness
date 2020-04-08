@@ -47,7 +47,7 @@
 
 
                 <Button
-                    android:id="@+id/driverDownloadNow"
+                    android:id="@+id/receiveFileButton"
                     android:textColor="@android:color/white"
                     android:background="@drawable/button_shape"
                     android:text="@string/receieveFileButton"
