@@ -18,7 +18,6 @@ import java.io.File;
 public class DownloadCompletedBroadcastReceiver extends BroadcastReceiver {
     private Context context;
     private String fileName;
-   private Unzipper unzipper;
    private File file;
    private Long downloadID;
    private boolean downloading = false;
@@ -26,7 +25,6 @@ public class DownloadCompletedBroadcastReceiver extends BroadcastReceiver {
         this.context = context;
         this.fileName = fileName;
         file = new File(context.getExternalFilesDir(null)+"/advertData/"+fileName);
-        this.unzipper = new Unzipper(context,file);
         this.downloadID = downloadId;
     }
 
@@ -38,7 +36,7 @@ public class DownloadCompletedBroadcastReceiver extends BroadcastReceiver {
         if (downloadID == id) {
             File downloadedFile = new File(context.getExternalFilesDir(null)+"/advertData/"+fileName);
             if(downloadedFile.exists()){
-                unzipper.execute();
+                new Unzipper(context,file).execute();
                 Download download = new Download();
                 download.setFileName(fileName);
                 download.setDownloadStatus("Completed");
