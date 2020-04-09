@@ -110,7 +110,7 @@ public class Unzipper extends AsyncTask<Void, Integer, Integer>{
                         }
                         fout.close();
                         zin.closeEntry();
-                        newFileNumber++;
+                        newFileNumber+=1;
                     }else {
                         noNewFileFound++;
                     }
@@ -139,11 +139,12 @@ public class Unzipper extends AsyncTask<Void, Integer, Integer>{
         super.onPostExecute(integer);
         handleJSONfile(JSONfileName);
         deleteZipFile(_zipFile);
+        deleteZipFile(new File(ROOT_LOCATION+JSONfileName));
 
         if(newFileNumber>0){
             myProgressDialog.setMessage("We found "+newFileNumber+" new file");
         }else {
-            myProgressDialog.setMessage("We couldn't found any file this file contains for you");
+            myProgressDialog.setMessage("We couldn't found any files for you");
         }
         new Handler().postDelayed(
                 new Runnable() {
@@ -154,9 +155,6 @@ public class Unzipper extends AsyncTask<Void, Integer, Integer>{
                 5000);
     }
 
-    /*public String unzip() {
-
-    }*/
 
     public void handleJSONfile(String file){
         try {
@@ -170,6 +168,7 @@ public class Unzipper extends AsyncTask<Void, Integer, Integer>{
                 advertRoom.setAdvertId(advertJSON.getInt("id"));
                 advertRoom.setFileName(advertJSON.getString("fileName"));
                 advertRoom.setPrivilege(advertJSON.getString("privilege"));
+                advertRoom.setFilePath(ROOT_LOCATION+"/"+advertJSON.getString("fileName"));
                 advertRoom.setMaximumViewPerDay(advertJSON.getInt("maximumViewPerDay"));
                 AsyncTask.execute(new Runnable() {
                     @Override

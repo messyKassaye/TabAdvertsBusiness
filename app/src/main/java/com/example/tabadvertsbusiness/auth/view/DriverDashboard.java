@@ -88,7 +88,6 @@ public class DriverDashboard extends AppCompatActivity
         TabletAdsRoomDatabase.getDatabase(this);
 
         File file = getFilesDir();
-        System.out.println("file: "+file.getName());
 
         commonServices = new CommonServices(this);
         commonServices.setAdvertlayout("horizontal");

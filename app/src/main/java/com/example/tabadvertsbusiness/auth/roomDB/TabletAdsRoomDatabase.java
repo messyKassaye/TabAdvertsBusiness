@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 
 @Database(entities = {AdvertRoom.class, AdvertViewsRoom.class,
         Download.class},
-        version = 3,
+        version = 1,
         exportSchema = false)
 public abstract class TabletAdsRoomDatabase extends RoomDatabase {
     private static final int NUMBER_OF_THEARD = 4;

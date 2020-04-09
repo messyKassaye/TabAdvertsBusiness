@@ -83,8 +83,8 @@
     <string name="receiveFiles">Receive files</string>
     <string name="receieveFileButton">Receive file now</string>
 
-    <string name="today_advert">Today\'s advertRoom</string>
-    <string name="yesterday_advert">Yesterday\'s advertRoom</string>
+    <string name="today_advert">Today\'s adverts</string>
+    <string name="yesterday_advert">Yesterday\'s adverts</string>
     <string name="all_advert">All adverts</string>
 
 

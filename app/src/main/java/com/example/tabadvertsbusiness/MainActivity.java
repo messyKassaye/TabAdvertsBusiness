@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.tabadvertsbusiness.player.PlayerDashboard;
+
 import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,6 +44,15 @@ public class MainActivity extends AppCompatActivity {
                 if (i ==3)
                     i = 0;
                 welcome_and_wish.postDelayed(this, 5000);
+            }
+        });
+
+        startAdvert = findViewById(R.id.start_advertising);
+        startAdvert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PlayerDashboard.class);
+                startActivity(intent);
             }
         });
 
