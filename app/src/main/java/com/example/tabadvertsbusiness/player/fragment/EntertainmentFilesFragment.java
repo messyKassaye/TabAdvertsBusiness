@@ -1,15 +1,20 @@
-package com.example.tabadvertsbusiness.auth.view.fragments;
+package com.example.tabadvertsbusiness.player.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.IntentCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +25,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
+import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
+import com.example.tabadvertsbusiness.auth.roomDB.DAO.AdvertDAO;
+import com.example.tabadvertsbusiness.auth.roomDB.DAO.EntertainmentDAO;
+import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
+import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
+import com.example.tabadvertsbusiness.auth.roomDB.entity.EntertainmentRoom;
 import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.player.Player;
 import com.obsez.android.lib.filechooser.ChooserDialog;
 
 import java.io.File;
-
-import static com.example.tabadvertsbusiness.auth.helpers.SuperApplication.getContext;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,6 +63,8 @@ public class EntertainmentFilesFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private List<String> filesList = new ArrayList<>();
+    private ProgressDialog progressDialog;
 
     public EntertainmentFilesFragment() {
         // Required empty public constructor
@@ -110,6 +123,7 @@ public class EntertainmentFilesFragment extends Fragment {
         addMyFile = getView().findViewById(R.id.addMyFiles);
         startAdverting = getView().findViewById(R.id.startPlaying);
 
+
         Constants.calculateDeviceResolution((AppCompatActivity) getContext());
         if(Constants.getRealWidth()<=480){
             buttonLayout.setOrientation(LinearLayout.VERTICAL);
@@ -129,12 +143,37 @@ public class EntertainmentFilesFragment extends Fragment {
                 new ChooserDialog(getActivity())
                         .withFilter(false,true,"mp4","mkv","mp3")
                         .enableMultiple(true)
-                        .disableTitle(true)
                         .withChosenListener(new ChooserDialog.Result() {
                             @Override
                             public void onChoosePath(String path, File pathFile) {
-                                System.out.println("Path: "+path);
-                                System.out.println("File: "+pathFile.getName());
+                                File file = new File(path);
+                                if(file.exists()){
+
+                                    AsyncTask.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                          TabletAdsRoomDatabase db=  TabletAdsRoomDatabase
+                                                  .getDatabase(getContext());
+                                          EntertainmentDAO entDao = db.getEntertainmentDAO();
+
+                                          EntertainmentRoom entertainmentRoom = entDao.show(path);
+                                            if (entertainmentRoom==null){
+                                                EntertainmentRoom room = new EntertainmentRoom();
+                                                room.setFilePath(path);
+                                                room.setChoose(true);
+                                                entDao.store(room);
+
+                                            }else {
+                                                System.out.println("File: "+entertainmentRoom.isChoose());
+                                                EntertainmentRoom room = new EntertainmentRoom();
+                                                room.setFilePath(path);
+                                                room.setChoose(!entertainmentRoom.isChoose());
+                                                entDao.update(room);
+                                            }
+                                        }
+                                    });
+
+                                }
                             }
                         })
                         // to handle the back key pressed or clicked outside the dialog:
@@ -153,9 +192,17 @@ public class EntertainmentFilesFragment extends Fragment {
         startAdverting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), Player.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                progressDialog = LoadingDialog.loadingDialog(getActivity(),"Please wait...." +
+                        "we are processing your data");
+                progressDialog.show();
+
+                prepareAdvertData();
+
+               /* Intent intent = new Intent(getContext(), Player.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                ActivityCompat.finishAffinity(getActivity());*/
             }
         });
     }
@@ -184,6 +231,10 @@ public class EntertainmentFilesFragment extends Fragment {
         mListener = null;
     }
 
+    public void processReceivedFiles(List<String> filesList,File pathFile){
+        System.out.println("File list: "+filesList.size());
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -197,5 +248,26 @@ public class EntertainmentFilesFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void prepareAdvertData(){
+
+        TabletAdsRoomDatabase db = TabletAdsRoomDatabase.getDatabase(getContext());
+
+        AdvertDAO advertDAO = db.getAdvertDAO();
+        advertDAO.index().observe(getActivity(),advertRooms -> {
+
+            List<AdvertRoom> adverts = advertRooms;
+            db.getEntertainmentDAO().index()
+                    .observe(getActivity(),entertainmentRooms -> {
+                        preparePlayList(adverts,entertainmentRooms);
+                    });
+        });
+
+    }
+
+    public void preparePlayList(List<AdvertRoom> adverts,List<EntertainmentRoom> entertainment){
+        System.out.println("Ad: "+adverts.size());
+        System.out.println("Enter: "+entertainment.size());
     }
 }

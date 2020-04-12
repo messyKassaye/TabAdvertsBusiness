@@ -19,7 +19,6 @@
         <activity android:name=".player.Player"></activity>
         <activity android:name=".player.PlayerDashboard" />
         <activity android:name=".auth.view.DownloaderDashboard" />
-        <activity android:name=".auth.view.activities.AddNewCarActivity" />
         <activity
             android:name=".auth.view.DriverDashboard"
             android:label="@string/title_activity_driver_dashboard"

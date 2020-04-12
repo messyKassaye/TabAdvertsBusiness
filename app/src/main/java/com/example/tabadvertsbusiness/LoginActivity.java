@@ -83,8 +83,6 @@ public class LoginActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case android.R.id.home:
                 finish();
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
 
         }
         return super.onOptionsItemSelected(item);
@@ -93,8 +91,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         this.finish();
-        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-        startActivity(intent);
     }
 
     public void login(String email, String password){

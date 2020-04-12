@@ -76,7 +76,7 @@ public class AddNewCarActivity extends AppCompatActivity {
                 @Override
                 public void onCheckedChanged(RadioGroup radioGroup, int i) {
                     View radioButton = car_category_layout.findViewById(i);
-                     carCategory = (Category)radioButton.getTag();
+                    carCategory = (Category)radioButton.getTag();
                     checkChanged(carCategory);
                 }
             });

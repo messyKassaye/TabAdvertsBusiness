@@ -3,6 +3,7 @@ package com.example.tabadvertsbusiness.player;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,10 +13,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.tabadvertsbusiness.LoginActivity;
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
-import com.example.tabadvertsbusiness.auth.view.fragments.EntertainmentFilesFragment;
+import com.example.tabadvertsbusiness.player.fragment.EntertainmentFilesFragment;
 import com.example.tabadvertsbusiness.constants.Constants;
 
 import java.util.List;
@@ -24,7 +26,9 @@ public class PlayerDashboard extends AppCompatActivity implements EntertainmentF
 
     private LinearLayout playerInfoLayout;
     private Button login;
-    private TextView infoText;
+    private TextView infoText,headerText;
+
+    private LinearLayout mainPlayertStarterLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,21 +46,31 @@ public class PlayerDashboard extends AppCompatActivity implements EntertainmentF
 
         playerInfoLayout = findViewById(R.id.playerInfoLayout);
         infoText = findViewById(R.id.playerInfo);
+        headerText = findViewById(R.id.noAdvertData);
+
         login = findViewById(R.id.playerInfoButton);
+
+        mainPlayertStarterLayout = findViewById(R.id.mainPlayerStarterLayout);
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
             }
         });
+
+
 
         TabletAdsRoomDatabase.getDatabase(getApplicationContext())
                 .getAdvertDAO().index().observe(this,advertRooms -> {
 
-            if (Constants.doesDatabaseExist(getApplicationContext())&&advertRooms.size()<=0){
+            System.out.println("Size: "+advertRooms.size());
+            if (advertRooms.size()<=0){
                 playerInfoLayout.setVisibility(View.VISIBLE);
-                infoText.setText("Advert data is not found in this tablet." +
-                        " Please download or receive advert data and start working.");
+                headerText.setText("Advert data is not found in this tablet.");
+                infoText.setText("Please login and download or receive advert data then you can " +
+                        "start playing advert videos.");
             }else {
                 startPlayingAdvert(advertRooms);
             }
@@ -66,8 +80,7 @@ public class PlayerDashboard extends AppCompatActivity implements EntertainmentF
     }
 
     public void startPlayingAdvert(List<AdvertRoom> advertRooms){
-
-
+        mainPlayertStarterLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
