@@ -33,6 +33,7 @@ import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.EntertainmentRoom;
 import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.player.Player;
+import com.example.tabadvertsbusiness.player.model.Media;
 import com.obsez.android.lib.filechooser.ChooserDialog;
 
 import java.io.File;
@@ -63,8 +64,8 @@ public class EntertainmentFilesFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private List<String> filesList = new ArrayList<>();
-    private ProgressDialog progressDialog;
+
+
 
     public EntertainmentFilesFragment() {
         // Required empty public constructor
@@ -132,9 +133,12 @@ public class EntertainmentFilesFragment extends Fragment {
             addMyFile.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
             ));
+            setMargins(addMyFile, 0, 50, 50, 0);
+
             startAdverting.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
             ));
+            setMargins(startAdverting, 0, 50, 0, 0);
         }
 
         addMyFile.setOnClickListener(new View.OnClickListener() {
@@ -193,16 +197,11 @@ public class EntertainmentFilesFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                progressDialog = LoadingDialog.loadingDialog(getActivity(),"Please wait...." +
-                        "we are processing your data");
-                progressDialog.show();
-
-                prepareAdvertData();
-
-               /* Intent intent = new Intent(getContext(), Player.class);
+                Intent intent = new Intent(getContext(), Player.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                ActivityCompat.finishAffinity(getActivity());*/
+                ActivityCompat.finishAffinity(getActivity());
+
             }
         });
     }
@@ -250,24 +249,12 @@ public class EntertainmentFilesFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void prepareAdvertData(){
-
-        TabletAdsRoomDatabase db = TabletAdsRoomDatabase.getDatabase(getContext());
-
-        AdvertDAO advertDAO = db.getAdvertDAO();
-        advertDAO.index().observe(getActivity(),advertRooms -> {
-
-            List<AdvertRoom> adverts = advertRooms;
-            db.getEntertainmentDAO().index()
-                    .observe(getActivity(),entertainmentRooms -> {
-                        preparePlayList(adverts,entertainmentRooms);
-                    });
-        });
-
+    private void setMargins (View view, int left, int top, int right, int bottom) {
+        if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            p.setMargins(left, top, right, bottom);
+            view.requestLayout();
+        }
     }
 
-    public void preparePlayList(List<AdvertRoom> adverts,List<EntertainmentRoom> entertainment){
-        System.out.println("Ad: "+adverts.size());
-        System.out.println("Enter: "+entertainment.size());
-    }
 }
