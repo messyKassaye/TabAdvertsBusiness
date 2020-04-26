@@ -41,7 +41,7 @@ public class Player extends AppCompatActivity  {
 
     private RelativeLayout playerController;
     private Button closePlayer,hidePlayer;
-    private int i =0;
+    private int counter =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +63,7 @@ public class Player extends AppCompatActivity  {
         surfaceView.setZOrderOnTop(false);
 
         //media player controller
+        player = new MediaPlayer();
         playerController = findViewById(R.id.mediaController);
         closePlayer = findViewById(R.id.closePlayer);
         hidePlayer = findViewById(R.id.hideController);
@@ -114,31 +115,27 @@ public class Player extends AppCompatActivity  {
 
         playList = new ArrayList<>();
         for (int i=0;i<adverts.size();i++){
-            AdvertRoom advertRoom = adverts.get(i);
             Media media = new Media();
-            media.setFilePath(advertRoom.getFilePath());
-            media.setMediaId(advertRoom.getId());
+            media.setFilePath(adverts.get(i).getFilePath());
+            media.setMediaId(adverts.get(i).getId());
             media.setType("advert");
             playList.add(media);
         }
 
         for (int j=0;j<entertainment.size();j++){
-            EntertainmentRoom entertainmentRoom = entertainment.get(j);
             Media media = new Media();
             media.setType("entertainment");
-            media.setMediaId(entertainmentRoom.getId());
-            media.setFilePath(entertainmentRoom.getFilePath());
+            media.setMediaId(entertainment.get(j).getId());
+            media.setFilePath(entertainment.get(j).getFilePath());
             playList.add(media);
         }
-        playRecursively(playList.get(i).getFilePath());
-
+        playRecursively(playList.get(counter).getFilePath());
 
     }
 
     public void playRecursively(String path){
         try {
 
-            player = new MediaPlayer();
             player.setDisplay(surfaceView.getHolder());
             player.setDataSource(path);
             player.prepare();
@@ -146,14 +143,14 @@ public class Player extends AppCompatActivity  {
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
-                    i++;
-                    if (i==playList.size()-1){
-                        i=0;
+                    counter++;
+                    if (counter==playList.size()){
+                        counter=0;
                         player.release();
-                        playRecursively(playList.get(i).getFilePath());
+                        playRecursively(playList.get(counter).getFilePath());
                     }else {
                         player.release();
-                        playRecursively(playList.get(i).getFilePath());
+                        playRecursively(playList.get(counter).getFilePath());
                     }
                 }
             });

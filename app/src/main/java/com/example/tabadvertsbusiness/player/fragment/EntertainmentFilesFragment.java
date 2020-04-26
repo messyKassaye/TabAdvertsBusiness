@@ -151,29 +151,17 @@ public class EntertainmentFilesFragment extends Fragment {
                             @Override
                             public void onChoosePath(String path, File pathFile) {
                                 File file = new File(path);
-                                if(file.exists()){
-
+                                if(!file.isDirectory()){
                                     AsyncTask.execute(new Runnable() {
                                         @Override
                                         public void run() {
                                           TabletAdsRoomDatabase db=  TabletAdsRoomDatabase
                                                   .getDatabase(getContext());
                                           EntertainmentDAO entDao = db.getEntertainmentDAO();
-
-                                          EntertainmentRoom entertainmentRoom = entDao.show(path);
-                                            if (entertainmentRoom==null){
-                                                EntertainmentRoom room = new EntertainmentRoom();
-                                                room.setFilePath(path);
-                                                room.setChoose(true);
-                                                entDao.store(room);
-
-                                            }else {
-                                                System.out.println("File: "+entertainmentRoom.isChoose());
-                                                EntertainmentRoom room = new EntertainmentRoom();
-                                                room.setFilePath(path);
-                                                room.setChoose(!entertainmentRoom.isChoose());
-                                                entDao.update(room);
-                                            }
+                                            EntertainmentRoom room = new EntertainmentRoom();
+                                            room.setFilePath(path);
+                                            room.setChoose(true);
+                                            entDao.store(room);
                                         }
                                     });
 
