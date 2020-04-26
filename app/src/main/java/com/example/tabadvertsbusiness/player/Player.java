@@ -27,7 +27,6 @@ import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.EntertainmentRoom;
 import com.example.tabadvertsbusiness.player.model.Media;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,15 +34,14 @@ public class Player extends AppCompatActivity  {
 
 
     private ProgressDialog progressDialog;
-    private ArrayList<Media>  playList = new ArrayList<>();
+    private ArrayList<Media> playList;
     private MediaPlayer player;
 
     private SurfaceView surfaceView;
 
     private RelativeLayout playerController;
     private Button closePlayer,hidePlayer;
-    private boolean exit = false;
-    private int i = 0;
+    private int i =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +88,6 @@ public class Player extends AppCompatActivity  {
         });
 
 
-
         prepareAdvertData();
 
     }
@@ -101,9 +98,11 @@ public class Player extends AppCompatActivity  {
 
         AdvertDAO advertDAO = db.getAdvertDAO();
         advertDAO.index().observe(this,advertRooms -> {
+
+            List<AdvertRoom> adverts = advertRooms;
             db.getEntertainmentDAO().index()
                     .observe(this,entertainmentRooms -> {
-                        preparePlayList(advertRooms,entertainmentRooms);
+                        preparePlayList(adverts,entertainmentRooms);
                     });
         });
 
@@ -113,69 +112,55 @@ public class Player extends AppCompatActivity  {
 
         progressDialog.dismiss();
 
+        playList = new ArrayList<>();
         for (int i=0;i<adverts.size();i++){
+            AdvertRoom advertRoom = adverts.get(i);
             Media media = new Media();
-            media.setFilePath(adverts.get(i).getFilePath());
-            media.setMediaId(adverts.get(i).getId());
+            media.setFilePath(advertRoom.getFilePath());
+            media.setMediaId(advertRoom.getId());
             media.setType("advert");
-            if (checkMedialFileExistence(adverts.get(i).getFilePath())) {
-                playList.add(media);
-            }
+            playList.add(media);
         }
 
         for (int j=0;j<entertainment.size();j++){
-            Media media= new Media();
+            EntertainmentRoom entertainmentRoom = entertainment.get(j);
+            Media media = new Media();
             media.setType("entertainment");
-            media.setMediaId(entertainment.get(j).getId());
-            media.setFilePath(entertainment.get(i).getFilePath());
-            if (checkMedialFileExistence(entertainment.get(i).getFilePath())) {
-                playList.add(media);
-            }
+            media.setMediaId(entertainmentRoom.getId());
+            media.setFilePath(entertainmentRoom.getFilePath());
+            playList.add(media);
         }
-
-        for (int i=0;i<playList.size();i++){
-            System.out.println("Care: "+playList.get(i).getFilePath());
-        }
-
         playRecursively(playList.get(i).getFilePath());
+
 
     }
 
-    public void playRecursively(String  path){
+    public void playRecursively(String path){
         try {
 
             player = new MediaPlayer();
             player.setDisplay(surfaceView.getHolder());
-            player.setDataSource(playList.get(i).getFilePath());
+            player.setDataSource(path);
             player.prepare();
             player.start();
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
-                    i+=1;
-                    System.out.println("Type: "+playList.get(i).getType());
+                    i++;
                     if (i==playList.size()-1){
                         i=0;
                         player.release();
                         playRecursively(playList.get(i).getFilePath());
-                    }else{
+                    }else {
                         player.release();
                         playRecursively(playList.get(i).getFilePath());
                     }
                 }
             });
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
-    public boolean checkMedialFileExistence(String path){
-        File file = new File(path);
-        if (file.isFile()){
-            return true;
-        }else {
-            return false;
+        }catch (Exception e){
+
         }
     }
 

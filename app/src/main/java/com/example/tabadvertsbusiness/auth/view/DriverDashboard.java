@@ -5,10 +5,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.example.tabadvertsbusiness.MainActivity;
 import com.example.tabadvertsbusiness.auth.response.TabletResponse;
 import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
@@ -202,6 +204,9 @@ public class DriverDashboard extends AppCompatActivity
             fragment = new AbouThisTabletFragment();
         }else if(id==R.id.nav_file){
             fragment = new MyFilesFragment();
+        }else if (id==R.id.nav_logout){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         }
 
         if (fragment != null) {
