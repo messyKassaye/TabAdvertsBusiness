@@ -9,13 +9,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class Constants {
     //10.0.2.2
     private static final String TOKEN_PREFENCE = "token";
-    private static final String DOWNLOAD_PATH = "http://10.0.2.2:8000/";
-    private static final String API_URL="http://10.0.2.2:8000/api/";
-    private static final String API_AUTH_URL="http://10.0.2.2:8000/api/auth/";
+    private static final String DOWNLOAD_PATH = "http://dev.tesfabunna.com/";
+    private static final String API_URL="http://dev.tesfabunna.com/api/";
+    private static final String API_AUTH_URL="http://dev.tesfabunna.com/api/auth/";
     private static final String DATA_PATH = "advertData";
     private static final String DB_NAME = "TabletAdsDB";
     private static int realWidth,realHeight;
@@ -79,5 +81,22 @@ public class Constants {
             setRealWidth(display.getWidth());
             setRealHeight(display.getHeight());
         }
+    }
+
+    public static String currentDate(){
+        String date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+        return date;
+    }
+
+    public static String todaysDate(){
+        String date = Constants.currentDate();
+        String today = date.substring(0,date.lastIndexOf(" "));
+        return  today;
+    }
+
+    public static String yesterdaysDate(){
+        String date = Constants.todaysDate();
+        String yesterdayDate = String.valueOf(Integer.valueOf(date.substring(0,date.lastIndexOf("/")))-1);
+        return yesterdayDate;
     }
 }

@@ -250,7 +250,7 @@ public class DriverDownloadFragment extends Fragment {
 
             case ERROR:
                 progressDialog.dismiss();
-                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Something is not Good. Please try again", Toast.LENGTH_SHORT).show();
                 break;
 
             default:

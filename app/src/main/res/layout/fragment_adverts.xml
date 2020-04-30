@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <!-- header -->
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/advertHeader"
             android:padding="5dp"
             android:orientation="vertical"
@@ -23,12 +23,20 @@
 
             <!-- TODO: Update blank fragment layout -->
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:textAllCaps="true"
                 android:text="@string/my_adverts" />
-        </LinearLayout>
+
+            <ImageView
+                android:id="@+id/advertsInfo"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ic_info_black_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/advertLayout"

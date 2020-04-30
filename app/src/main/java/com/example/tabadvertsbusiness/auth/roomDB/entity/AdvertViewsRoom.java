@@ -21,8 +21,8 @@ public class AdvertViewsRoom {
     @ColumnInfo(name = "picture")
     private String picture;
 
-    @ColumnInfo(name = "status")
-    private boolean status;
+    @ColumnInfo(name = "isSend",defaultValue = "false")
+    private boolean send;
 
     public int getId() {
         return id;
@@ -64,11 +64,11 @@ public class AdvertViewsRoom {
         this.picture = picture;
     }
 
-    public boolean isStatus() {
-        return status;
+    public boolean isSend() {
+        return send;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setSend(boolean send) {
+        this.send = send;
     }
 }

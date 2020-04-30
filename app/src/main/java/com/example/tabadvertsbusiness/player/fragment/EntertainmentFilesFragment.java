@@ -1,9 +1,11 @@
 package com.example.tabadvertsbusiness.player.fragment;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -144,56 +146,82 @@ public class EntertainmentFilesFragment extends Fragment {
         addMyFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new ChooserDialog(getActivity())
-                        .withFilter(false,true,"mp4","mkv","mp3")
-                        .enableMultiple(true)
-                        .withChosenListener(new ChooserDialog.Result() {
-                            @Override
-                            public void onChoosePath(String path, File pathFile) {
-                                File file = new File(path);
-                                if(!file.isDirectory()){
-                                    AsyncTask.execute(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                          TabletAdsRoomDatabase db=  TabletAdsRoomDatabase
-                                                  .getDatabase(getContext());
-                                          EntertainmentDAO entDao = db.getEntertainmentDAO();
-                                            EntertainmentRoom room = new EntertainmentRoom();
-                                            room.setFilePath(path);
-                                            room.setChoose(true);
-                                            entDao.store(room);
-                                        }
-                                    });
-
-                                }
-                            }
-                        })
-                        // to handle the back key pressed or clicked outside the dialog:
-                        .withOnCancelListener(new DialogInterface.OnCancelListener() {
-                            public void onCancel(DialogInterface dialog) {
-                                Toast.makeText(getContext(),"File selection canceled",
-                                        Toast.LENGTH_LONG).show();
-                                dialog.cancel(); // MUST have
-                            }
-                        })
-                        .build()
-                        .show();
+               addFile();
             }
         });
 
         startAdverting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TabletAdsRoomDatabase db = TabletAdsRoomDatabase.getDatabase(getActivity());
+                db.getEntertainmentDAO().index().observe(getActivity(),entertainmentRooms -> {
+                    if (entertainmentRooms.size()<=0){
+                        Dialog dialog = new Dialog(getActivity());
+                        dialog.setContentView(R.layout.confirmation_dialog);
+                        ((Button)dialog.findViewById(R.id.addFileButton))
+                                .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.dismiss();
+                                addFile();
+                            }
+                        });
+                        ((Button)dialog.findViewById(R.id.closeButton))
+                                .setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        dialog.dismiss();
 
-                Intent intent = new Intent(getContext(), Player.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                ActivityCompat.finishAffinity(getActivity());
-
+                                    }
+                                });
+                        dialog.show();
+                    }else {
+                        Intent intent = new Intent(getContext(), Player.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        ActivityCompat.finishAffinity(getActivity());
+                    }
+                });
             }
         });
     }
 
+    public void addFile(){
+        new ChooserDialog(getActivity())
+                .withFilter(false,true,"mp4","mkv","mp3")
+                .enableMultiple(true)
+                .withChosenListener(new ChooserDialog.Result() {
+                    @Override
+                    public void onChoosePath(String path, File pathFile) {
+                        File file = new File(path);
+                        if(!file.isDirectory()){
+                            AsyncTask.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    TabletAdsRoomDatabase db=  TabletAdsRoomDatabase
+                                            .getDatabase(getContext());
+                                    EntertainmentDAO entDao = db.getEntertainmentDAO();
+                                    EntertainmentRoom room = new EntertainmentRoom();
+                                    room.setFilePath(path);
+                                    room.setChoose(true);
+                                    entDao.store(room);
+                                }
+                            });
+
+                        }
+                    }
+                })
+                // to handle the back key pressed or clicked outside the dialog:
+                .withOnCancelListener(new DialogInterface.OnCancelListener() {
+                    public void onCancel(DialogInterface dialog) {
+                        Toast.makeText(getContext(),"File selection canceled",
+                                Toast.LENGTH_LONG).show();
+                        dialog.cancel(); // MUST have
+                    }
+                })
+                .build()
+                .show();
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

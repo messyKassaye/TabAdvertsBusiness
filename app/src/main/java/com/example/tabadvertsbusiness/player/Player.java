@@ -1,10 +1,10 @@
 package com.example.tabadvertsbusiness.player;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,24 +24,35 @@ import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
 import com.example.tabadvertsbusiness.auth.roomDB.DAO.AdvertDAO;
 import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
+import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertViewsRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.EntertainmentRoom;
+import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertRoomVIewModel;
+import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertViewsViewModel;
+import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.player.model.Media;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 public class Player extends AppCompatActivity  {
 
 
     private ProgressDialog progressDialog;
-    private ArrayList<Media> playList;
+    private ArrayList<EntertainmentRoom> playList = new ArrayList<>();
+    private ArrayList<AdvertRoom> advertPlaylist = new ArrayList<>();
     private MediaPlayer player;
 
     private SurfaceView surfaceView;
 
     private RelativeLayout playerController;
     private Button closePlayer,hidePlayer;
-    private int counter =0;
+    private int i=0;
+    private int entertainmentCounter=1;
+
+    private AdvertViewsViewModel vIewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +64,7 @@ public class Player extends AppCompatActivity  {
 
         //land scape
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        vIewModel = ViewModelProviders.of(this).get(AdvertViewsViewModel.class);
 
         progressDialog = LoadingDialog.loadingDialog(this,"Please wait...." +
                 "we are processing your data");
@@ -63,7 +75,6 @@ public class Player extends AppCompatActivity  {
         surfaceView.setZOrderOnTop(false);
 
         //media player controller
-        player = new MediaPlayer();
         playerController = findViewById(R.id.mediaController);
         closePlayer = findViewById(R.id.closePlayer);
         hidePlayer = findViewById(R.id.hideController);
@@ -113,29 +124,17 @@ public class Player extends AppCompatActivity  {
 
         progressDialog.dismiss();
 
-        playList = new ArrayList<>();
-        for (int i=0;i<adverts.size();i++){
-            Media media = new Media();
-            media.setFilePath(adverts.get(i).getFilePath());
-            media.setMediaId(adverts.get(i).getId());
-            media.setType("advert");
-            playList.add(media);
-        }
+        advertPlaylist.addAll(adverts);
+        playList.addAll(entertainment);
 
-        for (int j=0;j<entertainment.size();j++){
-            Media media = new Media();
-            media.setType("entertainment");
-            media.setMediaId(entertainment.get(j).getId());
-            media.setFilePath(entertainment.get(j).getFilePath());
-            playList.add(media);
-        }
-        playRecursively(playList.get(counter).getFilePath());
+        playRecursively(playList.get(i).getFilePath(),"entertainment",0);
 
     }
 
-    public void playRecursively(String path){
+    public void playRecursively(String path,String type,int id){
         try {
 
+            player = new MediaPlayer();
             player.setDisplay(surfaceView.getHolder());
             player.setDataSource(path);
             player.prepare();
@@ -143,24 +142,49 @@ public class Player extends AppCompatActivity  {
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
-                    counter++;
-                    if (counter==playList.size()){
-                        counter=0;
-                        player.release();
-                        playRecursively(playList.get(counter).getFilePath());
-                    }else {
-                        player.release();
-                        playRecursively(playList.get(counter).getFilePath());
+
+                    if (type.equalsIgnoreCase("advert")){
+                        entertainmentCounter = 1;
+                        saveAdvertViewData(id);
                     }
+
+                    entertainmentCounter++;
+                    if (entertainmentCounter==3){
+                        Random random = new Random();
+                        int nextAdvertPlayId = random.nextInt(advertPlaylist.size());
+                        player.release();
+                        playRecursively(
+                                advertPlaylist.get(nextAdvertPlayId).getFilePath(),
+                                "advert",advertPlaylist.get(nextAdvertPlayId).getAdvertId());
+                    }else {
+                        i++;
+                        if (i==playList.size()-1){
+                            i=0;
+                            player.release();
+                            playRecursively(playList.get(i).getFilePath(),"entertainment",0);
+                        }else {
+                            player.release();
+                            playRecursively(playList.get(i).getFilePath(),"entertainment",0);
+                        }
+                    }
+
                 }
             });
-
 
         }catch (Exception e){
 
         }
     }
 
+    public void saveAdvertViewData(int advertId){
+        String date = Constants.currentDate();
+        AdvertViewsRoom advertViewsRoom = new AdvertViewsRoom();
+        advertViewsRoom.setAdvertId(advertId);
+        advertViewsRoom.setNumberOfViewers(4);
+        advertViewsRoom.setPicture("No picture is found. because openCV camera doesn't work on emulator");
+        advertViewsRoom.setAdvertTime(date);
+        vIewModel.store(advertViewsRoom);
+    }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         playerController.setVisibility(View.VISIBLE);

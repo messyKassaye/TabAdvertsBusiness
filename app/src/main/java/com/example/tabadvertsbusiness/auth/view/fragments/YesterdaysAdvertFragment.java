@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,10 @@ import android.widget.TextView;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.commons.Helpers;
+import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertViewsRoom;
+import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertViewsViewModel;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +48,8 @@ public class YesterdaysAdvertFragment extends Fragment {
     private CardView advertCard;
     private TextView headerTitle;
     private TextView totalAdvert;
+    private AdvertViewsViewModel viewModel;
+    private ArrayList<AdvertViewsRoom> yesterdayAdvert;
 
     public YesterdaysAdvertFragment() {
         // Required empty public constructor
@@ -85,6 +92,8 @@ public class YesterdaysAdvertFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        viewModel = ViewModelProviders.of(getActivity()).get(AdvertViewsViewModel.class);
 
         advertCard = getView().findViewById(R.id.advertCard);
         advertCard.setCardBackgroundColor(Color.parseColor("#2B2B2B"));
