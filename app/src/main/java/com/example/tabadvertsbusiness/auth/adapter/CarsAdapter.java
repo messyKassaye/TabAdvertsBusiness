@@ -28,7 +28,6 @@ import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
 import com.example.tabadvertsbusiness.auth.services.PlaceService;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
 import com.example.tabadvertsbusiness.auth.view.DriverDashboard;
-import com.example.tabadvertsbusiness.auth.view.fragments.AbouThisTabletFragment;
 import com.example.tabadvertsbusiness.auth.view_model.TabletViewModel;
 
 import java.util.ArrayList;
@@ -110,11 +109,8 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
         viewHolder.setWorkingPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                placeService.setType(2);
-                placeService.setCarId(car.getId());
-
-                mainDialog.display(((AppCompatActivity) context).getSupportFragmentManager(),
-                        "Set your car work place",R.layout.set_address_dialog_layout);
+                DriverDashboard driverDashboard = (DriverDashboard)context;
+                driverDashboard.showRegisterCarWorkPlaceFragment(car);
             }
         });
 

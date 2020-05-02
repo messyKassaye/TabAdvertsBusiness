@@ -96,7 +96,7 @@ public class Constants {
 
     public static String yesterdaysDate(){
         String date = Constants.todaysDate();
-        String yesterdayDate = String.valueOf(Integer.valueOf(date.substring(0,date.lastIndexOf("/")))-1);
+        String yesterdayDate = String.valueOf(Integer.valueOf(date.substring(0,date.indexOf("/")))-1);
         return yesterdayDate;
     }
 }

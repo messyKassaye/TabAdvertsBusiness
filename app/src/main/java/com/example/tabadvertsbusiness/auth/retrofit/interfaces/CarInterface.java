@@ -6,6 +6,8 @@ import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -15,6 +17,9 @@ public interface CarInterface {
     @POST("cars")
     Observable<SuccessResponse> store(@Body CarStore carStore);
 
-    @PUT("cars/{id}")
-    Observable<SuccessResponse> update(@Body Car car, @Path("id") int id);
+    @FormUrlEncoded
+    @PATCH("cars/{id}")
+    Observable<SuccessResponse> update(@Path("id") int id,
+                                       @Field("plate_number")String plate_number,
+                                       @Field("place_id") int place_id);
 }

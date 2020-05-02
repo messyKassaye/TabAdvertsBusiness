@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.example.tabadvertsbusiness.MainActivity;
+import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.response.TabletResponse;
 import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
@@ -26,6 +27,7 @@ import com.example.tabadvertsbusiness.auth.view.fragments.FinanceFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.HomeFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.MyAdvertsFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.MyFilesFragment;
+import com.example.tabadvertsbusiness.auth.view.fragments.RegisterCarWorkPlace;
 import com.example.tabadvertsbusiness.auth.view.fragments.RegisterNewCar;
 import com.example.tabadvertsbusiness.auth.view.fragments.SettingFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.TodaysAdvertFragment;
@@ -61,13 +63,9 @@ import retrofit2.Response;
 public class DriverDashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         HomeFragment.OnFragmentInteractionListener,FinanceFragment.OnFragmentInteractionListener,
-        FileFragment.OnFragmentInteractionListener,SettingFragment.OnFragmentInteractionListener,
-        AdvertsFragment.OnFragmentInteractionListener, CarFragment.OnFragmentInteractionListener,
+        SettingFragment.OnFragmentInteractionListener, CarFragment.OnFragmentInteractionListener,
         AbouThisTabletFragment.OnFragmentInteractionListener, DriverDownloadFragment.OnFragmentInteractionListener,
-        AddressFragment.OnFragmentInteractionListener,RegisterNewCar.OnFragmentInteractionListener,
-        TodaysAdvertFragment.OnFragmentInteractionListener,MyAdvertsFragment.OnFragmentInteractionListener,
-        YesterdaysAdvertFragment.OnFragmentInteractionListener, MyFilesFragment.OnFragmentInteractionListener,
-        AllAdvertsFragment.OnFragmentInteractionListener{
+        RegisterNewCar.OnFragmentInteractionListener{
     private static final String TAG = DriverDashboard.class.getSimpleName();
     private MeViewModel viewModel;
     private TextView fullName,email;
@@ -78,12 +76,12 @@ public class DriverDashboard extends AppCompatActivity
     private Response<TabletResponse> tabletResponseResponse;
 
     private CommonServices commonServices;
-
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_dashboard);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Driver dashboard");
         setSupportActionBar(toolbar);
 
@@ -198,12 +196,16 @@ public class DriverDashboard extends AppCompatActivity
         if (id == R.id.nav_home) {
             // Handle the camera action
             fragment = new HomeFragment();
+            toolbar.setTitle("Driver dashboard");
         } else if(id==R.id.nav_adverts){
             fragment = new MyAdvertsFragment();
+            toolbar.setTitle("My adverts");
         } else if (id == R.id.nav_about_tablet) {
             fragment = new AbouThisTabletFragment();
+            toolbar.setTitle("About this tablet");
         }else if(id==R.id.nav_file){
             fragment = new MyFilesFragment();
+            toolbar.setTitle("My files");
         }else if (id==R.id.nav_logout){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -237,6 +239,7 @@ public class DriverDashboard extends AppCompatActivity
 
                 if(meResponse.getData().getRelations().getCars().size()<=0){
                     addNewCar();
+                    progressBar.setVisibility(View.GONE);
                 }else {
                     tabletViewModel.show(serial_number).enqueue(new Callback<TabletResponse>() {
                         @Override
@@ -260,13 +263,6 @@ public class DriverDashboard extends AppCompatActivity
     }
 
 
-    public void showAboutTablet(){
-        Fragment newFragment = new AbouThisTabletFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, newFragment);
-        ft.addToBackStack(null);
-        ft.commit();
-    }
 
     public void showHome(){
         Fragment newFragment = new HomeFragment();
@@ -293,5 +289,13 @@ public class DriverDashboard extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    public void showRegisterCarWorkPlaceFragment(Car car){
+        Fragment newFragment = new RegisterCarWorkPlace(car);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, newFragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 }

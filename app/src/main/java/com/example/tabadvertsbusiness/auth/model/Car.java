@@ -11,6 +11,9 @@ public class Car {
     private List<Tablet> working_tablet;
     private int place_id;
 
+    public Car() {
+    }
+
     public int getId() {
         return id;
     }

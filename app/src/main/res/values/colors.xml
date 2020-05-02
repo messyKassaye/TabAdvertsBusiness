@@ -8,4 +8,6 @@
     <color name="white_color">#FFFFFF</color>
     <color name="sub_title_color">#d3d3d3</color>
     <color name="grey">#808080</color>
+    <color name="orange">#FF8C00</color>
+    <color name="green">#2E8B57</color>
 </resources>

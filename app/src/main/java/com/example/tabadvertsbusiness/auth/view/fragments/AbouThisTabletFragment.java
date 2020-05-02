@@ -121,11 +121,9 @@ public class AbouThisTabletFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 if(response.body().getData().size()<=0){
                     tabletNotAssingedLayout.setVisibility(View.GONE);
-                    Toast.makeText(getContext(),"There is no un assigned car",Toast.LENGTH_LONG).show();
                 }else {
                     assignTablet(response);
                     assignedLayout.setVisibility(View.VISIBLE);
-                    Toast.makeText(getContext(),response.body().getData().get(0).getSerial_number().toString(),Toast.LENGTH_LONG).show();
                 }
             }
 

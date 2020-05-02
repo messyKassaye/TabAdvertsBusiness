@@ -49,25 +49,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link TodaysAdvertFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link TodaysAdvertFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TodaysAdvertFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
     private CardView advertCard;
     private TextView headerTitle;
     private TextView totalAdvert;
@@ -84,31 +67,12 @@ public class TodaysAdvertFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TodaysAdvertFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TodaysAdvertFragment newInstance(String param1, String param2) {
-        TodaysAdvertFragment fragment = new TodaysAdvertFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -148,39 +112,42 @@ public class TodaysAdvertFragment extends Fragment {
         sendAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog.show();
-
-                String serial_number = Build.SERIAL;
-                System.out.println("Serial: "+serial_number);
-                tabletViewModel.show(serial_number).enqueue(new Callback<TabletResponse>() {
-                    @Override
-                    public void onResponse(Call<TabletResponse> call, Response<TabletResponse> response) {
-                        int  card_id = response.body().getData().get(0).getCar_id();
-                        try {
-                            for (int i = 0; i < todayAdvertData.size(); i++) {
-                                JSONObject jsonObject = new JSONObject();
-                                jsonObject.put("car_id",card_id);
-                                jsonObject.put("advert_id", todayAdvertData.get(i).getAdvertId());
-                                jsonObject.put("advert_time", todayAdvertData.get(i).getAdvertTime());
-                                jsonObject.put("number_of_viewers", todayAdvertData.get(i).getNumberOfViewers());
-                                jsonObject.put("picture", todayAdvertData.get(i).getPicture());
-                                mainJSON.put(jsonObject);
+                if (todayAdvertData.size()<=0){
+                    Toast.makeText(getActivity(),"There is no data to send.",Toast.LENGTH_LONG).show();
+                }else {
+                    progressDialog.show();
+                    String serial_number = Build.SERIAL;
+                    System.out.println("Serial: " + serial_number);
+                    tabletViewModel.show(serial_number).enqueue(new Callback<TabletResponse>() {
+                        @Override
+                        public void onResponse(Call<TabletResponse> call, Response<TabletResponse> response) {
+                            int card_id = response.body().getData().get(0).getCar_id();
+                            try {
+                                for (int i = 0; i < todayAdvertData.size(); i++) {
+                                    JSONObject jsonObject = new JSONObject();
+                                    jsonObject.put("car_id", card_id);
+                                    jsonObject.put("advert_id", todayAdvertData.get(i).getAdvertId());
+                                    jsonObject.put("advert_time", todayAdvertData.get(i).getAdvertTime());
+                                    jsonObject.put("number_of_viewers", todayAdvertData.get(i).getNumberOfViewers());
+                                    jsonObject.put("picture", todayAdvertData.get(i).getPicture());
+                                    mainJSON.put(jsonObject);
+                                }
+                                System.out.println("Object: " + mainJSON.toString());
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                            System.out.println("Object: " + mainJSON.toString());
-                        } catch (Exception e) {
-                            e.printStackTrace();
+
+                            AdvertViewSendObject advertViewSendObject = new AdvertViewSendObject();
+                            advertViewSendObject.setData(mainJSON.toString());
+                            retrofitViewModel.store(advertViewSendObject);
                         }
 
-                        AdvertViewSendObject advertViewSendObject = new AdvertViewSendObject();
-                        advertViewSendObject.setData(mainJSON.toString());
-                        retrofitViewModel.store(advertViewSendObject);
-                    }
+                        @Override
+                        public void onFailure(Call<TabletResponse> call, Throwable t) {
 
-                    @Override
-                    public void onFailure(Call<TabletResponse> call, Throwable t) {
-
-                    }
-                });
+                        }
+                    });
+                }
 
             }
         });
@@ -205,44 +172,6 @@ public class TodaysAdvertFragment extends Fragment {
         });
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 
     private void consumeResponse(ApiResponse apiResponse) {
 
@@ -278,6 +207,7 @@ public class TodaysAdvertFragment extends Fragment {
     }
 
     public void updateAdvertView(List<AdvertViewsRoom> advertViews){
+        totalAdvert.setText("0");
         TabletAdsRoomDatabase db = TabletAdsRoomDatabase.getDatabase(getContext());
         for (int i=0;i<advertViews.size();i++){
             AdvertViewsRoom advertViewsRoom = new AdvertViewsRoom();

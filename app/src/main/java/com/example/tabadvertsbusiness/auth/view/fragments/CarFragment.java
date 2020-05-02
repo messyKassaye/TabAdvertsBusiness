@@ -145,7 +145,7 @@ public class CarFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                     snackbar.show();
                 }else {
-                    this.addNewCar();
+
                 }
 
             }

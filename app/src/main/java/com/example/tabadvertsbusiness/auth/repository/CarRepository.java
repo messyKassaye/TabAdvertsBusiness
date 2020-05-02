@@ -20,6 +20,6 @@ public class CarRepository {
     }
 
     public Observable<SuccessResponse> update(Car car,int id){
-        return carInterface.update(car,id);
+        return carInterface.update(id,car.getPlate_number(),car.getPlace_id());
     }
 }

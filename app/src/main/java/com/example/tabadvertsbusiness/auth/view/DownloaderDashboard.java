@@ -22,7 +22,6 @@ import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 import com.google.android.material.button.MaterialButton;
 
 public class DownloaderDashboard extends AppCompatActivity implements
-        AddressFragment.OnFragmentInteractionListener ,
         NewDownloadFragment.OnFragmentInteractionListener,
         TotalDownloadSizeFragment.OnFragmentInteractionListener,
         DownloadHistoryFragment.OnFragmentInteractionListener {

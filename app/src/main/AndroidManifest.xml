@@ -30,7 +30,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".player.vision.FaceDetector"></activity>
         <activity android:name=".player.Player" />
         <activity android:name=".player.PlayerDashboard" />
         <activity android:name=".auth.view.DownloaderDashboard" />

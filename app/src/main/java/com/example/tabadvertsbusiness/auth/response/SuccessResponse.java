@@ -1,6 +1,7 @@
 package com.example.tabadvertsbusiness.auth.response;
 
 import com.example.tabadvertsbusiness.auth.model.Advert;
+import com.example.tabadvertsbusiness.auth.model.Car;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -22,6 +23,10 @@ public class SuccessResponse {
     @SerializedName("adverts")
     @Expose
     private List<Advert> adverts;
+
+    @SerializedName("car")
+    @Expose
+    private Car car;
 
 
 
@@ -55,5 +60,13 @@ public class SuccessResponse {
 
     public void setAdverts(List<Advert> adverts) {
         this.adverts = adverts;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
     }
 }

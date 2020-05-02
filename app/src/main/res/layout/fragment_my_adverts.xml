@@ -7,26 +7,44 @@
     tools:context=".auth.view.fragments.MyAdvertsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <HorizontalScrollView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TableRow>
-                <TextView
-                    android:text="Company name"
-                    android:layout_column="1"
-                    android:padding="3dp"
-                    />
-                <TextView
-                    android:text="Product name"
-                    android:layout_column="2"
-                    android:padding="3dp"
-                    />
-            </TableRow>
-        </TableLayout>
+        <ProgressBar
+            android:id="@+id/myAdvertPbr"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-    </HorizontalScrollView>
+        <LinearLayout
+            android:id="@+id/noAdvertsFound"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:padding="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textStyle="bold"
+                android:text="We couldn't any find played adverts in this tablet. please play advert and generate more income"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+        <HorizontalScrollView
+            android:visibility="gone"
+            android:id="@+id/advertsRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TableLayout
+                android:id="@+id/advertTable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </TableLayout>
+        </HorizontalScrollView>
+
+    </LinearLayout>
 </ScrollView>
