@@ -17,8 +17,8 @@
            <fragment
                android:id="@+id/download_fragment"
                android:layout_marginBottom="20dp"
-               android:name="com.example.tabadvertsbusiness.auth.view.fragments.DriverDownloadFragment"
-               android:layout_width="wrap_content"
+               android:name="com.example.tabadvertsbusiness.auth.view.fragments.DriverDownloadRequestFragment"
+               android:layout_width="match_parent"
                android:layout_height="wrap_content"/>
 
            <fragment

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".auth.view.fragments.DriverDownloadFragment">
+    tools:context=".auth.view.fragments.DriverDownloadRequestFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.cardview.widget.CardView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/driverDownloadCard"
         app:cardBackgroundColor="@color/colorPrimary"
-        android:layout_width="280dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".auth.view.downloaderView.NewDownloadFragment">
 
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"/>
 
             <LinearLayout
-                android:id="@+id/driverDownloadLayout"
+                android:id="@+id/mainLayout"
                 android:visibility="gone"
                 android:layout_marginTop="20dp"
                 android:padding="10dp"
@@ -54,9 +54,52 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
-                    android:id="@+id/downloadInfo"
+                    android:id="@+id/sendRequestInfo"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+                <Button
+                    android:id="@+id/sendDownloadRequestNow"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/button_shape"
+                    android:text="Send download request"
+                    android:textAllCaps="false"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </Button>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:id="@+id/downloadRequestLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/downloadRequestInfo"
+                    android:textColor="@android:color/holo_green_light"
+                    android:layout_gravity="center"
+                    android:text="We were processing your download request until now. Now we have zipped your file and you can start downloading it"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/downloadingStatus"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="Downloading your file...."
+                    android:textColor="@android:color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -72,7 +115,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                 </Button>
-
             </LinearLayout>
 
         </LinearLayout>

@@ -26,7 +26,7 @@
             android:layout_height="wrap_content">
             <TextView
                 android:textStyle="bold"
-                android:text="We couldn't any find played adverts in this tablet. please play advert and generate more income"
+                android:text="We couldn't find any played adverts in this tablet. please play advert and generate more income"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>

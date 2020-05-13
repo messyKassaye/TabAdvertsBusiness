@@ -1,11 +1,20 @@
 package com.example.tabadvertsbusiness.auth.model;
 
 public class Attribute {
+    private int id;
     private String first_name;
     private String last_name;
     private String email;
     private String phone;
     private String avator;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirst_name() {
         return first_name;

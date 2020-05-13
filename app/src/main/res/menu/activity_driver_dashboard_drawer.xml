@@ -8,6 +8,12 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_dashboard_black_24dp"
             android:title="@string/menu_home" />
+
+        <item
+            android:id="@+id/nav_my_cars"
+            android:icon="@drawable/ic_directions_car_black_24dp"
+            android:title="@string/my_cars"
+            />
         <item
             android:id="@+id/nav_adverts"
             android:icon="@drawable/ic_videocam_black_24dp"

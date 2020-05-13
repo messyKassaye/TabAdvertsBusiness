@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,8 +96,13 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
 
         if(car.getWorking_tablet().size()>0){
             viewHolder.assignButton.setVisibility(View.GONE);
-            viewHolder.assigned_text.setText("assigned to : "+car.getWorking_tablet()
-                    .get(0).getSerial_number()+" tablet");
+            String serialNumber = Build.SERIAL;
+            if (serialNumber.equalsIgnoreCase(car.getWorking_tablet().get(0).getSerial_number())){
+                viewHolder.assigned_text.setText(Html.fromHtml("working tablet: <span style='color:#1976d2;'>On this tablet</span>"));
+            }else {
+                viewHolder.assigned_text.setText("Working tablet : "+car.getWorking_tablet()
+                        .get(0).getSerial_number());
+            }
         }
 
         viewHolder.assignButton.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +175,6 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
 
             case ERROR:
                 progressDialog.dismiss();
-                Toast.makeText(context,apiResponse.data.getMessage(), Toast.LENGTH_LONG).show();
                 break;
 
             default:
@@ -184,7 +189,7 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
         if(response.isStatus()){
             Toast.makeText(context,response.getMessage(),Toast.LENGTH_LONG).show();
             DriverDashboard dashboard = (DriverDashboard)context;
-            dashboard.replaceFragment();
+            dashboard.showHome();
         }else {
             Toast.makeText(context,response.getMessage(),Toast.LENGTH_LONG).show();
         }

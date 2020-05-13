@@ -28,6 +28,9 @@ public class SuccessResponse {
     @Expose
     private Car car;
 
+    @SerializedName("status_type")
+    private String status_type;
+
 
 
     public boolean isStatus() {
@@ -68,5 +71,13 @@ public class SuccessResponse {
 
     public void setCar(Car car) {
         this.car = car;
+    }
+
+    public String getStatus_type() {
+        return status_type;
+    }
+
+    public void setStatus_type(String status_type) {
+        this.status_type = status_type;
     }
 }

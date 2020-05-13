@@ -4,7 +4,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,15 +13,13 @@ import com.example.tabadvertsbusiness.MainActivity;
 import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.response.TabletResponse;
 import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
-import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
 import com.example.tabadvertsbusiness.auth.services.CommonServices;
+import com.example.tabadvertsbusiness.auth.sharedPreferences.ApplicationPreferenceCreator;
 import com.example.tabadvertsbusiness.auth.view.fragments.AbouThisTabletFragment;
-import com.example.tabadvertsbusiness.auth.view.fragments.AddressFragment;
-import com.example.tabadvertsbusiness.auth.view.fragments.AdvertsFragment;
-import com.example.tabadvertsbusiness.auth.view.fragments.AllAdvertsFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.CarFragment;
-import com.example.tabadvertsbusiness.auth.view.fragments.DriverDownloadFragment;
-import com.example.tabadvertsbusiness.auth.view.fragments.FileFragment;
+import com.example.tabadvertsbusiness.auth.view.fragments.CarWorkPlaceNotAssignedFragment;
+import com.example.tabadvertsbusiness.auth.view.fragments.DownloadRequestSubmittedFragment;
+import com.example.tabadvertsbusiness.auth.view.fragments.DriverDownloadRequestFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.FinanceFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.HomeFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.MyAdvertsFragment;
@@ -30,12 +27,8 @@ import com.example.tabadvertsbusiness.auth.view.fragments.MyFilesFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.RegisterCarWorkPlace;
 import com.example.tabadvertsbusiness.auth.view.fragments.RegisterNewCar;
 import com.example.tabadvertsbusiness.auth.view.fragments.SettingFragment;
-import com.example.tabadvertsbusiness.auth.view.fragments.TodaysAdvertFragment;
-import com.example.tabadvertsbusiness.auth.view.fragments.YesterdaysAdvertFragment;
+import com.example.tabadvertsbusiness.auth.view.fragments.TabletNotAssignedToCarFragment;
 import com.example.tabadvertsbusiness.auth.view_model.TabletViewModel;
-import com.example.tabadvertsbusiness.constants.Constants;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 import androidx.core.view.GravityCompat;
@@ -47,28 +40,29 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 
 import java.io.File;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DriverDashboard extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        HomeFragment.OnFragmentInteractionListener,FinanceFragment.OnFragmentInteractionListener,
-        SettingFragment.OnFragmentInteractionListener, CarFragment.OnFragmentInteractionListener,
-        AbouThisTabletFragment.OnFragmentInteractionListener, DriverDownloadFragment.OnFragmentInteractionListener,
+        implements NavigationView.OnNavigationItemSelectedListener,FinanceFragment.OnFragmentInteractionListener,
+        SettingFragment.OnFragmentInteractionListener,
+        DriverDownloadRequestFragment.OnFragmentInteractionListener,
         RegisterNewCar.OnFragmentInteractionListener{
     private static final String TAG = DriverDashboard.class.getSimpleName();
     private MeViewModel viewModel;
     private TextView fullName,email;
+    private ImageView profileImage;
     private NavigationView navigationView;
     private String serial_number;
     private TabletViewModel tabletViewModel;
@@ -84,6 +78,7 @@ public class DriverDashboard extends AppCompatActivity
          toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Driver dashboard");
         setSupportActionBar(toolbar);
+
 
         TabletAdsRoomDatabase.getDatabase(this);
 
@@ -111,6 +106,8 @@ public class DriverDashboard extends AppCompatActivity
             @Override
             public void run() {
                 TabletAdsRoomDatabase.getDatabase(getBaseContext());
+                ApplicationPreferenceCreator.setDownloadingStatus(getApplicationContext(),null);
+
             }
         });
         //initialize view model
@@ -120,6 +117,7 @@ public class DriverDashboard extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         fullName = (TextView) headerView.findViewById(R.id.full_name);
         email = (TextView)headerView.findViewById(R.id.email);
+        profileImage = headerView.findViewById(R.id.driverProfileImage);
         //set view model value
         this.setView();
     }
@@ -209,6 +207,9 @@ public class DriverDashboard extends AppCompatActivity
         }else if (id==R.id.nav_logout){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+        }else if (id==R.id.nav_my_cars){
+            fragment = new CarFragment();
+            toolbar.setTitle("My cars");
         }
 
         if (fragment != null) {
@@ -235,6 +236,11 @@ public class DriverDashboard extends AppCompatActivity
                 fullName.setText(meResponse.getData().getAttribute().getFirst_name()+" "
                 +meResponse.getData().getAttribute().getLast_name());
                 email.setText(meResponse.getData().getAttribute().getEmail());
+                if (meResponse.getData().getAttribute().getAvator().equals("letter")){
+                    profileImage.setImageResource(R.drawable.ic_person_black_24dp);
+                }else {
+
+                }
 
 
                 if(meResponse.getData().getRelations().getCars().size()<=0){
@@ -246,9 +252,13 @@ public class DriverDashboard extends AppCompatActivity
                         public void onResponse(Call<TabletResponse> call, Response<TabletResponse> response) {
                             progressBar.setVisibility(View.GONE);
                             if(response.body().getData().size()<=0){
-                                showCars();
+                                showTabletIsNotAssignedToCar();
                             }else {
-                                showHome();
+                                if (response.body().getData().get(0).getCars().getWorking_place().size()<=0){
+                                    showAboutThisTablet();
+                                }else {
+                                    showHome();
+                                }
                             }
                         }
 
@@ -271,6 +281,14 @@ public class DriverDashboard extends AppCompatActivity
         ft.addToBackStack(null);
         ft.commit();
     }
+
+    public void showAboutThisTablet(){
+        Fragment newFragment = new AbouThisTabletFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, newFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
     public void addNewCar(){
         Fragment newFragment = new RegisterNewCar(this);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -279,8 +297,32 @@ public class DriverDashboard extends AppCompatActivity
         ft.commit();
     }
 
-    public void showCars(){
-        Fragment newFragment = new CarFragment();
+    public void showDownloadRequestSubmmitedFragment(String message){
+        Fragment newFragment = new DownloadRequestSubmittedFragment(message);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, newFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void showTabletIsNotAssignedToCar(){
+        Fragment newFragment = new TabletNotAssignedToCarFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, newFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void showCarRegisterationFragment(){
+        Fragment newFragment = new RegisterNewCar();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, newFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void carWorkPlaceIsNotSet(Car car){
+        Fragment newFragment = new CarWorkPlaceNotAssignedFragment(car);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, newFragment);
         ft.addToBackStack(null);

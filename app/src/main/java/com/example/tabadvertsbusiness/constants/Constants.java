@@ -8,12 +8,11 @@ import android.view.Display;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Constants {
-    //10.0.2.2
+    //10.0.2.2:8000
     private static final String TOKEN_PREFENCE = "token";
     private static final String DOWNLOAD_PATH = "http://dev.tesfabunna.com/";
     private static final String API_URL="http://dev.tesfabunna.com/api/";
@@ -98,5 +97,9 @@ public class Constants {
         String date = Constants.todaysDate();
         String yesterdayDate = String.valueOf(Integer.valueOf(date.substring(0,date.indexOf("/")))-1);
         return yesterdayDate;
+    }
+
+    public static String getDownloadingPreference(){
+        return "Downloads";
     }
 }

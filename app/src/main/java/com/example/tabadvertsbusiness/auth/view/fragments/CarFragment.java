@@ -3,6 +3,7 @@ package com.example.tabadvertsbusiness.auth.view.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,18 +17,28 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.adapter.CarsAdapter;
 import com.example.tabadvertsbusiness.auth.adapter.ShimmerRecyclerViewAdapter;
+import com.example.tabadvertsbusiness.auth.helpers.GridSpacingItemDecoration;
 import com.example.tabadvertsbusiness.auth.model.Car;
+import com.example.tabadvertsbusiness.auth.model.Tablet;
+import com.example.tabadvertsbusiness.auth.response.TabletResponse;
+import com.example.tabadvertsbusiness.auth.view.DriverDashboard;
 import com.example.tabadvertsbusiness.auth.view.activities.AddNewCarActivity;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
+import com.example.tabadvertsbusiness.auth.view_model.TabletViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -35,32 +46,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.supercharge.shimmerlayout.ShimmerLayout;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CarFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CarFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class CarFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
     private MeViewModel viewModel;
-    private View snackBarLayout;
-    private Snackbar snackbar;
-
-    private FloatingActionButton fab;
-
     private RecyclerView recyclerView;
     private ArrayList<Car> arrayList = new ArrayList<>();
     private CarsAdapter adapter;
@@ -74,91 +67,76 @@ public class CarFragment extends Fragment {
     //
     public FrameLayout frameLayout;
     public LayoutInflater inflater;
+    private List<Car> carList;
+
+    private LinearLayout noCarLayout;
+    private Button registerCarButton;
 
 
     public CarFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CarFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CarFragment newInstance(String param1, String param2) {
-        CarFragment fragment = new CarFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String serial_number = Build.SERIAL;
-        snackBarLayout = getView().findViewById(R.id.car_coordinator);
-        snackbar = Snackbar.make(snackBarLayout,"Assign this tablet to one of the following your car.",Snackbar.LENGTH_INDEFINITE);
-        (snackbar.getView()).getLayoutParams().width =ViewGroup.LayoutParams.MATCH_PARENT;
-
-        fab = getView().findViewById(R.id.add_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
         //pre loading for shimmer
         shimmer = getView().findViewById(R.id.shimmerSkeleton);
         skeletonLayout = getView().findViewById(R.id.skeletonLayout);
-        skeletonLayout.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        skeletonLayout.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         skeletonLayout.setItemAnimator(new DefaultItemAnimator());
         shimmerRecyclerViewAdapter = new ShimmerRecyclerViewAdapter(getActivity(),shimmerList);
         this.showSkeleton(true);
 
 
 
+        noCarLayout = getView().findViewById(R.id.noCarLayout);
+        registerCarButton = getView().findViewById(R.id.registerNewCars);
 
         //cars recycler view
         recyclerView = (RecyclerView)getView().findViewById(R.id.cars_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, GridSpacingItemDecoration.dpToPx(10,getContext()), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         //recycler view adapter
         adapter = new CarsAdapter(getActivity(),arrayList);
         recyclerView.setAdapter(adapter);
 
+
         viewModel = ViewModelProviders.of(getActivity()).get(MeViewModel.class);
         viewModel.me().observe(getActivity(),meResponse -> {
             if(meResponse!=null){
                 this.showSkeleton(false);
-                List<Car> list = meResponse.getData().getRelations().getCars();
-                if(list.size()>0){
-                    arrayList.addAll(list);
+                carList = meResponse.getData().getRelations().getCars();
+                if(carList.size()>0){
+                    arrayList.addAll(carList);
                     adapter.notifyDataSetChanged();
-                    snackbar.show();
                 }else {
-
+                    noCarLayout.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
                 }
 
             }
         });
+
+        registerCarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DriverDashboard dashboard = (DriverDashboard)getContext();
+                dashboard.showCarRegisterationFragment();
+            }
+        });
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
 
     }
 
@@ -169,44 +147,7 @@ public class CarFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_car, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 
 
     public int getSkeletonRowCount(Context context) {
@@ -234,24 +175,5 @@ public class CarFragment extends Fragment {
         }
     }
 
-    public void addNewCar(){
 
-        frameLayout = getView().findViewById(R.id.cars_container);
-        this.inflater = (LayoutInflater) getActivity()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        frameLayout.removeAllViews();
-
-        ViewGroup noCarFound = (ViewGroup) inflater.inflate(R.layout.no_car_found, null);
-        Button registerButton = (Button)noCarFound.findViewById(R.id.add_new_car);
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), AddNewCarActivity.class);
-                getActivity().startActivity(intent);
-
-            }
-        });
-        frameLayout.addView(noCarFound);
-
-    }
 }

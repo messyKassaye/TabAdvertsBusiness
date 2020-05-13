@@ -7,6 +7,8 @@ public class Tablet {
     private String serial_number;
     private Car cars;
     private int car_id;
+    private int user_id;
+    private Attribute user;
     public int getId() {
         return id;
     }
@@ -37,5 +39,21 @@ public class Tablet {
 
     public void setCar_id(int car_id) {
         this.car_id = car_id;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public Attribute getUser() {
+        return user;
+    }
+
+    public void setUser(Attribute user) {
+        this.user = user;
     }
 }
