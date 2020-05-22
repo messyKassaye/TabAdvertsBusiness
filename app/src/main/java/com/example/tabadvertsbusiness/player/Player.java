@@ -6,19 +6,18 @@ import androidx.lifecycle.ViewModelProviders;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.MediaController;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
-import com.example.tabadvertsbusiness.MainActivity;
+import com.example.tabadvertsbusiness.home.HomeActivity;
+import com.example.tabadvertsbusiness.home.fragments.HomeFragment;
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
 import com.example.tabadvertsbusiness.auth.roomDB.DAO.AdvertDAO;
@@ -26,18 +25,14 @@ import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertViewsRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.EntertainmentRoom;
-import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertRoomVIewModel;
 import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertViewsViewModel;
 import com.example.tabadvertsbusiness.constants.Constants;
-import com.example.tabadvertsbusiness.player.model.Media;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
-public class Player extends AppCompatActivity  {
+public class Player extends AppCompatActivity {
 
 
     private ProgressDialog progressDialog;
@@ -49,6 +44,7 @@ public class Player extends AppCompatActivity  {
 
     private RelativeLayout playerController;
     private Button closePlayer,hidePlayer;
+    private ImageButton playButton;
     private int i=0;
     private int entertainmentCounter=1;
 
@@ -57,10 +53,11 @@ public class Player extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE); //create fullscreen activity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                WindowManager.LayoutParams.FLAG_FULLSCREEN); //create fullscreen activity
         setContentView(R.layout.activity_player);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);//make screen open always
 
         //land scape
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -78,6 +75,7 @@ public class Player extends AppCompatActivity  {
         playerController = findViewById(R.id.mediaController);
         closePlayer = findViewById(R.id.closePlayer);
         hidePlayer = findViewById(R.id.hideController);
+        playButton = findViewById(R.id.playButton);
 
         closePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +85,7 @@ public class Player extends AppCompatActivity  {
                 }
 
                 finish();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });
@@ -101,6 +99,17 @@ public class Player extends AppCompatActivity  {
 
 
         prepareAdvertData();
+
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (player.isPlaying()){
+                    playerController.setVisibility(View.GONE);
+                }else {
+                    player.start();
+                }
+            }
+        });
 
     }
 
@@ -129,6 +138,7 @@ public class Player extends AppCompatActivity  {
 
         playRecursively(playList.get(i).getFilePath(),"entertainment",0);
 
+
     }
 
     public void playRecursively(String path,String type,int id){
@@ -151,7 +161,7 @@ public class Player extends AppCompatActivity  {
                     entertainmentCounter++;
                     if (entertainmentCounter==3){
                         Random random = new Random();
-                        int nextAdvertPlayId = random.nextInt(advertPlaylist.size());
+                        int nextAdvertPlayId = random.nextInt(advertPlaylist.size()-1);
                         player.release();
                         playRecursively(
                                 advertPlaylist.get(nextAdvertPlayId).getFilePath(),

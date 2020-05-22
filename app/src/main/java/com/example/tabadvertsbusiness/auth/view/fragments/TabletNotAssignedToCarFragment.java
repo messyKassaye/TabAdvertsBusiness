@@ -24,7 +24,6 @@ import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.adapter.CarsAdapter;
 import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.view.DriverDashboard;
-import com.example.tabadvertsbusiness.auth.view.activities.AddNewCarActivity;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 
 import org.xmlpull.v1.sax2.Driver;

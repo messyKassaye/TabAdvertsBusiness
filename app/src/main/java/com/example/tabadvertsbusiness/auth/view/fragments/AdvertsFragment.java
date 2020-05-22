@@ -21,14 +21,6 @@ import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.adapter.AdvertsAdapter;
 import com.example.tabadvertsbusiness.auth.services.CommonServices;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AdvertsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link AdvertsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AdvertsFragment extends Fragment{
 
 

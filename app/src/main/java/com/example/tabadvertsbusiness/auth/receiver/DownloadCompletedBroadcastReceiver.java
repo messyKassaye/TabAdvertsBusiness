@@ -7,12 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.tabadvertsbusiness.MainActivity;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
 import com.example.tabadvertsbusiness.auth.helpers.Unzipper;
 import com.example.tabadvertsbusiness.auth.model.DownloadRequests;
@@ -45,7 +45,7 @@ public class DownloadCompletedBroadcastReceiver extends BroadcastReceiver {
         this.context = context;
         this.downloadRequestFragment = downloadRequest;
         this.fileName = fileName;
-        file = new File(context.getExternalFilesDir(null)+"/advertData/"+fileName);
+        file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/advertData", fileName);
         this.downloadID = downloadId;
         this.processedFile = processedFile;
         progressDialog = LoadingDialog.loadingDialog(context, "Downloading your file....");
@@ -59,7 +59,9 @@ public class DownloadCompletedBroadcastReceiver extends BroadcastReceiver {
         long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
         //Checking if the received broadcast is for our enqueued download by matching download id
         if (downloadID == id) {
-            File downloadedFile = new File(context.getExternalFilesDir(null)+"/advertData/"+fileName);
+            File downloadedFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/advertData", fileName);
+
+            //File downloadedFile = new File(context.getExternalFilesDir(null)+"/advertData/"+fileName);
             if(downloadedFile.exists()){
                 new Unzipper(context,file).execute();
                 Download download = new Download();

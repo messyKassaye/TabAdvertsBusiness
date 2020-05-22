@@ -13,6 +13,6 @@
         android:paddingLeft="16dp"
         android:paddingRight="6dp"
         app:contentInsetStartWithNavigation="0dp"
-        app:navigationIcon="@drawable/ic_close_white_24dp" />
+        app:navigationIcon="@drawable/ic_close_32dp" />
 
 </com.google.android.material.appbar.AppBarLayout>

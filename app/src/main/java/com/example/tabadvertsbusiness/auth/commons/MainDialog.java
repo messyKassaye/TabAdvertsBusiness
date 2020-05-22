@@ -4,16 +4,20 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.view.fragments.AddressFragment;
+import com.example.tabadvertsbusiness.auth.view.fragments.CarFragment;
 
 public class MainDialog extends DialogFragment {
 
@@ -21,15 +25,15 @@ public class MainDialog extends DialogFragment {
 
     private Toolbar toolbar;
     private String title;
-    private int id;
+    private Fragment fragment;
     private View view;
 
     public MainDialog newInstance(){
         return this;
     }
-    public void display(FragmentManager fragmentManager,String title,int id) {
+    public void display(FragmentManager fragmentManager, String title, Fragment fragment) {
         this.title = title;
-        this.id = id;
+        this.fragment = fragment;
         this.show(fragmentManager,TAG);
     }
 
@@ -54,8 +58,13 @@ public class MainDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        view = inflater.inflate(id, container, false);
+        view = inflater.inflate(R.layout.main_dialog_layout, container, false);
         toolbar = view.findViewById(R.id.dialogToolbar);
+
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        ft.replace(R.id.mainDialogContent, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
 
         return view;
     }
@@ -64,7 +73,7 @@ public class MainDialog extends DialogFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         toolbar.setNavigationOnClickListener(v -> dismiss());
-        toolbar.setTitle(title);
+        toolbar.setTitle("  "+title);
         toolbar.setTitleTextColor(Color.WHITE);
 
     }

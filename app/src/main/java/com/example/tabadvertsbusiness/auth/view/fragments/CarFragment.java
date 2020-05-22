@@ -17,38 +17,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.adapter.CarsAdapter;
 import com.example.tabadvertsbusiness.auth.adapter.ShimmerRecyclerViewAdapter;
 import com.example.tabadvertsbusiness.auth.helpers.GridSpacingItemDecoration;
 import com.example.tabadvertsbusiness.auth.model.Car;
-import com.example.tabadvertsbusiness.auth.model.Tablet;
-import com.example.tabadvertsbusiness.auth.response.TabletResponse;
 import com.example.tabadvertsbusiness.auth.view.DriverDashboard;
-import com.example.tabadvertsbusiness.auth.view.activities.AddNewCarActivity;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
-import com.example.tabadvertsbusiness.auth.view_model.TabletViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import io.supercharge.shimmerlayout.ShimmerLayout;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 
 public class CarFragment extends Fragment {

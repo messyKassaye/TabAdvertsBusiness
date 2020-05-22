@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import com.example.tabadvertsbusiness.MainActivity;
+import com.example.tabadvertsbusiness.home.HomeActivity;
 import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.response.TabletResponse;
 import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
@@ -17,11 +17,9 @@ import com.example.tabadvertsbusiness.auth.services.CommonServices;
 import com.example.tabadvertsbusiness.auth.sharedPreferences.ApplicationPreferenceCreator;
 import com.example.tabadvertsbusiness.auth.view.fragments.AbouThisTabletFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.CarFragment;
-import com.example.tabadvertsbusiness.auth.view.fragments.CarWorkPlaceNotAssignedFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.DownloadRequestSubmittedFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.DriverDownloadRequestFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.FinanceFragment;
-import com.example.tabadvertsbusiness.auth.view.fragments.HomeFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.MyAdvertsFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.MyFilesFragment;
 import com.example.tabadvertsbusiness.auth.view.fragments.RegisterCarWorkPlace;
@@ -43,12 +41,9 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
-
-import java.io.File;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,7 +77,6 @@ public class DriverDashboard extends AppCompatActivity
 
         TabletAdsRoomDatabase.getDatabase(this);
 
-        File file = getFilesDir();
 
         commonServices = new CommonServices(this);
         commonServices.setAdvertlayout("horizontal");
@@ -148,7 +142,7 @@ public class DriverDashboard extends AppCompatActivity
     }
 
     public void addHomeFragment(){
-        Fragment newFragment = new HomeFragment();
+        Fragment newFragment = new com.example.tabadvertsbusiness.auth.view.fragments.HomeFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.content_frame, newFragment);
         ft.addToBackStack(null);
@@ -193,7 +187,7 @@ public class DriverDashboard extends AppCompatActivity
         Fragment fragment = null;
         if (id == R.id.nav_home) {
             // Handle the camera action
-            fragment = new HomeFragment();
+            fragment = new com.example.tabadvertsbusiness.auth.view.fragments.HomeFragment();
             toolbar.setTitle("Driver dashboard");
         } else if(id==R.id.nav_adverts){
             fragment = new MyAdvertsFragment();
@@ -205,7 +199,7 @@ public class DriverDashboard extends AppCompatActivity
             fragment = new MyFilesFragment();
             toolbar.setTitle("My files");
         }else if (id==R.id.nav_logout){
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         }else if (id==R.id.nav_my_cars){
             fragment = new CarFragment();
@@ -275,7 +269,7 @@ public class DriverDashboard extends AppCompatActivity
 
 
     public void showHome(){
-        Fragment newFragment = new HomeFragment();
+        Fragment newFragment = new com.example.tabadvertsbusiness.auth.view.fragments.HomeFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, newFragment);
         ft.addToBackStack(null);
@@ -321,13 +315,6 @@ public class DriverDashboard extends AppCompatActivity
         ft.commit();
     }
 
-    public void carWorkPlaceIsNotSet(Car car){
-        Fragment newFragment = new CarWorkPlaceNotAssignedFragment(car);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, newFragment);
-        ft.addToBackStack(null);
-        ft.commit();
-    }
     @Override
     public void onFragmentInteraction(Uri uri) {
 

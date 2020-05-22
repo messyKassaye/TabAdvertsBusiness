@@ -150,10 +150,11 @@ public class AbouThisTabletFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 placeService.setType(2);
+                AddressFragment fragment = new AddressFragment();
                 mainDialog.display(
                         getActivity().getSupportFragmentManager(),
                         "Set car working place",
-                        R.layout.set_address_dialog_layout);
+                        fragment);
             }
         });
     }

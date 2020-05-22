@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/advertCard"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!-- header layout -->
+        <LinearLayout
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/headerTitle"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:padding="5dp"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <!-- content layout -->
+        <LinearLayout
+            android:id="@+id/advertMainLayout"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_shape"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/totalAdvert"
+                    android:layout_marginTop="20dp"
+                    android:layout_centerInParent="true"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:textSize="35dp"
+                    android:text="20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/advertContentLayout"
+            android:layout_below="@+id/advertMainLayout"
+            android:padding="10dp"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/showUnsendAdvert"
+                    android:background="@android:color/transparent"
+                    android:textColor="@android:color/white"
+                    android:text="Show all"
+                    android:layout_gravity="center"
+                    android:textAllCaps="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/sendUnsendAdvert"
+                    android:background="@android:color/transparent"
+                    android:textColor="@android:color/white"
+                    android:layout_marginLeft="20dp"
+                    android:visibility="gone"
+                    android:text="Send all"
+                    android:textAllCaps="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/noAdvertIsFound"
+            android:layout_below="@+id/advertMainLayout"
+            android:layout_marginTop="30dp"
+            android:padding="10dp"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="No advert is found"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

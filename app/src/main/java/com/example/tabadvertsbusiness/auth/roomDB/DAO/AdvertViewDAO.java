@@ -7,8 +7,10 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.example.tabadvertsbusiness.auth.model.AdvertView;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertViewsRoom;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -25,5 +27,11 @@ public interface AdvertViewDAO {
 
     @Update
     public void update(AdvertViewsRoom... advertViewsRoom);
+
+    @Query("select * from advertViews where advertId=:advertId")
+    public LiveData<List<AdvertViewsRoom>> showCompanyAdvertView(int advertId);
+
+    @Query("select * from advertViews where isSend=:status")
+    public LiveData<List<AdvertViewsRoom>> showUnsendAdvert(boolean status);
 
 }

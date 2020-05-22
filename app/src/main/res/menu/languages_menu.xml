@@ -4,19 +4,29 @@
 
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
+         android:id="@+id/home"
+         android:icon="@drawable/ic_home_black_24dp"
+         android:title=""
+         app:showAsAction="always"
+        />
+    <item
         android:id="@+id/action_favorite"
-        android:icon="@drawable/ic_language_white_24dp"
+        android:icon="@drawable/ic_more_vert_white_24dp"
         android:title="@string/languages"
         app:showAsAction="always">
         <menu>
 
             <item
-                android:id="@+id/subitem1"
-                android:title="Sub Item 1" />
+                android:id="@+id/how_it_works"
+                android:title="How it works" />
 
             <item
-                android:id="@+id/subitem2"
-                android:title="Sub Item 2" />
+                android:id="@+id/about_us"
+                android:title="About us" />
+
+            <item
+                android:id="@+id/contact_us"
+                android:title="Contact us" />
 
         </menu>
     </item>

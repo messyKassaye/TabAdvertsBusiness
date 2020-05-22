@@ -32,19 +32,13 @@
         </LinearLayout>
 
 
-        <HorizontalScrollView
+        <androidx.recyclerview.widget.RecyclerView
             android:visibility="gone"
             android:id="@+id/advertsRecyclerView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <TableLayout
-                android:id="@+id/advertTable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </TableLayout>
-        </HorizontalScrollView>
+        </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
 </ScrollView>

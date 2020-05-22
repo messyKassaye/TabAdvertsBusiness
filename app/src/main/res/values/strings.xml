@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Tablet adverts</string>
-    <string name="welcome">Welcome to Tablet Ads</string>
+    <string name="app_name">Ride ads</string>
+    <string name="welcome">Welcome to Ride Ads</string>
     <string name="start_working_now">Start working now and get more income.</string>
     <string name="have_nice_time">Have a nice working time.</string>
     <string name="start_advertising">Start adverting</string>
@@ -84,7 +84,7 @@
     <string name="receieveFileButton">Receive file now</string>
 
     <string name="today_advert">Today\'s adverts</string>
-    <string name="yesterday_advert">Yesterday\'s adverts</string>
+    <string name="unsend_adverts">Unsend adverts</string>
     <string name="all_advert">All adverts</string>
 
 

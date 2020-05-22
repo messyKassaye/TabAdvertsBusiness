@@ -1,26 +1,32 @@
-package com.example.tabadvertsbusiness;
+package com.example.tabadvertsbusiness.home.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.model.Tablet;
 import com.example.tabadvertsbusiness.auth.response.TabletResponse;
 import com.example.tabadvertsbusiness.auth.view.DownloaderDashboard;
@@ -33,18 +39,15 @@ import com.example.tabadvertsbusiness.http.interfaces.LoginService;
 import com.example.tabadvertsbusiness.models.LoginResponse;
 
 
-import org.json.JSONObject;
-
 import java.net.SocketTimeoutException;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginFragment extends Fragment {
 
     private EditText email, password;
     private Button loginButton;
@@ -57,26 +60,27 @@ public class LoginActivity extends AppCompatActivity {
     private TabletViewModel tabletViewModel;
     private MeViewModel meViewModel;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
-        Toolbar toolbar =(Toolbar)findViewById(R.id.my_toolbar);
-        toolbar.setTitle("Tab adverts business");
-        toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
-        loginLayout = findViewById(R.id.loginLayout);
-        checkLayout = findViewById(R.id.checkingLayout);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        email = (EditText)findViewById(R.id.input_email);
-        password = (EditText)findViewById(R.id.input_password);
-        loginButton = (Button)findViewById(R.id.btn_login);
-        errorShower = (TextView)findViewById(R.id.errorShower);
+        View view = inflater.inflate(R.layout.activity_login,container,false);
+
+        loginLayout = view.findViewById(R.id.loginLayout);
+        checkLayout = view.findViewById(R.id.checkingLayout);
+
+        email = view.findViewById(R.id.input_email);
+        email.requestFocus();
+
+        password = view.findViewById(R.id.input_password);
+        loginButton = view.findViewById(R.id.btn_login);
+        errorShower = view.findViewById(R.id.errorShower);
 
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -95,27 +99,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        return view;
 
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                finish();
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        this.finish();
     }
 
     public void login(String email, String password){
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+        final ProgressDialog progressDialog = new ProgressDialog(getContext(),
                 R.style.Theme_AppCompat_Light_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
@@ -139,11 +128,11 @@ public class LoginActivity extends AppCompatActivity {
                             if(response.body().getRole().getId()==2){
                                 progressDialog.dismiss();
                                 setToken(response.body().getToken());
-                                showCheckLayout();
+                                showCheckLayout(getView());
                             }else if (response.body().getRole().getId()==4){
                                 progressDialog.dismiss();
                                 setToken(response.body().getToken());
-                                Intent intent = new Intent(getApplicationContext(), DownloaderDashboard.class);
+                                Intent intent = new Intent(getContext(), DownloaderDashboard.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                             }
@@ -169,19 +158,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void setToken(String token){
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences(Constants.getTokenPrefence(),0);
+        SharedPreferences preferences = getContext().getSharedPreferences(Constants.getTokenPrefence(),0);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("token",token);
         editor.commit();
     }
 
-    public void showCheckLayout(){
+    public void showCheckLayout(View view){
         loginLayout.setVisibility(View.GONE);
         checkLayout.setVisibility(View.VISIBLE);
 
-        progressBar = findViewById(R.id.checkPr);
-        textViewInfo = findViewById(R.id.checkingInfo);
-        exit = findViewById(R.id.checkingExit);
+        progressBar = view.findViewById(R.id.checkPr);
+        textViewInfo = view.findViewById(R.id.checkingInfo);
+        exit = view.findViewById(R.id.checkingExit);
 
         tabletViewModel = ViewModelProviders.of(this).get(TabletViewModel.class);
         meViewModel = ViewModelProviders.of(this).get(MeViewModel.class);
@@ -189,8 +178,8 @@ public class LoginActivity extends AppCompatActivity {
         tabletViewModel.show(serail_number).enqueue(new Callback<TabletResponse>() {
             @Override
             public void onResponse(Call<TabletResponse> call, Response<TabletResponse> response) {
-                progressBar.setVisibility(View.GONE);
                 if (response.body().getData().size()<=0){
+                    progressBar.setVisibility(View.GONE);
                     showDriverDashboard();
                 }else {
                     checkOwnerOfThisTablet(response.body().getData());
@@ -207,7 +196,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 clearToken();
-                finish();
+                getActivity().finish();
             }
         });
 
@@ -216,6 +205,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void checkOwnerOfThisTablet(List<Tablet> tablets){
         meViewModel.me().observe(this,meResponse -> {
+            progressBar.setVisibility(View.GONE);
             if (meResponse.getData().getAttribute().getId()==tablets.get(0).getUser_id()){
                 showDriverDashboard();
             }else {
@@ -229,18 +219,18 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 clearToken();
-                finish();
+                getActivity().finish();
             }
         });
     }
 
     public void showDriverDashboard(){
-        Intent intent = new Intent(getApplicationContext(), DriverDashboard.class);
+        Intent intent = new Intent(getContext(), DriverDashboard.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
     public void clearToken(){
-        SharedPreferences preferences =getSharedPreferences(Constants.getTokenPrefence(), 0);
+        SharedPreferences preferences =getActivity().getSharedPreferences(Constants.getTokenPrefence(), 0);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.apply();

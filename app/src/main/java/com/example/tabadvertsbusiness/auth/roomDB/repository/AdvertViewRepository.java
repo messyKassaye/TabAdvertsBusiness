@@ -34,4 +34,12 @@ public class AdvertViewRepository {
     public void update(AdvertViewsRoom advertViewsRoom){
         advertViewDAO.update(advertViewsRoom);
     }
+
+    public LiveData<List<AdvertViewsRoom>> showCompanyAdvert(int id){
+        return advertViewDAO.showCompanyAdvertView(id);
+    }
+
+    public LiveData<List<AdvertViewsRoom>> showUnsendAdvert(boolean status){
+        return  advertViewDAO.showUnsendAdvert(status);
+    }
 }

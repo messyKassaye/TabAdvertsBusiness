@@ -56,6 +56,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/advertContentLayout"
             android:layout_below="@+id/advertMainLayout"
             android:padding="10dp"
             android:orientation="vertical"
@@ -75,6 +76,7 @@
                     android:background="@android:color/transparent"
                     android:textColor="@android:color/white"
                     android:text="Show all"
+                    android:layout_gravity="center"
                     android:textAllCaps="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -83,12 +85,33 @@
                     android:background="@android:color/transparent"
                     android:textColor="@android:color/white"
                     android:layout_marginLeft="20dp"
+                    android:visibility="gone"
                     android:text="Send all"
                     android:textAllCaps="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
             </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/noAdvertIsFound"
+            android:layout_below="@+id/advertMainLayout"
+            android:layout_marginTop="30dp"
+            android:padding="10dp"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="No advert is found"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

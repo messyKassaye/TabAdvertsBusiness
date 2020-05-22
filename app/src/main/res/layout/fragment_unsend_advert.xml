@@ -7,6 +7,6 @@
     tools:context=".auth.view.fragments.TodaysAdvertFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <include layout="@layout/advert_card_layout"/>
+    <include layout="@layout/unsend_advert_layout"/>
 
 </LinearLayout>

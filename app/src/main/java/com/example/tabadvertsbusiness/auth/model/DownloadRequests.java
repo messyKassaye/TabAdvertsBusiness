@@ -3,6 +3,7 @@ package com.example.tabadvertsbusiness.auth.model;
 public class DownloadRequests {
     private int id;
     private String downloadedAdverts;
+    private String device_id;
     private String file_name;
     private String status;
 
@@ -20,6 +21,14 @@ public class DownloadRequests {
 
     public void setDownloadedAdverts(String downloadedAdverts) {
         this.downloadedAdverts = downloadedAdverts;
+    }
+
+    public String getDevice_id() {
+        return device_id;
+    }
+
+    public void setDevice_id(String device_id) {
+        this.device_id = device_id;
     }
 
     public String getFile_name() {

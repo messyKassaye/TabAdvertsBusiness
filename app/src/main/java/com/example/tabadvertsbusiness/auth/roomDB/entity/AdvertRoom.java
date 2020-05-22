@@ -12,6 +12,12 @@ public class AdvertRoom {
     @ColumnInfo(name = "advertId")
     private int advertId;
 
+    @ColumnInfo(name = "company_name")
+    private String company_name;
+
+    @ColumnInfo(name = "product_name")
+    private String product_name;
+
     @ColumnInfo(name = "maximumViewPerDay")
     private int maximumViewPerDay;
 
@@ -43,12 +49,29 @@ public class AdvertRoom {
         this.id = id;
     }
 
+
     public int getMaximumViewPerDay() {
         return maximumViewPerDay;
     }
 
     public void setMaximumViewPerDay(int maximumViewPerDay) {
         this.maximumViewPerDay = maximumViewPerDay;
+    }
+
+    public String getCompany_name() {
+        return company_name;
+    }
+
+    public void setCompany_name(String company_name) {
+        this.company_name = company_name;
+    }
+
+    public String getProduct_name() {
+        return product_name;
+    }
+
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
     }
 
     public String getPrivilege() {

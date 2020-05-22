@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
@@ -53,7 +54,7 @@ public class Unzipper extends AsyncTask<Void, Integer, Integer>{
         _zipFile = zipFile;
         this.context = context;
 
-        ROOT_LOCATION = context.getExternalFilesDir(null)+"/advertData";
+        ROOT_LOCATION = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) +"/advertData";
 
         _dirChecker("");
     }
@@ -165,6 +166,8 @@ public class Unzipper extends AsyncTask<Void, Integer, Integer>{
             for (int i=0;i<=advertData.length();i++){
                 JSONObject advertJSON = advertData.getJSONObject(i);
                 AdvertRoom advertRoom = new AdvertRoom();
+                advertRoom.setCompany_name(advertJSON.getString("company_name"));
+                advertRoom.setProduct_name(advertJSON.getString("product_name"));
                 advertRoom.setAdvertId(advertJSON.getInt("id"));
                 advertRoom.setFileName(advertJSON.getString("fileName"));
                 advertRoom.setPrivilege(advertJSON.getString("privilege"));
@@ -174,13 +177,13 @@ public class Unzipper extends AsyncTask<Void, Integer, Integer>{
                     @Override
                     public void run() {
 
-                       TabletAdsRoomDatabase tabletAdsRoomDatabase= TabletAdsRoomDatabase.getDatabase(context);
-                       AdvertDAO advertDAO = tabletAdsRoomDatabase.getAdvertDAO();
+                        TabletAdsRoomDatabase tabletAdsRoomDatabase= TabletAdsRoomDatabase.getDatabase(context);
+                        AdvertDAO advertDAO = tabletAdsRoomDatabase.getAdvertDAO();
 
-                       AdvertRoom storedAdvert = advertDAO.show(advertRoom.getAdvertId());
-                       if(storedAdvert==null){
-                           advertDAO.store(advertRoom);
-                       }
+                        AdvertRoom storedAdvert = advertDAO.show(advertRoom.getAdvertId());
+                        if(storedAdvert==null){
+                            advertDAO.store(advertRoom);
+                        }
                     }
                 });
 

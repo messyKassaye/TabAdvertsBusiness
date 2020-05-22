@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +47,7 @@ public class RegisterNewCar extends Fragment {
 
     private MaterialButton registerNewCarBtn;
     private LinearLayout firstLayout,newCarRegistrationLayout;
-    private RecyclerView carTypeRecyclerview,carCategoryRecyclerView,carWorkplaceRecyclerview;
+    private RecyclerView carTypeRecyclerview,carCategoryRecyclerView;
 
     private CategoryViewModel carTypeViewModel;
     private ArrayList<Category> cartypeArrayList = new ArrayList<>();
@@ -66,6 +67,10 @@ public class RegisterNewCar extends Fragment {
     private CarViewModel carViewModel;
     private DriverDashboard driverDashboard;
     private String plateNumber;
+
+    private ProgressBar progressBar;
+    private LinearLayout mainLayout;
+
     public RegisterNewCar(DriverDashboard dashboard) {
         // Required empty public constructor
         driverDashboard = dashboard;
@@ -86,8 +91,11 @@ public class RegisterNewCar extends Fragment {
 
         carTypeViewModel = ViewModelProviders.of(getActivity()).get(CategoryViewModel.class);
         carViewModel = ViewModelProviders.of(getActivity()).get(CarViewModel.class);
-        progressDialog = LoadingDialog.loadingDialog(getActivity(),"Assigning....");
+        progressDialog = LoadingDialog.loadingDialog(getActivity(),"Registering new car....");
         carViewModel.storeResponse().observe(getActivity(), this::consumeResponse);
+
+        mainLayout = getView().findViewById(R.id.carsMainLayout);
+        progressBar = getView().findViewById(R.id.progressBar);
 
         firstLayout = getView().findViewById(R.id.firstLayout);
         registerNewCarBtn = getView().findViewById(R.id.registerCar);
@@ -110,7 +118,9 @@ public class RegisterNewCar extends Fragment {
         carTypeRecyclerview.setAdapter(cartypeAdapter);
 
         carTypeViewModel.index().observe(this,categoryResponse -> {
-            if (categoryResponse != null) {
+            progressBar.setVisibility(View.GONE);
+            if (categoryResponse.getData().size()>0) {
+                mainLayout.setVisibility(View.VISIBLE);
                 cartypeArrayList.addAll(categoryResponse.getData());
                 cartypeAdapter.notifyDataSetChanged();
             }

@@ -110,7 +110,10 @@ public class DownloaderDashboard extends AppCompatActivity implements
 
 
     public void setPlace(){
-       dialog.display(getSupportFragmentManager(),"Set your address",R.layout.set_address_dialog_layout);
+        AddressFragment fragment = new AddressFragment();
+
+        dialog.display(getSupportFragmentManager(),
+               "Set your address",fragment);
     }
 
     public void closeDialog(){

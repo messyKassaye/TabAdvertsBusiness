@@ -51,8 +51,8 @@ public class DownloadRequestRepository {
         return  downloadedAdvertsInterface.store(downloadedAdverts);
     }
 
-    public Call<DownloadRequestResponse> show(String status){
-        return downloadedAdvertsInterface.show(status);
+    public Call<DownloadRequestResponse> show(String device_id,String status){
+        return downloadedAdvertsInterface.show(device_id,status);
     }
 
     public Call<SuccessResponse> update(DownloadRequests downloadRequests,int id){

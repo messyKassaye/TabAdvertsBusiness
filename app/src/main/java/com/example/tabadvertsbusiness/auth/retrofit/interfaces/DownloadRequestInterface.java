@@ -19,8 +19,8 @@ public interface DownloadRequestInterface {
     @POST("download_request")
     Observable<SuccessResponse> store(@Body DownloadRequests downloadRequests);
 
-    @GET("download_request/{status}")
-    Call<DownloadRequestResponse> show(@Path("status") String status);
+    @GET("download_request/{device_id}/{status}")
+    Call<DownloadRequestResponse> show(@Path("device_id") String id,@Path("status") String status);
 
     @PUT("download_request/{id}")
     Call<SuccessResponse> update(@Body DownloadRequests downloadRequests,@Path("id") int id);

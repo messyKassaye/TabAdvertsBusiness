@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.commons.Helpers;
+import com.example.tabadvertsbusiness.auth.commons.MainDialog;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
 import com.example.tabadvertsbusiness.auth.model.AdvertView;
 import com.example.tabadvertsbusiness.auth.model.AdvertViewSendObject;
@@ -56,13 +57,8 @@ public class TodaysAdvertFragment extends Fragment {
     private TextView totalAdvert;
     private AdvertViewsViewModel viewsViewModel;
     private ArrayList<AdvertViewsRoom> todayAdvertData = new ArrayList<>();
-    private Button showAll, sendAll;
-    private AdvertViewRetrofitViewModel retrofitViewModel;
-    private ProgressDialog progressDialog;
-    private JSONArray mainJSON;
-
-    private TabletViewModel tabletViewModel;
-
+    private LinearLayout mainLayout,noAdvertLayout;
+    private Button showAll;
     public TodaysAdvertFragment() {
         // Required empty public constructor
     }
@@ -87,70 +83,34 @@ public class TodaysAdvertFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //find car id of this tablet
-        tabletViewModel = ViewModelProviders.of(getActivity()).get(TabletViewModel.class);
+        mainLayout = getView().findViewById(R.id.advertContentLayout);
+        noAdvertLayout = getView().findViewById(R.id.noAdvertIsFound);
 
-
-        try{
-            mainJSON = new JSONArray();
-        }catch (Exception e){}
         advertCard = getView().findViewById(R.id.advertCard);
         advertCard.setCardBackgroundColor(Color.parseColor("#2E8B57"));
 
         showAll = getView().findViewById(R.id.showAll);
-        sendAll = getView().findViewById(R.id.sendAll);
 
         headerTitle = getView().findViewById(R.id.headerTitle);
         headerTitle.setText(R.string.today_advert);
         totalAdvert = getView().findViewById(R.id.totalAdvert);
 
-        retrofitViewModel = ViewModelProviders.of(getActivity()).get(AdvertViewRetrofitViewModel.class);
-        progressDialog = LoadingDialog.loadingDialog(getActivity(), "Sending your data....");
-        retrofitViewModel.storeResponse().observe(getActivity(), this::consumeResponse);
-
         displayAdvertData();
 
-        sendAll.setOnClickListener(new View.OnClickListener() {
+        showAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (todayAdvertData.size()<=0){
-                    Toast.makeText(getActivity(),"There is no data to send.",Toast.LENGTH_LONG).show();
-                }else {
-                    progressDialog.show();
-                    String serial_number = Build.SERIAL;
-                    System.out.println("Serial: " + serial_number);
-                    tabletViewModel.show(serial_number).enqueue(new Callback<TabletResponse>() {
-                        @Override
-                        public void onResponse(Call<TabletResponse> call, Response<TabletResponse> response) {
-                            int card_id = response.body().getData().get(0).getCar_id();
-                            try {
-                                for (int i = 0; i < todayAdvertData.size(); i++) {
-                                    JSONObject jsonObject = new JSONObject();
-                                    jsonObject.put("car_id", card_id);
-                                    jsonObject.put("advert_id", todayAdvertData.get(i).getAdvertId());
-                                    jsonObject.put("advert_time", todayAdvertData.get(i).getAdvertTime());
-                                    jsonObject.put("number_of_viewers", todayAdvertData.get(i).getNumberOfViewers());
-                                    jsonObject.put("picture", todayAdvertData.get(i).getPicture());
-                                    mainJSON.put(jsonObject);
-                                }
-                                System.out.println("Object: " + mainJSON.toString());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
 
-                            AdvertViewSendObject advertViewSendObject = new AdvertViewSendObject();
-                            advertViewSendObject.setData(mainJSON.toString());
-                            retrofitViewModel.store(advertViewSendObject);
-                        }
-
-                        @Override
-                        public void onFailure(Call<TabletResponse> call, Throwable t) {
-
-                        }
-                    });
-                }
-
+                ShowAllAdvertsFragment fragment = new ShowAllAdvertsFragment(todayAdvertData);
+                MainDialog dialog = new MainDialog();
+                dialog.display(
+                        getFragmentManager(),
+                        "Today's advert",
+                        fragment
+                );
             }
         });
+
 
 
     }
@@ -163,61 +123,24 @@ public class TodaysAdvertFragment extends Fragment {
             for (int i = 0; i < advertViewsRooms.size(); i++) {
                 String advertTime = advertViewsRooms.get(i).getAdvertTime();
                 String advertDate = advertTime.substring(0, advertTime.lastIndexOf(" "));
-                if (currentDate.equals(advertDate) && !advertViewsRooms.get(i).isSend()) {
+                if (currentDate.equals(advertDate)) {
                     todayAdvertData.add(advertViewsRooms.get(i));
                 }
-                System.out.println("Status: "+advertViewsRooms.get(i).isSend());
+
             }
             totalAdvert.setText("" + todayAdvertData.size());
+            if (todayAdvertData.size()<=0){
+                mainLayout.setVisibility(View.GONE);
+                noAdvertLayout.setVisibility(View.VISIBLE);
+            }else {
+                mainLayout.setVisibility(View.VISIBLE);
+                noAdvertLayout.setVisibility(View.GONE);
+            }
         });
+
     }
 
 
-    private void consumeResponse(ApiResponse apiResponse) {
 
-        switch (apiResponse.status) {
 
-            case LOADING:
-                progressDialog.show();
-                break;
-
-            case SUCCESS:
-                progressDialog.dismiss();
-                updateAdvertView(todayAdvertData);
-                renderSuccessResponse(apiResponse.data);
-                break;
-
-            case ERROR:
-                progressDialog.dismiss();
-                Toast.makeText(getActivity(),"Error", Toast.LENGTH_SHORT).show();
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    /*
-     * method to handle success response
-     * */
-    private void renderSuccessResponse(SuccessResponse response) {
-        if(response.isStatus()){
-            totalAdvert.setText("0");
-        }
-    }
-
-    public void updateAdvertView(List<AdvertViewsRoom> advertViews){
-        totalAdvert.setText("0");
-        TabletAdsRoomDatabase db = TabletAdsRoomDatabase.getDatabase(getContext());
-        for (int i=0;i<advertViews.size();i++){
-            AdvertViewsRoom advertViewsRoom = new AdvertViewsRoom();
-            advertViewsRoom.setSend(true);
-            advertViewsRoom.setId(advertViews.get(i).getId());
-            advertViewsRoom.setAdvertId(advertViews.get(i).getAdvertId());
-            advertViewsRoom.setNumberOfViewers(advertViews.get(i).getNumberOfViewers());
-            advertViewsRoom.setPicture(advertViews.get(i).getPicture());
-            advertViewsRoom.setAdvertTime(advertViews.get(i).getAdvertTime());
-            viewsViewModel.store(advertViewsRoom);
-        }
-    }
 }

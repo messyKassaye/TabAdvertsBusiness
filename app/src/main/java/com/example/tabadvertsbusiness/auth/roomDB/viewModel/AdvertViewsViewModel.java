@@ -31,4 +31,12 @@ public class AdvertViewsViewModel extends AndroidViewModel {
     public void update(AdvertViewsRoom advertViewsRoom){
         repository.update(advertViewsRoom);
     }
+
+    public LiveData<List<AdvertViewsRoom>> showCompany(int id){
+        return  repository.showCompanyAdvert(id);
+    }
+
+    public LiveData<List<AdvertViewsRoom>> showUnsendAdvert(boolean status){
+        return  repository.showUnsendAdvert(status);
+    }
 }

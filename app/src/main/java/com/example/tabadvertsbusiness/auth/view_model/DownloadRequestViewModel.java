@@ -58,8 +58,8 @@ public class DownloadRequestViewModel extends AndroidViewModel {
 
     }
 
-    public Call<DownloadRequestResponse> show(String status){
-        return  tabletRepository.show(status);
+    public Call<DownloadRequestResponse> show(String device_id,String status){
+        return  tabletRepository.show(device_id,status);
     }
 
     public Call<SuccessResponse> update(DownloadRequests downloadRequests,int id){

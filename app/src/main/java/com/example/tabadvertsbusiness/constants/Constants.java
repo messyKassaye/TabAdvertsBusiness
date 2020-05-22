@@ -7,16 +7,22 @@ import android.view.Display;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tabadvertsbusiness.R;
+import com.example.tabadvertsbusiness.home.models.CallPhone;
+import com.example.tabadvertsbusiness.home.models.Contact;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Constants {
     //10.0.2.2:8000
+    //http://dev.tesfabunna.com
     private static final String TOKEN_PREFENCE = "token";
-    private static final String DOWNLOAD_PATH = "http://dev.tesfabunna.com/";
-    private static final String API_URL="http://dev.tesfabunna.com/api/";
-    private static final String API_AUTH_URL="http://dev.tesfabunna.com/api/auth/";
+    private static final String DOWNLOAD_PATH = "http://10.0.2.2:8000/";
+    private static final String API_URL="http://10.0.2.2:8000/api/";
+    private static final String API_AUTH_URL="http://10.0.2.2:8000/api/auth/";
     private static final String DATA_PATH = "advertData";
     private static final String DB_NAME = "TabletAdsDB";
     private static int realWidth,realHeight;
@@ -101,5 +107,22 @@ public class Constants {
 
     public static String getDownloadingPreference(){
         return "Downloads";
+    }
+
+    public static ArrayList<Contact> getContacts(){
+        ArrayList<Contact> contacts = new ArrayList<>();
+        contacts.add(new Contact(R.drawable.ic_add_black_24dp,"http://facebook.com","Facebook"));
+        contacts.add(new Contact(R.drawable.ic_arrow_back_black_24dp,"","Linkedin"));
+        contacts.add(new Contact(R.drawable.ic_directions_car_black_24dp,"tg://resolve?domain=ethiobraves","Telegram"));
+        contacts.add(new Contact(R.drawable.ic_arrow_back_black_24dp,"","WatsApp"));
+        return contacts;
+    }
+
+    public static  ArrayList<CallPhone> getPhones(){
+        ArrayList<CallPhone> phones = new ArrayList<>();
+        phones.add(new CallPhone("0923 64 45 45"));
+        phones.add(new CallPhone("0923 27 55 71"));
+
+        return phones;
     }
 }
