@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">Ride ads</string>
-    <string name="welcome">Welcome to Ride Ads</string>
-    <string name="start_working_now">Start working now and get more income.</string>
-    <string name="have_nice_time">Have a nice working time.</string>
+    <string name="welcome">Advert is a hub of all business</string>
+    <string name="start_working_now">Advertise your product on Ride ads.</string>
+    <string name="have_nice_time">Start adverting on your car now.</string>
+    <string name="slider_sub_info1">Let the world know what you have and what your company produce </string>
+    <string name="slider_sub_info2">Advertise your product using Ride ads platform on taxi and buses </string>
+    <string name="slider_sub_info3">Play advert video on your car and increase your daily income </string>
+
     <string name="start_advertising">Start adverting</string>
     <string name="start_updating">Download data</string>
     <string name="languages">Languages</string>

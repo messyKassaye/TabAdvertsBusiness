@@ -29,7 +29,7 @@ public class HomeFragment extends Fragment {
 
     private Timer timer;
     TextView welcome_and_wish;
-    Button startAdvert,startUpdating;
+    Button startAdvert,startUpdating,signUp;
 
     public HomeFragment(){
 
@@ -43,21 +43,9 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_main,container,false);
-        welcome_and_wish = view.findViewById(R.id.welcome_and_wish);
-        final int data[] = {R.string.welcome,R.string.start_working_now,R.string.have_nice_time};
-        welcome_and_wish.post(new Runnable() {
-            int i = 0;
-            @Override
-            public void run() {
-                welcome_and_wish.setText(data[i]);
-                i++;
-                if (i ==3)
-                    i = 0;
-                welcome_and_wish.postDelayed(this, 5000);
-            }
-        });
 
         startAdvert = view.findViewById(R.id.start_advertising);
+
         startAdvert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +60,15 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 HomeActivity home = (HomeActivity)getActivity();
                 home.showLogin();
+            }
+        });
+
+        signUp = view.findViewById(R.id.signUP);
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HomeActivity home = (HomeActivity)getActivity();
+                home.showSignUp();
             }
         });
 

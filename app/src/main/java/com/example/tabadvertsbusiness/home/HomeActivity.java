@@ -19,6 +19,7 @@ import com.example.tabadvertsbusiness.home.fragments.ContactUsFragment;
 import com.example.tabadvertsbusiness.home.fragments.HomeFragment;
 import com.example.tabadvertsbusiness.home.fragments.HowItWorksFragment;
 import com.example.tabadvertsbusiness.home.fragments.LoginFragment;
+import com.example.tabadvertsbusiness.home.fragments.SignupFragment;
 import com.example.tabadvertsbusiness.player.PlayerDashboard;
 
 public class HomeActivity extends AppCompatActivity {
@@ -31,7 +32,7 @@ public class HomeActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.my_toolbar);
         toolbar.setTitle("Ride ads");
-        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitleTextColor(Color.parseColor("#242424"));
         setSupportActionBar(toolbar);
 
         Fragment newFragment = new HomeFragment();
@@ -67,12 +68,6 @@ public class HomeActivity extends AppCompatActivity {
                 ft.addToBackStack(null);
                 ft.commit();
                 return true;
-            case R.id.about_us:
-                newFragment = new AboutUsFragment();
-                ft.replace(R.id.home_content_frame, newFragment);
-                ft.addToBackStack(null);
-                ft.commit();
-                return true;
             case R.id.contact_us:
                 newFragment = new ContactUsFragment();
                 ft.replace(R.id.home_content_frame, newFragment);
@@ -97,6 +92,14 @@ public class HomeActivity extends AppCompatActivity {
 
 public void showPlay(){
     Fragment newFragment = new PlayerDashboard();
+    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+    ft.replace(R.id.home_content_frame, newFragment);
+    ft.addToBackStack(null);
+    ft.commit();
+}
+
+public void showSignUp(){
+    Fragment newFragment = new SignupFragment();
     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
     ft.replace(R.id.home_content_frame, newFragment);
     ft.addToBackStack(null);

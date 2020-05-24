@@ -34,23 +34,22 @@ public class HowItWorksFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_how_it_works, container, false);
 
         webView = view.findViewById(R.id.howItWorksWebview);
-        webView.setBackgroundColor(Color.parseColor("#2B2B2B"));
         progressBar = view.findViewById(R.id.progressBar);
 
-        String message = "<div style='background-color:#2B2B2B'>" +
+        String message = "<div>" +
                 "<span style='font-size:1.1em;color:#1976d2'>How Ride ads work</span>"+
-                "<p style='color:white;text-align: justify;line-height:1.2em;'>Ride ads is an advertising company. "+
+                "<p style='color:#242424;text-align: justify;line-height:1.2em;'>Ride ads is an advertising company. "+
                 "We have prepared an advertising platform for companies and for transportation service owners like " +
                 "taxi or buses.</p>"+
-                "<p style='color:white;text-align: justify;line-height:1.2em;'>Our platform contains " +
+                "<p style='color:#242424;text-align: justify;line-height:1.2em;'>Our platform contains " +
                 "Web based and Tablet based applications to play different companies product on taxi and buses.</p>"+
-                "<p style='color:white;text-align: justify;line-height:1.2em;'>Companies upload their " +
+                "<p style='color:#242424;text-align: justify;line-height:1.2em;'>Companies upload their " +
                 "advertising video, audio and images into our server then drivers will download this " +
                 "video using the prepared tablet application and play it to their passengers. When drivers " +
                 "or car owners play companies advertising media they will be payed 60% of the media price.</P>"+
                 "<p></p>"+
-                "<p style='text-align: justify;color:white;'>Start advertising your product on our platform and make your company more productive.</P>"+
-                "<p style='text-align: justify;color:white;'>Start adverting on your car and increase your daily income</p>"+
+                "<p style='text-align: justify;color:#242424;'>Start advertising your product on our platform and make your company more productive.</P>"+
+                "<p style='text-align: justify;color:#242424;'>Start adverting on your car and increase your daily income</p>"+
                 "<p style='text-align: center;color:#FF8C00;'>Start adverting, start playing now</p>"+
                 "</div>";
         String html = "<html><head></head><body>"+message+"</body></html>";

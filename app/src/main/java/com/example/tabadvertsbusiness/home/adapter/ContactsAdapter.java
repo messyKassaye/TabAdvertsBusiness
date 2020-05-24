@@ -42,7 +42,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     public void onBindViewHolder(@NonNull ContactsAdapter.ViewHolder viewHolder, int i) {
         Contact contact = carsArraylist.get(i);
         viewHolder.name.setText(contact.getName());
-        viewHolder.icon.setImageResource(contact.getImage_id());
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,14 +60,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name;
-        private ImageView icon;
         private CardView cardView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             name = itemView.findViewById(R.id.social_media_name);
-            icon = itemView.findViewById(R.id.contact_icon);
             cardView = itemView.findViewById(R.id.contactsCard);
 
         }

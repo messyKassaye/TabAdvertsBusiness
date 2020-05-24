@@ -69,7 +69,7 @@ public class PlayerDashboard extends Fragment {
             if (advertRooms.size()<=0){
                 playerInfoLayout.setVisibility(View.VISIBLE);
                 headerText.setText("Advert data is not found in this tablet.");
-                infoText.setText("Please login and download or receive advert data then you can " +
+                infoText.setText("Login and download or receive advert data then you can " +
                         "start playing advert videos.");
             }else {
                 startPlayingAdvert(advertRooms);

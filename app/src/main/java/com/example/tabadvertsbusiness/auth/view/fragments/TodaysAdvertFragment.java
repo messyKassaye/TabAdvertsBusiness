@@ -1,15 +1,10 @@
 package com.example.tabadvertsbusiness.auth.view.fragments;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -18,37 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
-import com.example.tabadvertsbusiness.auth.commons.Helpers;
 import com.example.tabadvertsbusiness.auth.commons.MainDialog;
-import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
-import com.example.tabadvertsbusiness.auth.model.AdvertView;
-import com.example.tabadvertsbusiness.auth.model.AdvertViewSendObject;
-import com.example.tabadvertsbusiness.auth.repository.AdvertViewRepository;
-import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
-import com.example.tabadvertsbusiness.auth.response.TabletResponse;
-import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertViewsRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertViewsViewModel;
-import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
-import com.example.tabadvertsbusiness.auth.view_model.AdvertViewRetrofitViewModel;
-import com.example.tabadvertsbusiness.auth.view_model.TabletViewModel;
 import com.example.tabadvertsbusiness.constants.Constants;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class TodaysAdvertFragment extends Fragment {
 
@@ -101,7 +75,7 @@ public class TodaysAdvertFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                ShowAllAdvertsFragment fragment = new ShowAllAdvertsFragment(todayAdvertData);
+                ShowAllAdvertsTab fragment = new ShowAllAdvertsTab(todayAdvertData);
                 MainDialog dialog = new MainDialog();
                 dialog.display(
                         getFragmentManager(),

@@ -13,7 +13,7 @@
 
         <fragment
             android:id="@+id/address_fragment"
-            android:name="com.example.tabadvertsbusiness.auth.view.fragments.ShowAllAdvertsFragment"
+            android:name="com.example.tabadvertsbusiness.auth.view.fragments.ShowAllAdvertsTab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

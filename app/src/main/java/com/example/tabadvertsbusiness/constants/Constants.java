@@ -20,9 +20,9 @@ public class Constants {
     //10.0.2.2:8000
     //http://dev.tesfabunna.com
     private static final String TOKEN_PREFENCE = "token";
-    private static final String DOWNLOAD_PATH = "http://10.0.2.2:8000/";
-    private static final String API_URL="http://10.0.2.2:8000/api/";
-    private static final String API_AUTH_URL="http://10.0.2.2:8000/api/auth/";
+    private static final String DOWNLOAD_PATH = "http://dev.tesfabunna.com/";
+    private static final String API_URL="http://dev.tesfabunna.com/api/";
+    private static final String API_AUTH_URL="http://dev.tesfabunna.com/api/auth/";
     private static final String DATA_PATH = "advertData";
     private static final String DB_NAME = "TabletAdsDB";
     private static int realWidth,realHeight;
@@ -111,10 +111,10 @@ public class Constants {
 
     public static ArrayList<Contact> getContacts(){
         ArrayList<Contact> contacts = new ArrayList<>();
-        contacts.add(new Contact(R.drawable.ic_add_black_24dp,"http://facebook.com","Facebook"));
-        contacts.add(new Contact(R.drawable.ic_arrow_back_black_24dp,"","Linkedin"));
-        contacts.add(new Contact(R.drawable.ic_directions_car_black_24dp,"tg://resolve?domain=ethiobraves","Telegram"));
-        contacts.add(new Contact(R.drawable.ic_arrow_back_black_24dp,"","WatsApp"));
+        contacts.add(new Contact("http://facebook.com","Facebook"));
+        contacts.add(new Contact("https://www.linkedin.com/in/meseret-kassaye-013409123/","Linkedin"));
+        contacts.add(new Contact("tg://resolve?domain=ethiobraves","Telegram"));
+        contacts.add(new Contact("whatsapp://send?phone=+251923644545","WatsApp"));
         return contacts;
     }
 

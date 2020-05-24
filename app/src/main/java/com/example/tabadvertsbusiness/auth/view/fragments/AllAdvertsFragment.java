@@ -1,8 +1,6 @@
 package com.example.tabadvertsbusiness.auth.view.fragments;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,7 +22,6 @@ import com.example.tabadvertsbusiness.auth.commons.Helpers;
 import com.example.tabadvertsbusiness.auth.commons.MainDialog;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertViewsRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertViewsViewModel;
-import com.example.tabadvertsbusiness.constants.Constants;
 
 import java.util.ArrayList;
 
@@ -83,7 +80,7 @@ public class AllAdvertsFragment extends Fragment {
         showAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShowAllAdvertsFragment fragment = new ShowAllAdvertsFragment(todayAdvertData);
+                ShowAllAdvertsTab fragment = new ShowAllAdvertsTab(todayAdvertData);
                 MainDialog dialog = new MainDialog();
                 dialog.display(
                         getFragmentManager(),

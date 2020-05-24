@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/hiThere"
-        android:textColor="@android:color/white"
+        android:textColor="@color/textColor"
         android:layout_gravity="center"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -27,7 +27,7 @@
     <TextView
         android:id="@+id/entertainmentInfo"
         android:layout_gravity="center"
-        android:textColor="@android:color/white"
+        android:textColor="@color/textColor"
         android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
@@ -48,7 +48,7 @@
             android:layout_marginBottom="20dp"
             android:text="Add my files"
             android:textAllCaps="false"
-            android:textColor="@android:color/white"
+            android:textColor="@color/textColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

@@ -76,7 +76,6 @@ public class LoginFragment extends Fragment {
         checkLayout = view.findViewById(R.id.checkingLayout);
 
         email = view.findViewById(R.id.input_email);
-        email.requestFocus();
 
         password = view.findViewById(R.id.input_password);
         loginButton = view.findViewById(R.id.btn_login);
