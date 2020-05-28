@@ -198,8 +198,6 @@ public class LoginFragment extends Fragment {
                 getActivity().finish();
             }
         });
-
-
     }
 
     public void checkOwnerOfThisTablet(List<Tablet> tablets){

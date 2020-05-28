@@ -76,6 +76,10 @@ dependencies {
     // If you want to additionally use the CameraX Extensions library
     implementation "androidx.camera:camera-extensions:1.0.0-alpha10"
 
+    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
+
+
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 

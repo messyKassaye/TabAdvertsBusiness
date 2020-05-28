@@ -15,10 +15,12 @@ import android.widget.Toast;
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.view.fragments.CarFragment;
 import com.example.tabadvertsbusiness.home.fragments.AboutUsFragment;
+import com.example.tabadvertsbusiness.home.fragments.CheckTabletFragment;
 import com.example.tabadvertsbusiness.home.fragments.ContactUsFragment;
 import com.example.tabadvertsbusiness.home.fragments.HomeFragment;
 import com.example.tabadvertsbusiness.home.fragments.HowItWorksFragment;
 import com.example.tabadvertsbusiness.home.fragments.LoginFragment;
+import com.example.tabadvertsbusiness.home.fragments.PhonePasswordFrament;
 import com.example.tabadvertsbusiness.home.fragments.SignupFragment;
 import com.example.tabadvertsbusiness.player.PlayerDashboard;
 
@@ -90,19 +92,36 @@ public class HomeActivity extends AppCompatActivity {
         ft.commit();
     }
 
-public void showPlay(){
-    Fragment newFragment = new PlayerDashboard();
-    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-    ft.replace(R.id.home_content_frame, newFragment);
-    ft.addToBackStack(null);
-    ft.commit();
-}
 
-public void showSignUp(){
-    Fragment newFragment = new SignupFragment();
-    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-    ft.replace(R.id.home_content_frame, newFragment);
-    ft.addToBackStack(null);
-    ft.commit();
-}
+    public void showPlay(){
+        Fragment newFragment = new PlayerDashboard();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.home_content_frame, newFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void showSignUp(){
+        Fragment newFragment = new SignupFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.home_content_frame, newFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void showPhoneAndPassword(String email,String firstName,String lastName){
+        Fragment newFragment = new PhonePasswordFrament(email,firstName,lastName);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.home_content_frame, newFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void showCheckTablet(){
+        Fragment newFragment = new CheckTabletFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.home_content_frame, newFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
 }

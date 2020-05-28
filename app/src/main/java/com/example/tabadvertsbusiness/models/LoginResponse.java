@@ -17,6 +17,20 @@ public class LoginResponse {
     @Expose
     private String token;
 
+    @SerializedName("message")
+    @Expose
+    private String message;
+
+    public LoginResponse() {
+    }
+
+    public LoginResponse(boolean status, Role role, String token, String message) {
+        this.status = status;
+        this.role = role;
+        this.token = token;
+        this.message = message;
+    }
+
     public String getToken() {
         return token;
     }
@@ -39,5 +53,13 @@ public class LoginResponse {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

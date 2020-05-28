@@ -22,6 +22,8 @@
         android:name="android.hardware.camera.front.autofocus"
         android:required="false" />
 
+
+
     <application
         android:name=".auth.helpers.SuperApplication"
         android:allowBackup="true"
@@ -31,6 +33,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:usesCleartextTraffic="true">
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+
         <activity android:name=".player.vision.FaceDetector" />
         <activity android:name=".player.Player" />
         <activity android:name=".player.PlayerDashboard" />
