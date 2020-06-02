@@ -22,6 +22,8 @@ import com.example.tabadvertsbusiness.home.fragments.LoginFragment;
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
+import com.example.tabadvertsbusiness.player.vision.FaceDetector;
+
 import java.util.List;
 
 public class PlayerDashboard extends Fragment {
@@ -58,6 +60,8 @@ public class PlayerDashboard extends Fragment {
             public void onClick(View view) {
                 HomeActivity homeActivity = (HomeActivity)getActivity();
                 homeActivity.showLogin();
+               /* FaceDetector detector = new FaceDetector();
+                detector.start();*/
             }
         });
 

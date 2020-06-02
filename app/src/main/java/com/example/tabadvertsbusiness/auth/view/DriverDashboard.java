@@ -284,7 +284,7 @@ public class DriverDashboard extends AppCompatActivity
         ft.commit();
     }
     public void addNewCar(){
-        Fragment newFragment = new RegisterNewCar(this);
+        Fragment newFragment = new RegisterNewCar();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.content_frame, newFragment);
         ft.addToBackStack(null);

@@ -18,18 +18,25 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.adapter.CarsAdapter;
 import com.example.tabadvertsbusiness.auth.model.Car;
+import com.example.tabadvertsbusiness.auth.response.CarResponse;
 import com.example.tabadvertsbusiness.auth.view.DriverDashboard;
+import com.example.tabadvertsbusiness.auth.view_model.CarViewModel;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 
 import org.xmlpull.v1.sax2.Driver;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TabletNotAssignedToCarFragment extends Fragment {
 
@@ -44,6 +51,9 @@ public class TabletNotAssignedToCarFragment extends Fragment {
     private CarsAdapter carsAdapter;
     private RecyclerView recyclerView;
     private ArrayList<Car> carArrayList = new ArrayList<>();
+    private ProgressBar progressBar;
+    private LinearLayout mainLayout;
+    private CarViewModel carViewModel;
     public TabletNotAssignedToCarFragment() {
         // Required empty public constructor
     }
@@ -66,9 +76,35 @@ public class TabletNotAssignedToCarFragment extends Fragment {
         viewModel.me().observe(getActivity(),meResponse -> {
             if (meResponse!=null){
                 firstName = meResponse.getData().getAttribute().getFirst_name();
-                carList = meResponse.getData().getRelations().getCars();
             }
         });
+
+        progressBar = view.findViewById(R.id.tabletNotAssignedPr);
+        mainLayout = view.findViewById(R.id.tabletNotAssignedMainLayout);
+
+        carViewModel = ViewModelProviders.of(getActivity()).get(CarViewModel.class);
+        carViewModel.index().enqueue(new Callback<CarResponse>() {
+            @Override
+            public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
+                progressBar.setVisibility(View.GONE);
+                mainLayout.setVisibility(View.VISIBLE);
+                if (response!=null){
+                    carList = response.body().getData();
+                    showView(getView());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CarResponse> call, Throwable t) {
+
+            }
+        });
+
+        return view;
+    }
+
+
+    public void showView(View view){
 
         registerCarLayout = view.findViewById(R.id.registerCarLayout);
         registerCarInfo = view.findViewById(R.id.registerCarInfo);
@@ -138,9 +174,6 @@ public class TabletNotAssignedToCarFragment extends Fragment {
                 dashboard.showCarRegisterationFragment();
             }
         });
-
-        return view;
     }
-
 
 }

@@ -1,6 +1,7 @@
 package com.example.tabadvertsbusiness.constants;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -124,5 +125,17 @@ public class Constants {
         phones.add(new CallPhone("0923 27 55 71"));
 
         return phones;
+    }
+
+    public static void setImage(String image,Context context){
+        SharedPreferences preferences = context.getSharedPreferences("Images",0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("image",image);
+        editor.commit();
+    }
+
+    public static String getImage(Context context){
+        SharedPreferences preferences = context.getSharedPreferences("Images",0);
+       return preferences.getString("image","");
     }
 }

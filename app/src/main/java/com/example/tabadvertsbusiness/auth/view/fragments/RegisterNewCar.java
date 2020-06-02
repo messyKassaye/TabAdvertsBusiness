@@ -65,18 +65,16 @@ public class RegisterNewCar extends Fragment {
     private int carCategory = 0;
     private ProgressDialog progressDialog;
     private CarViewModel carViewModel;
-    private DriverDashboard driverDashboard;
     private String plateNumber;
 
     private ProgressBar progressBar;
     private LinearLayout mainLayout;
 
-    public RegisterNewCar(DriverDashboard dashboard) {
+    public RegisterNewCar() {
         // Required empty public constructor
-        driverDashboard = dashboard;
+
     }
 
-    public RegisterNewCar(){}
 
 
     @Override
@@ -228,7 +226,8 @@ public class RegisterNewCar extends Fragment {
 
     private void renderSuccessResponse(SuccessResponse response) {
         if(response.isStatus()){
-            driverDashboard.showRegisterCarWorkPlaceFragment(response.getCar());
+            DriverDashboard dashboard = (DriverDashboard)getContext();
+            dashboard.showRegisterCarWorkPlaceFragment(response.getCar());
         }
     }
 

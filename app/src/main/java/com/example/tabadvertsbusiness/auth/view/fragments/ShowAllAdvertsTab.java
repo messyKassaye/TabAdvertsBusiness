@@ -57,7 +57,7 @@ public class ShowAllAdvertsTab extends Fragment {
         advertRoomVIewModel.index().observe(getActivity(),advertRooms -> {
             progressBar.setVisibility(View.GONE);
             mainLayout.setVisibility(View.VISIBLE);
-            viewPageAdapter = new TabViewPagerAdapter(getFragmentManager(),advertRooms.size());
+            viewPageAdapter = new TabViewPagerAdapter(getFragmentManager());
             for (int i=0;i<advertRooms.size();i++){
                 viewPageAdapter.addFragment(new ShowAllAdvertsFragment(advertRooms.get(i).getId()),advertRooms.get(i).getProduct_name()+" ");
             }

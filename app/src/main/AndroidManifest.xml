@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.tabadvertsbusiness">
+    <meta-data
+        android:name="com.google.android.gms.vision.DEPENDENCIES"
+        android:value="face" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -22,8 +25,6 @@
         android:name="android.hardware.camera.front.autofocus"
         android:required="false" />
 
-
-
     <application
         android:name=".auth.helpers.SuperApplication"
         android:allowBackup="true"
@@ -33,24 +34,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity android:name=".player.PlayerController"></activity>
+        <activity android:name=".player.players.AdvertPlayer" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-
         <activity android:name=".player.vision.FaceDetector" />
-        <activity android:name=".player.Player" />
+        <activity android:name=".player.players.EntertainmentPlayer" />
         <activity android:name=".player.PlayerDashboard" />
         <activity android:name=".auth.view.DownloaderDashboard" />
         <activity
             android:name=".auth.view.DriverDashboard"
             android:label="@string/title_activity_driver_dashboard"
             android:theme="@style/NoActionBar" />
-
         <activity android:name=".home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

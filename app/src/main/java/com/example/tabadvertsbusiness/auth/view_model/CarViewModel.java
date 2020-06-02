@@ -10,6 +10,7 @@ import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.model.CarStore;
 import com.example.tabadvertsbusiness.auth.model.Tablet;
 import com.example.tabadvertsbusiness.auth.repository.CarRepository;
+import com.example.tabadvertsbusiness.auth.response.CarResponse;
 import com.example.tabadvertsbusiness.auth.response.TabletResponse;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
 
@@ -28,6 +29,10 @@ public class CarViewModel extends AndroidViewModel {
         super(application);
 
         carRepository = new CarRepository();
+    }
+
+    public Call<CarResponse> index(){
+        return carRepository.index();
     }
 
     public MutableLiveData<ApiResponse> storeResponse() {

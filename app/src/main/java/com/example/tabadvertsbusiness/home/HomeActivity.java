@@ -1,10 +1,14 @@
 package com.example.tabadvertsbusiness.home;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -27,6 +31,9 @@ import com.example.tabadvertsbusiness.player.PlayerDashboard;
 public class HomeActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
+    private int REQUEST_CODE_PERMISSIONS = 1001;
+    private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +49,12 @@ public class HomeActivity extends AppCompatActivity {
         ft.add(R.id.home_content_frame, newFragment);
         ft.addToBackStack(null);
         ft.commit();
+
+        if(allPermissionsGranted()){
+            return;
+        } else{
+            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
+        }
 
     }
 
@@ -123,5 +136,31 @@ public class HomeActivity extends AppCompatActivity {
         ft.replace(R.id.home_content_frame, newFragment);
         ft.addToBackStack(null);
         ft.commit();
+    }
+
+    private boolean allPermissionsGranted(){
+
+        for(String permission : REQUIRED_PERMISSIONS){
+            if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+        }
+        return true;
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if(requestCode == REQUEST_CODE_PERMISSIONS){
+            if(allPermissionsGranted()){
+                startApp();
+            } else{
+                ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
+
+            }
+        }
+    }
+
+    public void startApp(){
+
     }
 }

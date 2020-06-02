@@ -1,18 +1,26 @@
 package com.example.tabadvertsbusiness.auth.repository;
 
+
 import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.model.CarStore;
+import com.example.tabadvertsbusiness.auth.response.CarResponse;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
 import com.example.tabadvertsbusiness.auth.retrofit.RetrofitRequest;
 import com.example.tabadvertsbusiness.auth.retrofit.interfaces.CarInterface;
 
 import io.reactivex.Observable;
+import retrofit2.Call;
 
 public class CarRepository {
     private CarInterface carInterface;
 
+
     public CarRepository(){
         carInterface = RetrofitRequest.getApiInstance().create(CarInterface.class);
+    }
+
+    public Call<CarResponse> index(){
+        return carInterface.index();
     }
 
     public Observable<SuccessResponse> store(CarStore carStore){

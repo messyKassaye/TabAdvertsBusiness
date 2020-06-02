@@ -95,7 +95,7 @@
                     android:id="@+id/checkingInfo"
                     android:layout_gravity="center"
                     android:text="Checking device configuration. Please wait this will take small amount of time"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/textColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <ProgressBar

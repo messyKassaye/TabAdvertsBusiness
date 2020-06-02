@@ -1,12 +1,8 @@
 package com.example.tabadvertsbusiness.player.fragment;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -14,9 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.IntentCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,20 +21,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
-import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
-import com.example.tabadvertsbusiness.auth.roomDB.DAO.AdvertDAO;
 import com.example.tabadvertsbusiness.auth.roomDB.DAO.EntertainmentDAO;
 import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
-import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.EntertainmentRoom;
 import com.example.tabadvertsbusiness.constants.Constants;
-import com.example.tabadvertsbusiness.player.Player;
-import com.example.tabadvertsbusiness.player.model.Media;
+import com.example.tabadvertsbusiness.player.PlayerController;
 import com.obsez.android.lib.filechooser.ChooserDialog;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class EntertainmentFilesFragment extends Fragment {
@@ -142,7 +130,7 @@ public class EntertainmentFilesFragment extends Fragment {
                                 });
                         dialog.show();
                     }else {
-                        Intent intent = new Intent(getContext(), Player.class);
+                        Intent intent = new Intent(getContext(), PlayerController.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         ActivityCompat.finishAffinity(getActivity());
