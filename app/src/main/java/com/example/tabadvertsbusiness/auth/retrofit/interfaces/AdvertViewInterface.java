@@ -9,6 +9,6 @@ import retrofit2.http.POST;
 
 public interface AdvertViewInterface {
 
-    @POST("advert_view")
+    @POST("car_adverts")
     Observable<SuccessResponse> store(@Body AdvertViewSendObject advertView);
 }

@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.adapter.CarsAdapter;
@@ -88,7 +89,7 @@ public class TabletNotAssignedToCarFragment extends Fragment {
             public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
                 progressBar.setVisibility(View.GONE);
                 mainLayout.setVisibility(View.VISIBLE);
-                if (response!=null){
+                if (response.body().getData().size()>0){
                     carList = response.body().getData();
                     showView(getView());
                 }

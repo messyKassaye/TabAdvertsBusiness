@@ -2,63 +2,36 @@ package com.example.tabadvertsbusiness.player.players;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.core.Camera;
-import androidx.camera.core.CameraSelector;
-import androidx.camera.core.ImageAnalysis;
-import androidx.camera.core.ImageCapture;
-import androidx.camera.core.ImageCaptureException;
-import androidx.camera.core.Preview;
-import androidx.camera.extensions.HdrImageCaptureExtender;
-import androidx.camera.lifecycle.ProcessCameraProvider;
-import androidx.camera.view.PreviewView;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.home.HomeActivity;
-import com.example.tabadvertsbusiness.home.fragments.HomeFragment;
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
-import com.example.tabadvertsbusiness.auth.roomDB.DAO.AdvertDAO;
 import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
-import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
-import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertViewsRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.EntertainmentRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertViewsViewModel;
-import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.player.PlayerController;
-import com.google.common.util.concurrent.ListenableFuture;
+import com.example.tabadvertsbusiness.player.helpers.FaceDetectionStarter;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -76,6 +49,7 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
     private ImageButton playButton;
     private int i=0;
     private AdvertViewsViewModel vIewModel;
+    private Button closeMedia;
 
 
     public EntertainmentPlayer() {
@@ -90,7 +64,7 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       View view = inflater.inflate(R.layout.activity_player,container,false);
+       View view = inflater.inflate(R.layout.entertainment_player,container,false);
 
         //land scape
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -104,6 +78,7 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
         surfaceView = view.findViewById(R.id.playerSurfaceView);
         surfaceView.setZOrderOnTop(false);
 
+        closeMedia = view.findViewById(R.id.closeMedia);
         //media player controller
         playerController = view.findViewById(R.id.mediaController);
         closePlayer = view.findViewById(R.id.closePlayer);
@@ -144,6 +119,15 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
             }
         });
 
+        closeMedia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+                Intent intent = new Intent(getActivity(),HomeActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+
 
         return  view;
     }
@@ -179,6 +163,9 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
             player.setDataSource(path);
             player.prepare();
             player.start();
+            long faceDetectionTime = player.getDuration()-20000;
+            FaceDetectionStarter counter = new FaceDetectionStarter(faceDetectionTime,1000);
+            counter.start();
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
@@ -213,5 +200,27 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
     public void prepareAdvertDatas(){
         PlayerController controller = (PlayerController)getActivity();
         controller.preparedAdvertData();
+    }
+
+    public class CameraStarter extends CountDownTimer {
+
+        public CameraStarter(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            long elapsedhour = TimeUnit.MILLISECONDS.toHours(millisUntilFinished) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(millisUntilFinished));
+
+            long elapsedMinute = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished));
+
+            long elapsedSecond = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished));
+            String elapsedTime = "" + elapsedhour + ":" + elapsedMinute + ":" + elapsedSecond;
+        }
+
+        @Override
+        public void onFinish() {
+            System.out.println("FaceDetection started");
+        }
     }
 }

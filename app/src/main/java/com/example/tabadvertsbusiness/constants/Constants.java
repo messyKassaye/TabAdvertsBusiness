@@ -9,6 +9,7 @@ import android.view.Display;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tabadvertsbusiness.R;
+import com.example.tabadvertsbusiness.auth.helpers.SuperApplication;
 import com.example.tabadvertsbusiness.home.models.CallPhone;
 import com.example.tabadvertsbusiness.home.models.Contact;
 
@@ -20,7 +21,7 @@ import java.util.Calendar;
 public class Constants {
     //10.0.2.2:8000
     //http://dev.tesfabunna.com
-    private static final String TOKEN_PREFENCE = "token";
+    private static final String TOKEN_PREFENCE = "loggedUser";
     private static final String DOWNLOAD_PATH = "http://dev.tesfabunna.com/";
     private static final String API_URL="http://dev.tesfabunna.com/api/";
     private static final String API_AUTH_URL="http://dev.tesfabunna.com/api/auth/";
@@ -137,5 +138,36 @@ public class Constants {
     public static String getImage(Context context){
         SharedPreferences preferences = context.getSharedPreferences("Images",0);
        return preferences.getString("image","");
+    }
+
+    public static void setUserId(int userId,Context context){
+        SharedPreferences preferences = context.getSharedPreferences("userId",0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("id",userId);
+        editor.commit();
+    }
+
+    public static int getUserId(Context context){
+        SharedPreferences preferences = context.getSharedPreferences("userId",0);
+        return preferences.getInt("id",0);
+    }
+
+    public static void setCarId(int carId,Context context){
+        SharedPreferences preferences = context.getSharedPreferences("carId",0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("id",carId);
+        editor.commit();
+    }
+
+    public static int getCarId(Context context){
+        SharedPreferences preferences = context.getSharedPreferences("carId",0);
+        return preferences.getInt("id",0);
+    }
+
+    public static void clearToken(Context context){
+        SharedPreferences preferences = SuperApplication.getContext().getSharedPreferences(Constants.getTokenPrefence(),0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove("token");
+        editor.apply();
     }
 }

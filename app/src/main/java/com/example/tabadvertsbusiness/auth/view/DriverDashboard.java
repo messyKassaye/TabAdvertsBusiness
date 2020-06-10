@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.home.HomeActivity;
 import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.response.TabletResponse;
@@ -199,7 +200,9 @@ public class DriverDashboard extends AppCompatActivity
             fragment = new MyFilesFragment();
             toolbar.setTitle("My files");
         }else if (id==R.id.nav_logout){
+            Constants.clearToken(getApplicationContext());
             Intent intent = new Intent(this, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }else if (id==R.id.nav_my_cars){
             fragment = new CarFragment();
@@ -227,6 +230,7 @@ public class DriverDashboard extends AppCompatActivity
     public void setView(){
         viewModel.me().observe(this,meResponse->{
             if(meResponse!=null){
+                Constants.setUserId(meResponse.getData().getAttribute().getId(),getApplicationContext());
                 fullName.setText(meResponse.getData().getAttribute().getFirst_name()+" "
                 +meResponse.getData().getAttribute().getLast_name());
                 email.setText(meResponse.getData().getAttribute().getEmail());

@@ -26,9 +26,12 @@ import com.example.tabadvertsbusiness.auth.model.Car;
 import com.example.tabadvertsbusiness.auth.model.Tablet;
 import com.example.tabadvertsbusiness.auth.repository.TabletRepository;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
+import com.example.tabadvertsbusiness.auth.roomDB.entity.TabletAssignation;
+import com.example.tabadvertsbusiness.auth.roomDB.viewModel.TabletAssignViewModel;
 import com.example.tabadvertsbusiness.auth.services.PlaceService;
 import com.example.tabadvertsbusiness.auth.utils.ApiResponse;
 import com.example.tabadvertsbusiness.auth.view.DriverDashboard;
+import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
 import com.example.tabadvertsbusiness.auth.view_model.TabletViewModel;
 
 import java.util.ArrayList;
@@ -38,21 +41,24 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
 
     private Context context;
     ArrayList<Car> carsArraylist;
-    private TabletRepository tabletRepository;
     private ProgressDialog progressDialog;
     private TabletViewModel viewModel;
+    private TabletAssignViewModel tabletAssignViewModel;
+    private MeViewModel meViewModel;
 
     private CardView cardView;
     private MainDialog mainDialog;
     private PlaceService placeService;
+
     public CarsAdapter(Context context, ArrayList<Car> articleArrayList) {
         this.context = context;
         this.carsArraylist = articleArrayList;
-        this.tabletRepository = new TabletRepository();
         progressDialog = LoadingDialog.loadingDialog(context,"Assigning....");
 
         AppCompatActivity activity = (AppCompatActivity)context;
         viewModel = ViewModelProviders.of(activity).get(TabletViewModel.class);
+        tabletAssignViewModel = ViewModelProviders.of(activity).get(TabletAssignViewModel.class);
+        meViewModel = ViewModelProviders.of(activity).get(MeViewModel.class);
 
         viewModel.storeResponse().observe(activity, this::consumeResponse);
 

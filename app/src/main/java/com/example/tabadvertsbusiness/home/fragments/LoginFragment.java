@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tabadvertsbusiness.R;
+import com.example.tabadvertsbusiness.auth.helpers.SuperApplication;
 import com.example.tabadvertsbusiness.auth.model.Tablet;
 import com.example.tabadvertsbusiness.auth.response.TabletResponse;
 import com.example.tabadvertsbusiness.auth.view.DownloaderDashboard;
@@ -112,52 +113,52 @@ public class LoginFragment extends Fragment {
         Retrofit retrofit= MainHttpAdapter.getAuthApi();
         LoginService loginService = retrofit.create(LoginService.class);
 
-       Call<LoginResponse> call = loginService.login(email,password);
-            call.enqueue(new Callback<LoginResponse>() {
-                @Override
-                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                    if (response.code()==403){
+        Call<LoginResponse> call = loginService.login(email,password);
+        call.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (response.code()==403){
+                    progressDialog.dismiss();
+                    errorShower.setText("Incorrect email or password is used.");
+                }else if(response.code()==200){
+                    if(response.body().getRole().getId()!=2&&response.body().getRole().getId()!=4){
                         progressDialog.dismiss();
-                        errorShower.setText("Incorrect email or password is used.");
-                    }else if(response.code()==200){
-                        if(response.body().getRole().getId()!=2&&response.body().getRole().getId()!=4){
-                            progressDialog.dismiss();
-                            errorShower.setText("This application is created for car owners only. please use our web app for your purpose");
-                        }else {
-                            if(response.body().getRole().getId()==2){
-                                progressDialog.dismiss();
-                                setToken(response.body().getToken());
-                                showCheckLayout(getView());
-                            }else if (response.body().getRole().getId()==4){
-                                progressDialog.dismiss();
-                                setToken(response.body().getToken());
-                                Intent intent = new Intent(getContext(), DownloaderDashboard.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }
-                        }
-
+                        errorShower.setText("This application is created for car owners only. please use our web app for your purpose");
                     }else {
-                        progressDialog.dismiss();
-                        errorShower.setText("Something is not Good. This is not your mistake please get support from http://tabadvet.com/support");
+                        if(response.body().getRole().getId()==2){
+                            progressDialog.dismiss();
+                            setToken(response.body().getToken());
+                            showCheckLayout(getView());
+                        }else if (response.body().getRole().getId()==4){
+                            progressDialog.dismiss();
+                            setToken(response.body().getToken());
+                            Intent intent = new Intent(getContext(), DownloaderDashboard.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<LoginResponse> call, Throwable t) {
-                    if(t instanceof SocketTimeoutException){
-                        progressDialog.dismiss();
-                        errorShower.setText("It takes much time. Please check your connection");
-                    }
+                }else {
+                    progressDialog.dismiss();
+                    errorShower.setText("Something is not Good. This is not your mistake please get support from http://tabadvet.com/support");
                 }
-            });
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                if(t instanceof SocketTimeoutException){
+                    progressDialog.dismiss();
+                    errorShower.setText("It takes much time. Please check your connection");
+                }
+            }
+        });
 
 
 
     }
 
     public void setToken(String token){
-        SharedPreferences preferences = getContext().getSharedPreferences(Constants.getTokenPrefence(),0);
+        SharedPreferences preferences = SuperApplication.getContext().getSharedPreferences(Constants.getTokenPrefence(),0);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("token",token);
         editor.commit();
