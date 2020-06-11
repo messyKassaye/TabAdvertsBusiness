@@ -50,14 +50,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class BeforeStartingAdvertFindDataFragment extends Fragment {
     private Executor executor = Executors.newSingleThreadExecutor();

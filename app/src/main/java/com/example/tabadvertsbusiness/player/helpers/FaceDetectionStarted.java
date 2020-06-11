@@ -4,9 +4,9 @@ import android.os.CountDownTimer;
 
 import java.util.concurrent.TimeUnit;
 
-public class FaceDetectionStarter extends CountDownTimer {
+public class FaceDetectionStarted extends CountDownTimer {
 
-    public FaceDetectionStarter(long millisInFuture, long countDownInterval) {
+    public FaceDetectionStarted(long millisInFuture, long countDownInterval) {
         super(millisInFuture, countDownInterval);
     }
 
@@ -22,6 +22,6 @@ public class FaceDetectionStarter extends CountDownTimer {
 
     @Override
     public void onFinish() {
-        System.out.println("FaceDetection started");
+
     }
 }

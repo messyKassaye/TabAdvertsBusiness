@@ -2,15 +2,10 @@ package com.example.tabadvertsbusiness.player;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,11 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.tabadvertsbusiness.home.HomeActivity;
-import com.example.tabadvertsbusiness.home.fragments.LoginFragment;
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
-import com.example.tabadvertsbusiness.player.vision.FaceDetector;
 
 import java.util.List;
 
@@ -60,7 +53,7 @@ public class PlayerDashboard extends Fragment {
             public void onClick(View view) {
                 HomeActivity homeActivity = (HomeActivity)getActivity();
                 homeActivity.showLogin();
-               /* FaceDetector detector = new FaceDetector();
+               /* AppFaceDetector detector = new AppFaceDetector();
                 detector.start();*/
             }
         });

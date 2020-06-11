@@ -140,6 +140,18 @@ public class Constants {
        return preferences.getString("image","");
     }
 
+    public static void setFaces(int faces,Context context){
+        SharedPreferences preferences = context.getSharedPreferences("numberOfFaces",0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("faces",faces);
+        editor.commit();
+    }
+
+    public static int getFaces(Context context){
+        SharedPreferences preferences = context.getSharedPreferences("numberOfFaces",0);
+        return preferences.getInt("faces",0);
+    }
+
     public static void setUserId(int userId,Context context){
         SharedPreferences preferences = context.getSharedPreferences("userId",0);
         SharedPreferences.Editor editor = preferences.edit();
@@ -147,22 +159,7 @@ public class Constants {
         editor.commit();
     }
 
-    public static int getUserId(Context context){
-        SharedPreferences preferences = context.getSharedPreferences("userId",0);
-        return preferences.getInt("id",0);
-    }
 
-    public static void setCarId(int carId,Context context){
-        SharedPreferences preferences = context.getSharedPreferences("carId",0);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("id",carId);
-        editor.commit();
-    }
-
-    public static int getCarId(Context context){
-        SharedPreferences preferences = context.getSharedPreferences("carId",0);
-        return preferences.getInt("id",0);
-    }
 
     public static void clearToken(Context context){
         SharedPreferences preferences = SuperApplication.getContext().getSharedPreferences(Constants.getTokenPrefence(),0);

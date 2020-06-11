@@ -9,7 +9,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -26,12 +25,11 @@ import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.EntertainmentRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertViewsViewModel;
 import com.example.tabadvertsbusiness.player.PlayerController;
-import com.example.tabadvertsbusiness.player.helpers.FaceDetectionStarter;
+import com.example.tabadvertsbusiness.player.helpers.FaceDetectionStarted;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -163,9 +161,6 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
             player.setDataSource(path);
             player.prepare();
             player.start();
-            long faceDetectionTime = player.getDuration()-20000;
-            FaceDetectionStarter counter = new FaceDetectionStarter(faceDetectionTime,1000);
-            counter.start();
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
@@ -200,27 +195,5 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
     public void prepareAdvertDatas(){
         PlayerController controller = (PlayerController)getActivity();
         controller.preparedAdvertData();
-    }
-
-    public class CameraStarter extends CountDownTimer {
-
-        public CameraStarter(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-            long elapsedhour = TimeUnit.MILLISECONDS.toHours(millisUntilFinished) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(millisUntilFinished));
-
-            long elapsedMinute = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished));
-
-            long elapsedSecond = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished));
-            String elapsedTime = "" + elapsedhour + ":" + elapsedMinute + ":" + elapsedSecond;
-        }
-
-        @Override
-        public void onFinish() {
-            System.out.println("FaceDetection started");
-        }
     }
 }

@@ -31,6 +31,7 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/controllerLayout"
             android:layout_centerInParent="true"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
@@ -69,7 +70,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
-
     </RelativeLayout>
 
 </RelativeLayout>

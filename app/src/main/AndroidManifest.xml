@@ -46,7 +46,7 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-        <activity android:name=".player.vision.FaceDetector" />
+        <activity android:name=".player.vision.AppFaceDetector" />
         <activity android:name=".player.players.EntertainmentPlayer" />
         <activity android:name=".player.PlayerDashboard" />
         <activity android:name=".auth.view.DownloaderDashboard" />

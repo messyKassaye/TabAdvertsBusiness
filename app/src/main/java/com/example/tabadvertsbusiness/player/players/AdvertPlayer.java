@@ -22,6 +22,7 @@ import com.example.tabadvertsbusiness.auth.roomDB.entity.EntertainmentRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertViewsViewModel;
 import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.player.PlayerController;
+import com.example.tabadvertsbusiness.player.vision.AppFaceDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,9 @@ public class AdvertPlayer extends Fragment {
     public void playRecursively(String path,int advertId){
         try {
 
+            AppFaceDetector faceDetector=new AppFaceDetector(getContext());
+            faceDetector.startDetecting();
+
             player = new MediaPlayer();
             player.setDisplay(surfaceView.getHolder());
             player.setDataSource(path);
@@ -116,7 +120,7 @@ public class AdvertPlayer extends Fragment {
         String date = Constants.currentDate();
         AdvertViewsRoom advertViewsRoom = new AdvertViewsRoom();
         advertViewsRoom.setAdvertId(advertId);
-        advertViewsRoom.setNumberOfViewers(4);
+        advertViewsRoom.setNumberOfViewers(Constants.getFaces(getContext()));
         advertViewsRoom.setPicture(Constants.getImage(getContext()));
         advertViewsRoom.setAdvertTime(date);
         vIewModel.store(advertViewsRoom);
