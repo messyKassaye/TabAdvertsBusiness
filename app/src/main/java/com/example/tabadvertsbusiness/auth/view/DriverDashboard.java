@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.example.tabadvertsbusiness.auth.roomDB.viewModel.TabletAssignViewModel;
+import com.example.tabadvertsbusiness.auth.roomDB.viewModel.TabletAssignedCarWorkPlaceViewModel;
 import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.home.HomeActivity;
 import com.example.tabadvertsbusiness.auth.model.Car;
@@ -64,9 +66,11 @@ public class DriverDashboard extends AppCompatActivity
     private TabletViewModel tabletViewModel;
     private ProgressBar progressBar;
     private Response<TabletResponse> tabletResponseResponse;
-
     private CommonServices commonServices;
     private Toolbar toolbar;
+
+    private TabletAssignViewModel tabletAssignViewModel;
+    private TabletAssignedCarWorkPlaceViewModel tabletAssignedCarWorkPlaceViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -223,7 +227,8 @@ public class DriverDashboard extends AppCompatActivity
 
     public void initialize(){
         viewModel = ViewModelProviders.of(this).get(MeViewModel.class);
-
+        tabletAssignViewModel = ViewModelProviders.of(this).get(TabletAssignViewModel.class);
+        tabletAssignedCarWorkPlaceViewModel = ViewModelProviders.of(this).get(TabletAssignedCarWorkPlaceViewModel.class);
         tabletViewModel = ViewModelProviders.of(this).get(TabletViewModel.class);
     }
 
@@ -245,6 +250,7 @@ public class DriverDashboard extends AppCompatActivity
                     addNewCar();
                     progressBar.setVisibility(View.GONE);
                 }else {
+
                     tabletViewModel.show(serial_number).enqueue(new Callback<TabletResponse>() {
                         @Override
                         public void onResponse(Call<TabletResponse> call, Response<TabletResponse> response) {

@@ -1,5 +1,6 @@
 package com.example.tabadvertsbusiness.auth.retrofit.interfaces;
 
+import com.example.tabadvertsbusiness.auth.model.AdvertViewObject;
 import com.example.tabadvertsbusiness.auth.model.AdvertViewSendObject;
 import com.example.tabadvertsbusiness.auth.response.SuccessResponse;
 
@@ -11,4 +12,7 @@ public interface AdvertViewInterface {
 
     @POST("car_adverts")
     Observable<SuccessResponse> store(@Body AdvertViewSendObject advertView);
+
+    @POST("car_adverts")
+    Observable<SuccessResponse> storeView(@Body AdvertViewObject advertViewObject);
 }

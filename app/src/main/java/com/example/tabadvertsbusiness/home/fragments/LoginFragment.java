@@ -26,10 +26,13 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.auth0.android.jwt.JWT;
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.helpers.SuperApplication;
 import com.example.tabadvertsbusiness.auth.model.Tablet;
 import com.example.tabadvertsbusiness.auth.response.TabletResponse;
+import com.example.tabadvertsbusiness.auth.roomDB.entity.TabletAssignation;
+import com.example.tabadvertsbusiness.auth.roomDB.viewModel.TabletAssignViewModel;
 import com.example.tabadvertsbusiness.auth.view.DownloaderDashboard;
 import com.example.tabadvertsbusiness.auth.view.DriverDashboard;
 import com.example.tabadvertsbusiness.auth.view_model.MeViewModel;
@@ -60,6 +63,7 @@ public class LoginFragment extends Fragment {
     private Button exit;
     private TabletViewModel tabletViewModel;
     private MeViewModel meViewModel;
+    private TabletAssignViewModel tabletAssignViewModel;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,7 +132,7 @@ public class LoginFragment extends Fragment {
                         if(response.body().getRole().getId()==2){
                             progressDialog.dismiss();
                             setToken(response.body().getToken());
-                            showCheckLayout(getView());
+                            showCheckLayout(getView(),response.body().getToken());
                         }else if (response.body().getRole().getId()==4){
                             progressDialog.dismiss();
                             setToken(response.body().getToken());
@@ -164,7 +168,7 @@ public class LoginFragment extends Fragment {
         editor.commit();
     }
 
-    public void showCheckLayout(View view){
+    public void showCheckLayout(View view,String token){
         loginLayout.setVisibility(View.GONE);
         checkLayout.setVisibility(View.VISIBLE);
 
@@ -172,23 +176,19 @@ public class LoginFragment extends Fragment {
         textViewInfo = view.findViewById(R.id.checkingInfo);
         exit = view.findViewById(R.id.checkingExit);
 
+        tabletAssignViewModel = ViewModelProviders.of(this).get(TabletAssignViewModel.class);
         tabletViewModel = ViewModelProviders.of(this).get(TabletViewModel.class);
         meViewModel = ViewModelProviders.of(this).get(MeViewModel.class);
+
+
         String serail_number = Build.SERIAL;
-        tabletViewModel.show(serail_number).enqueue(new Callback<TabletResponse>() {
-            @Override
-            public void onResponse(Call<TabletResponse> call, Response<TabletResponse> response) {
-                if (response.body().getData().size()<=0){
-                    progressBar.setVisibility(View.GONE);
-                    showDriverDashboard();
-                }else {
-                    checkOwnerOfThisTablet(response.body().getData());
-                }
-            }
 
-            @Override
-            public void onFailure(Call<TabletResponse> call, Throwable t) {
-
+        //check if this tablet is assigned before and saved locally
+        tabletAssignViewModel.show(serail_number).observe(this,tabletAssignations -> {
+            if (tabletAssignations.size()>0){
+                checkOwnerOfThisTablet(tabletAssignations.get(0),token);
+            }else {
+                showDriverDashboard();
             }
         });
 
@@ -201,17 +201,19 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    public void checkOwnerOfThisTablet(List<Tablet> tablets){
-        meViewModel.me().observe(this,meResponse -> {
+    public void checkOwnerOfThisTablet(TabletAssignation assignation,String token){
+
+        JWT jwt = new JWT(token);
+        int userId = Integer.valueOf(jwt.getSubject());
+        if (userId==assignation.getUser_id()){
+            showDriverDashboard();
+        }else {
+            textViewInfo.setText("Sorry. This tablet is assigned for some one else not for you.");
+            textViewInfo.setTextColor(Color.RED);
             progressBar.setVisibility(View.GONE);
-            if (meResponse.getData().getAttribute().getId()==tablets.get(0).getUser_id()){
-                showDriverDashboard();
-            }else {
-                textViewInfo.setText("Sorry. This tablet is assigned for some one else not for you.");
-                exit.setVisibility(View.VISIBLE);
-                clearToken();
-            }
-        });
+            exit.setVisibility(View.VISIBLE);
+            clearToken();
+        }
 
         exit.setOnClickListener(new View.OnClickListener() {
             @Override

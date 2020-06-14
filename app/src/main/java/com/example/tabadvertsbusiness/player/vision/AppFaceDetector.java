@@ -120,7 +120,7 @@ public class AppFaceDetector {
         File file = new File (myDir, fname);
         try {
             FileOutputStream out = new FileOutputStream(file);
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 60, out);
             out.flush();
             out.close();
         } catch (Exception e) {

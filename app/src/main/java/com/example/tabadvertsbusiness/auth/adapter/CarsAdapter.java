@@ -50,6 +50,7 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
     private MainDialog mainDialog;
     private PlaceService placeService;
 
+
     public CarsAdapter(Context context, ArrayList<Car> articleArrayList) {
         this.context = context;
         this.carsArraylist = articleArrayList;
@@ -193,7 +194,11 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
      * */
     private void renderSuccessResponse(SuccessResponse response) {
         if(response.isStatus()){
-            Toast.makeText(context,response.getMessage(),Toast.LENGTH_LONG).show();
+            TabletAssignation assignation = new TabletAssignation();
+            assignation.setSerial_number(response.getTablet().getSerial_number());
+            assignation.setUser_id(response.getTablet().getUser_id());
+            assignation.setCar_id(response.getTablet().getCar_id());
+            tabletAssignViewModel.store(assignation);
             DriverDashboard dashboard = (DriverDashboard)context;
             dashboard.showHome();
         }else {

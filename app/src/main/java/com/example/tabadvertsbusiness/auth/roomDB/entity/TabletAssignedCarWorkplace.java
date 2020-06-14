@@ -6,26 +6,19 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-@Entity(tableName = "tablet_assignation")
-public class TabletAssignation {
+@Entity(tableName = "tablet_assigned_car_work_place")
+public class TabletAssignedCarWorkplace {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    @SerializedName("user_id")
-    @Expose
-    private int user_id;
-
     @SerializedName("serial_number")
+    @Expose
     private String serial_number;
 
-    @SerializedName("car_id")
-    private int car_id;
-
-
-    public int getUser_id() {
-        return user_id;
-    }
+    @SerializedName("place_id")
+    @Expose
+    private int place_id;
 
     public int getId() {
         return id;
@@ -33,10 +26,6 @@ public class TabletAssignation {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
     }
 
     public String getSerial_number() {
@@ -47,11 +36,11 @@ public class TabletAssignation {
         this.serial_number = serial_number;
     }
 
-    public int getCar_id() {
-        return car_id;
+    public int getPlace_id() {
+        return place_id;
     }
 
-    public void setCar_id(int car_id) {
-        this.car_id = car_id;
+    public void setPlace_id(int place_id) {
+        this.place_id = place_id;
     }
 }

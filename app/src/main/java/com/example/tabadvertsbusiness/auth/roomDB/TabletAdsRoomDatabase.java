@@ -11,20 +11,22 @@ import com.example.tabadvertsbusiness.auth.roomDB.DAO.AdvertViewDAO;
 import com.example.tabadvertsbusiness.auth.roomDB.DAO.DownloadDAO;
 import com.example.tabadvertsbusiness.auth.roomDB.DAO.EntertainmentDAO;
 import com.example.tabadvertsbusiness.auth.roomDB.DAO.TabletAssignDAO;
+import com.example.tabadvertsbusiness.auth.roomDB.DAO.TabletAssignedCarWorkPlaceDAO;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertViewsRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.Download;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.EntertainmentRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.TabletAssignation;
+import com.example.tabadvertsbusiness.auth.roomDB.entity.TabletAssignedCarWorkplace;
 import com.example.tabadvertsbusiness.constants.Constants;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-@Database(entities = {AdvertRoom.class, AdvertViewsRoom.class,
+@Database(entities = {AdvertRoom.class, AdvertViewsRoom.class, TabletAssignedCarWorkplace.class,
         Download.class, EntertainmentRoom.class, TabletAssignation.class},
-        version = 2,
+        version = 1,
         exportSchema = false)
 public abstract class TabletAdsRoomDatabase extends RoomDatabase {
     private static final int NUMBER_OF_THEARD = 4;
@@ -50,4 +52,6 @@ public abstract class TabletAdsRoomDatabase extends RoomDatabase {
 
    public abstract AdvertViewDAO getAdvertViewDAO();
    public abstract TabletAssignDAO getTabletAssignation();
+
+   public abstract TabletAssignedCarWorkPlaceDAO getTabletCarWorkPlaceDAO();
 }
