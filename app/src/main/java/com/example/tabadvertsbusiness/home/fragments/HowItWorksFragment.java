@@ -38,7 +38,7 @@ public class HowItWorksFragment extends Fragment {
 
         String message = "<div>" +
                 "<span style='font-size:1.1em;color:#1976d2'>How Ride ads work</span>"+
-                "<p style='color:#242424;text-align: justify;line-height:1.2em;'>Ride ads is an advertising company. "+
+                "<p style='color:#242424;text-align: justify;line-height:1.2em;'>Smart display is an advertising company. "+
                 "We have prepared an advertising platform for companies and for transportation service owners like " +
                 "taxi or buses.</p>"+
                 "<p style='color:#242424;text-align: justify;line-height:1.2em;'>Our platform contains " +

@@ -55,7 +55,7 @@ public class AllAdvertsAdapter extends RecyclerView.Adapter<AllAdvertsAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull AllAdvertsAdapter.ViewHolder viewHolder, int i) {
         AdvertViewsRoom adverts = carsArraylist.get(i);
-        viewHolder.advertTime.setText("Advert time: "+adverts.getAdvertTime());
+        viewHolder.advertTime.setText("Advert time: "+adverts.getAdvertDate()+" "+adverts.getAdvertTime());
 
     }
 

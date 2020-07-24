@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
 
 @Database(entities = {AdvertRoom.class, AdvertViewsRoom.class, TabletAssignedCarWorkplace.class,
         Download.class, EntertainmentRoom.class, TabletAssignation.class},
-        version = 1,
+        version = 15,
         exportSchema = false)
 public abstract class TabletAdsRoomDatabase extends RoomDatabase {
     private static final int NUMBER_OF_THEARD = 4;

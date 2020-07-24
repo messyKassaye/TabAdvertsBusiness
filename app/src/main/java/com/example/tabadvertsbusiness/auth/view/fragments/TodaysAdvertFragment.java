@@ -92,11 +92,9 @@ public class TodaysAdvertFragment extends Fragment {
     public void displayAdvertData() {
         viewsViewModel = ViewModelProviders.of(getActivity()).get(AdvertViewsViewModel.class);
         viewsViewModel.index().observe(getActivity(), advertViewsRooms -> {
-            String date = Constants.currentDate();
-            String currentDate = date.substring(0, date.lastIndexOf(" "));
+            String currentDate = Constants.currentDate();
             for (int i = 0; i < advertViewsRooms.size(); i++) {
-                String advertTime = advertViewsRooms.get(i).getAdvertTime();
-                String advertDate = advertTime.substring(0, advertTime.lastIndexOf(" "));
+                String advertDate = advertViewsRooms.get(i).getAdvertDate();
                 if (currentDate.equals(advertDate)) {
                     todayAdvertData.add(advertViewsRooms.get(i));
                 }

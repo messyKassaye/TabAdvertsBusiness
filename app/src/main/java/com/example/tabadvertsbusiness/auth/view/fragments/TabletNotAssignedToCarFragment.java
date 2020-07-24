@@ -119,15 +119,15 @@ public class TabletNotAssignedToCarFragment extends Fragment {
 
         webView = view.findViewById(R.id.infoWebView);
         String message = "<div style='display:flex;flex-direction:column'>" +
-                "<span style='font-size:1.1em;font-style:bold;color:#1976d2'>Hello "+firstName+" Welcome to Ride ads.</span> " +
-                "<p style='text-align: justify;'>Ride ads is a company which starts advertising different companies product on cars using tablet computers." +
+                "<span style='font-size:1.1em;font-style:bold;color:#1976d2'>Hello "+firstName+" Welcome to Smart display.</span> " +
+                "<p style='text-align: justify;'>Smart display is a company which starts advertising different companies product on cars using tablet computers." +
                 "We use 10 and above inch tablet computer  to play advert videos, audios and images of advertisers and also use all public transportation cars" +
                 ".</p>" +
                 "<p>Cars allowed to join our companies are Taxi and cross country bus</p>"+
                 "<span style='font-size:1.1em;font-style:bold;text-decoration:underline;color:#1976d2'>" +
                 "Taxi category includes</span>" +
                 "<div style='display:flex;flex-direction:column'>" +
-                "<span>Lada, Mini bus, Meter taxi and Bajajas</span>" +
+                "<span>Mini bus,  and Bajajas</span>" +
                 "</div>" +
                 "<span style='margin-top:20px;font-size:1.1em;font-style:bold;text-decoration:underline;color:#1976d2'>" +
                 "Bus category includes</span>"+

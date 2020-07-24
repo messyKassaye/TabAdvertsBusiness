@@ -42,4 +42,8 @@ public class AdvertViewRepository {
     public LiveData<List<AdvertViewsRoom>> showUnsendAdvert(boolean status){
         return  advertViewDAO.showUnsendAdvert(status);
     }
+
+    public LiveData<List<AdvertViewsRoom>> todayAdvert(String date, int advertId){
+        return advertViewDAO.todayAdvertView(date,advertId);
+    }
 }

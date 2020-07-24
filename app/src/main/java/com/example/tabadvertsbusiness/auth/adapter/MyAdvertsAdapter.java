@@ -52,7 +52,7 @@ public class MyAdvertsAdapter extends RecyclerView.Adapter<MyAdvertsAdapter.View
                 .substring(fileName.lastIndexOf(".")+1,fileName.length());
         viewHolder.mediaType.setText(Html.fromHtml("Media type: <span style='color:#1976d2'>"
                 +getMediaName(mediaName)+"</span>"));
-        viewsViewModel.showCompany(viewsRoom.getId()).observe((AppCompatActivity)context,advertViewsRooms -> {
+        viewsViewModel.showCompany(viewsRoom.getAdvertId()).observe((AppCompatActivity)context,advertViewsRooms -> {
             viewHolder.totalAdvert.setText(Html.fromHtml("Total adverts: <span style='color:#1976d2'>"+advertViewsRooms.size()+" play</span>"));
 
         });

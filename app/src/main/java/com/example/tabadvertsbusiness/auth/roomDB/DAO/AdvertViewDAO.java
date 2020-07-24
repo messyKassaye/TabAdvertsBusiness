@@ -34,4 +34,7 @@ public interface AdvertViewDAO {
     @Query("select * from advertViews where isSend=:status")
     public LiveData<List<AdvertViewsRoom>> showUnsendAdvert(boolean status);
 
+    @Query("select * from advertViews where id=:ids and advertDate=:date")
+    public LiveData<List<AdvertViewsRoom>> todayAdvertView(String date,int ids);
+
 }

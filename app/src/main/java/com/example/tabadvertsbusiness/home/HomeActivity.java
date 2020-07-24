@@ -40,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         toolbar = findViewById(R.id.my_toolbar);
-        toolbar.setTitle("Ride ads");
+        toolbar.setTitle("Smart display");
         toolbar.setTitleTextColor(Color.parseColor("#242424"));
         setSupportActionBar(toolbar);
 

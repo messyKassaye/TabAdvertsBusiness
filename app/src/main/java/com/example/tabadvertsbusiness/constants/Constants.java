@@ -91,7 +91,12 @@ public class Constants {
     }
 
     public static String currentDate(){
-        String date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+        String date = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+        return date;
+    }
+
+    public static String currentTime(){
+        String date = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
         return date;
     }
 

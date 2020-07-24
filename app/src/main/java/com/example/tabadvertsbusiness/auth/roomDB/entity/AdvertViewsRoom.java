@@ -11,6 +11,8 @@ public class AdvertViewsRoom {
 
     @ColumnInfo(name = "advertId")
     private int advertId;
+    @ColumnInfo(name = "advertDate")
+    private String advertDate;
 
     @ColumnInfo(name = "advertTime")
     private String advertTime;
@@ -34,6 +36,14 @@ public class AdvertViewsRoom {
 
     public int getAdvertId() {
         return advertId;
+    }
+
+    public String getAdvertDate() {
+        return advertDate;
+    }
+
+    public void setAdvertDate(String advertDate) {
+        this.advertDate = advertDate;
     }
 
     public void setAdvertId(int advertId) {

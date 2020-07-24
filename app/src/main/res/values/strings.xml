@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">Ride ads</string>
+    <string name="app_name">Smart display</string>
     <string name="facebook_app_id">584142919149168</string>
     <string name="fb_login_protocol_scheme">fb584142919149168</string>
 
     <string name="welcome">Advert is a hub of all business</string>
-    <string name="start_working_now">Advertise your product on Ride ads.</string>
+    <string name="start_working_now">Advertise your product on Smart display.</string>
     <string name="have_nice_time">Start adverting on your car now.</string>
     <string name="slider_sub_info1">Let the world know what you have and what your company produce </string>
-    <string name="slider_sub_info2">Ride ads is an advertising platform for both companies and taxis </string>
+    <string name="slider_sub_info2">Smart display is an advertising platform for both companies and taxis </string>
     <string name="slider_sub_info3">Play advert video on your taxi and increase your daily income </string>
 
     <string name="start_advertising">Start adverting</string>

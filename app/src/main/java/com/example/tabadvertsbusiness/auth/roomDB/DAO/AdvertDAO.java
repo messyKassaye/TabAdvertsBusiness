@@ -22,15 +22,7 @@ public interface AdvertDAO {
     @Insert
     public void store(AdvertRoom advertRoom);
 
-    @Query("select * from adverts where advertId=:ids")
-    public AdvertRoom show(int ids);
+    @Query("select * from adverts where id=:ids")
+    public LiveData<List<AdvertRoom>> show(int ids);
 
-
-    /*
-    public void update(int id);
-
-    public void show(int id);
-
-
-    public void delete(int id);*/
 }

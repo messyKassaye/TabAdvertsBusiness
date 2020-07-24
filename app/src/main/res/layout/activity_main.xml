@@ -1,72 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/background_color"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     tools:context=".home.fragments.HomeFragment">
 
-    <fragment
-        android:id="@+id/welcome_and_wish"
-        android:name="com.example.tabadvertsbusiness.home.fragments.SliderFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:background="@color/background_color"
         android:orientation="vertical"
-        android:layout_marginTop="50dp"
-        android:paddingRight="20dp"
-        android:paddingLeft="20dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/start_advertising"
-            android:text="@string/start_advertising"
-            android:paddingTop="5dp"
-            android:textSize="18dp"
-            android:elevation="0dp"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:background="@drawable/button_shape"
+        <fragment
+            android:id="@+id/welcome_and_wish"
+            android:name="com.example.tabadvertsbusiness.home.fragments.SliderFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="50dp"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp">
+
+            <Button
+                android:id="@+id/start_advertising"
+                android:text="@string/start_advertising"
+                android:paddingTop="5dp"
+                android:textSize="18dp"
+                android:elevation="0dp"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:background="@drawable/button_shape"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/start_updating"
+                android:text="Login"
+                android:paddingTop="5dp"
+                android:textSize="18dp"
+                android:elevation="0dp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_alignParentLeft="true"
+                android:background="@android:color/transparent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/signUP"
+                android:text="Sign up"
+                android:paddingTop="5dp"
+                android:textSize="18dp"
+                android:elevation="0dp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
     </LinearLayout>
 
-    <RelativeLayout
-        android:paddingRight="20dp"
-        android:paddingLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/start_updating"
-            android:text="Login"
-            android:paddingTop="5dp"
-            android:textSize="18dp"
-            android:elevation="0dp"
-            android:textAllCaps="false"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_alignParentLeft="true"
-            android:background="@android:color/transparent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/signUP"
-            android:text="Sign up"
-            android:paddingTop="5dp"
-            android:textSize="18dp"
-            android:elevation="0dp"
-            android:textAllCaps="false"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_alignParentRight="true"
-            android:background="@android:color/transparent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
-
-</LinearLayout>
+</ScrollView>

@@ -179,11 +179,12 @@ public class Unzipper extends AsyncTask<Void, Integer, Integer>{
 
                         TabletAdsRoomDatabase tabletAdsRoomDatabase= TabletAdsRoomDatabase.getDatabase(context);
                         AdvertDAO advertDAO = tabletAdsRoomDatabase.getAdvertDAO();
-
-                        AdvertRoom storedAdvert = advertDAO.show(advertRoom.getAdvertId());
-                        if(storedAdvert==null){
-                            advertDAO.store(advertRoom);
-                        }
+                        advertDAO.show(advertRoom.getId())
+                                .observe((AppCompatActivity)context,advertRooms -> {
+                                    if (advertRooms==null){
+                                        advertDAO.store(advertRoom);
+                                    }
+                                });
                     }
                 });
 

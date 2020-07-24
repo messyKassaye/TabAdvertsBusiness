@@ -39,4 +39,8 @@ public class AdvertViewsViewModel extends AndroidViewModel {
     public LiveData<List<AdvertViewsRoom>> showUnsendAdvert(boolean status){
         return  repository.showUnsendAdvert(status);
     }
+
+    public LiveData<List<AdvertViewsRoom>> todayAdvert(String date, int advertId){
+        return  repository.todayAdvert(date,advertId);
+    }
 }

@@ -29,7 +29,7 @@ public class AdvertRoomVIewModel extends AndroidViewModel {
     public void store(AdvertRoom advertRoom){
         repository.insert(advertRoom);
     }
-    public AdvertRoom show(int id){
+    public LiveData<List<AdvertRoom>> show(int id){
         return repository.show(id);
     }
 }

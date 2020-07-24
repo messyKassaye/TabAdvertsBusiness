@@ -92,7 +92,7 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ViewHolder> {
         viewHolder.carImage.setText(String.valueOf(car.getCar_category().get(0).getName().charAt(0)));
         viewHolder.plate_number.setText("Plate number: "+car.getPlate_number());
         viewHolder.carType.setText(car.getCar_category().get(0).getName());
-        viewHolder.totalAdvert.setText("Total adverts: "+car.getAdverts().size());
+        viewHolder.totalAdvert.setText("Total adverts: "+car.getAdverts());
         if(car.getWorking_place().size()>0){
             viewHolder.workingPlace.setText("Work place: "+car.getWorking_place().get(0).getCity());
         }else {

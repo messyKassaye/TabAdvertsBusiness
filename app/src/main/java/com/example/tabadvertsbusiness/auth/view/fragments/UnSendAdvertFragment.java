@@ -246,7 +246,7 @@ public class UnSendAdvertFragment extends Fragment {
                 @Override
                 public void run() {
                     progressLayout.setVisibility(View.GONE);
-                   // updateAdvertView(allAdverts);
+                    //updateAdvertView(allAdverts);
                 }
             }, 3000);
         }

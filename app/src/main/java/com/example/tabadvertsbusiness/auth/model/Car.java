@@ -6,7 +6,7 @@ public class Car {
     private int id;
     private String plate_number;
     private List<CarCategory> car_category;
-    private List<Advert> adverts;
+    private int  adverts;
     private List<Place> working_place;
     private List<Tablet> working_tablet;
     private int place_id;
@@ -46,11 +46,11 @@ public class Car {
         this.working_tablet = working_tablet;
     }
 
-    public List<Advert> getAdverts() {
+    public int getAdverts() {
         return adverts;
     }
 
-    public void setAdverts(List<Advert> adverts) {
+    public void setAdverts(int adverts) {
         this.adverts = adverts;
     }
 

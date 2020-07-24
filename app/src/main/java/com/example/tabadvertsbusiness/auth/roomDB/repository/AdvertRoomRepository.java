@@ -30,7 +30,8 @@ public class AdvertRoomRepository {
         });
     }
 
-    public AdvertRoom show(int id){
+    public LiveData<List<AdvertRoom>> show(int id){
        return advertDAO.show(id);
     }
+
 }

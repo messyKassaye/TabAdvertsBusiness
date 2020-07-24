@@ -19,6 +19,7 @@ import com.example.tabadvertsbusiness.auth.roomDB.TabletAdsRoomDatabase;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertViewsRoom;
 import com.example.tabadvertsbusiness.auth.roomDB.entity.EntertainmentRoom;
+import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertRoomVIewModel;
 import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertViewsViewModel;
 import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.player.PlayerController;
@@ -34,6 +35,7 @@ public class AdvertPlayer extends Fragment {
     private ArrayList<AdvertRoom> advertPlaylist = new ArrayList<>();
     private MediaPlayer player;
     private AdvertViewsViewModel vIewModel;
+    private AdvertRoomVIewModel advertRoomVIewModel;
     private SurfaceView surfaceView;
     public AdvertPlayer() {
     }
@@ -49,6 +51,7 @@ public class AdvertPlayer extends Fragment {
         View view = inflater.inflate(R.layout.activity_advert_player,container,false);
 
         vIewModel = ViewModelProviders.of(getActivity()).get(AdvertViewsViewModel.class);
+        advertRoomVIewModel = ViewModelProviders.of(getActivity()).get(AdvertRoomVIewModel.class);
 
         surfaceView = view.findViewById(R.id.advertPlayerSurfaceView);
         surfaceView.setZOrderOnTop(false);
@@ -70,12 +73,50 @@ public class AdvertPlayer extends Fragment {
     public void preparePlayList(List<AdvertRoom> adverts){
 
         advertPlaylist.addAll(adverts);
+        AdvertRoom advertRoom = advertPlaylist.get(getRandomNumber());//findAdvertIdRecursively(getRandomNumber());
+        advertRoomVIewModel.show(advertRoom.getId())
+                .observe(this,advertRooms -> {
+                    vIewModel.todayAdvert(Constants.currentDate(),advertRoom.getId())
+                            .observe(this,advertViewsRooms -> {
+                                if (advertViewsRooms.size()>=advertRooms.get(0).getMaximumViewPerDay()){
+                                    prepareAdvertData();
+                                }else {
+                                    playRecursively(advertRoom.getFilePath(),advertRoom.getAdvertId());
+                                }
+                            });
+                });
 
+    }
+
+    public void findAdvertIdRecursively(int randomNumber){
+        /*AdvertRoom advertRoom = advertPlaylist.get(randomNumber);
+        int perDayAdvert = advertRoomVIewModel.show(advertRoom.getId()).getMaximumViewPerDay();
+        int todaysAdvertView = vIewModel.todayAdvert(Constants.currentDate(),advertRoom.getId()).size();
+        if (todaysAdvertView>=perDayAdvert){
+          return  findAdvertIdRecursively(getRandomNumber());
+        }else {
+            return  advertRoom;
+        }*/
+        AdvertRoom advertRoom = advertPlaylist.get(randomNumber);
+        advertRoomVIewModel.show(advertRoom.getId())
+                .observe(this,advertRooms -> {
+                    vIewModel.todayAdvert(Constants.currentDate(),advertRoom.getId())
+                            .observe(this,advertViewsRooms -> {
+                                if (advertViewsRooms.size()>=advertRooms.get(0).getMaximumViewPerDay()){
+                                    System.out.println("AdvertView: "+advertViewsRooms.size());
+                                    System.out.println("Advert: "+advertRooms.size());
+                                }else {
+                                    System.out.println("AdvertView: "+advertViewsRooms.size());
+                                    System.out.println("Advert: "+advertRooms.size());
+                                }
+                            });
+                });
+
+    }
+
+    public int getRandomNumber(){
         Random random = new Random();
-        int randomNumber = random.nextInt(advertPlaylist.size());
-        playRecursively(advertPlaylist.get(randomNumber).getFilePath(),advertPlaylist.get(randomNumber).getAdvertId());
-
-
+        return  random.nextInt(advertPlaylist.size());
     }
 
     public void playRecursively(String path,int advertId){
@@ -118,12 +159,13 @@ public class AdvertPlayer extends Fragment {
 
     public void saveAdvertViewData(int advertId){
         String date = Constants.currentDate();
+        String advertTime = Constants.currentTime();
         AdvertViewsRoom advertViewsRoom = new AdvertViewsRoom();
         advertViewsRoom.setAdvertId(advertId);
+        advertViewsRoom.setAdvertDate(date);
         advertViewsRoom.setNumberOfViewers(Constants.getFaces(getContext()));
         advertViewsRoom.setPicture(Constants.getImage(getContext()));
-        advertViewsRoom.setAdvertTime(date);
+        advertViewsRoom.setAdvertTime(advertTime);
         vIewModel.store(advertViewsRoom);
     }
-
 }
