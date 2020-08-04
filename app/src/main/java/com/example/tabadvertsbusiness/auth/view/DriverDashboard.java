@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import com.example.tabadvertsbusiness.auth.roomDB.viewModel.TabletAssignViewModel;
 import com.example.tabadvertsbusiness.auth.roomDB.viewModel.TabletAssignedCarWorkPlaceViewModel;
+import com.example.tabadvertsbusiness.auth.view.fragments.HomeFragment;
 import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.home.HomeActivity;
 import com.example.tabadvertsbusiness.auth.model.Car;
@@ -192,7 +193,7 @@ public class DriverDashboard extends AppCompatActivity
         Fragment fragment = null;
         if (id == R.id.nav_home) {
             // Handle the camera action
-            fragment = new com.example.tabadvertsbusiness.auth.view.fragments.HomeFragment();
+            fragment = new HomeFragment();
             toolbar.setTitle("Driver dashboard");
         } else if(id==R.id.nav_adverts){
             fragment = new MyAdvertsFragment();

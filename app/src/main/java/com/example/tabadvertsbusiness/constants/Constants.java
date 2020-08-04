@@ -172,4 +172,18 @@ public class Constants {
         editor.remove("token");
         editor.apply();
     }
+
+    public static  void playedEntertainmentId(Context context,int id){
+        SharedPreferences preferences = context.getSharedPreferences("EntertainmentData",0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("EntertainmentId",id);
+        editor.commit();
+    }
+
+    public static  int getPlayedEntertainmentId(Context context){
+        SharedPreferences preferences = context.getSharedPreferences("EntertainmentData",0);
+       return   preferences.getInt("EntertainmentId",0);
+    }
+
+
 }

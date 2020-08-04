@@ -9,15 +9,19 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
 
+import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.home.HomeActivity;
 import com.example.tabadvertsbusiness.R;
 import com.example.tabadvertsbusiness.auth.dialogs.LoadingDialog;
@@ -33,7 +37,8 @@ import java.util.Random;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class EntertainmentPlayer extends Fragment implements View.OnTouchListener {
+public class EntertainmentPlayer extends Fragment implements View.OnTouchListener, SurfaceHolder.Callback, MediaPlayer.OnPreparedListener,
+        MediaController.MediaPlayerControl {
 
 
     private ProgressDialog progressDialog;
@@ -48,6 +53,11 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
     private int i=0;
     private AdvertViewsViewModel vIewModel;
     private Button closeMedia;
+
+    private MediaController mediaController;
+    private Handler handler = new Handler();
+    private SurfaceHolder surfaceHolder;
+
 
 
     public EntertainmentPlayer() {
@@ -78,44 +88,25 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
 
         closeMedia = view.findViewById(R.id.closeMedia);
         //media player controller
+        player = new MediaPlayer();
+        player.setOnPreparedListener(this::onPrepared);
+        mediaController = new MediaController(getActivity());
+        surfaceHolder = surfaceView.getHolder();
+        surfaceView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (mediaController!=null){
+                    mediaController.show();
+                }
+                return false;
+            }
+        });
+
+
         playerController = view.findViewById(R.id.mediaController);
         closePlayer = view.findViewById(R.id.closePlayer);
         hidePlayer = view.findViewById(R.id.hideController);
         playButton = view.findViewById(R.id.playButton);
-
-        closePlayer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(player.isPlaying()){
-                    player.release();
-                }
-
-                getActivity().finish();
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        hidePlayer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                playerController.setVisibility(View.GONE);
-            }
-        });
-
-
-        prepareEntertainmentFile();
-
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (player.isPlaying()){
-                    playerController.setVisibility(View.GONE);
-                }else {
-                    player.start();
-                }
-            }
-        });
 
         closeMedia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,13 +117,15 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
             }
         });
 
+        prepareEntertainmentFile();
+
 
         return  view;
     }
 
 
-    public void prepareEntertainmentFile(){
 
+    public void prepareEntertainmentFile(){
         TabletAdsRoomDatabase db = TabletAdsRoomDatabase.getDatabase(getApplicationContext());
         db.getEntertainmentDAO().index()
                 .observe(this,entertainmentRooms -> {
@@ -141,37 +134,39 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
 
     }
 
+
+
     public void preparePlayList(List<EntertainmentRoom> entertainment){
 
         progressDialog.dismiss();
         playList.addAll(entertainment);
-
-        Random random = new Random();
-        int randomNumber = random.nextInt(playList.size());
-        playRecursively(playList.get(randomNumber).getFilePath());
-
+        startPlaying(playList.get(0).getFilePath());
 
     }
 
-    public void playRecursively(String path){
+
+    public void startPlaying(String path) {
         try {
 
-            player = new MediaPlayer();
-            player.setDisplay(surfaceView.getHolder());
             player.setDataSource(path);
+            player.setDisplay(surfaceView.getHolder());
             player.prepare();
-            player.start();
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-
-                    prepareAdvertDatas();
+                @Override public void onCompletion(MediaPlayer mp) {
+                    player.reset();
+                    startPlaying(playList.get(getRandomPlayId()).getFilePath());
                 }
             });
+            player.start();
 
         }catch (Exception e){
 
         }
+    }
+
+    public int getRandomPlayId(){
+        Random random = new Random();
+        return random.nextInt(playList.size());
     }
 
 
@@ -188,12 +183,94 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        playerController.setVisibility(View.VISIBLE);
+        mediaController.show();
         return false;
     }
 
-    public void prepareAdvertDatas(){
-        PlayerController controller = (PlayerController)getActivity();
-        controller.preparedAdvertData();
+
+
+
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        player.start();
+        mediaController.setMediaPlayer(this);
+        mediaController.setAnchorView(surfaceView);
+        handler.post(new Runnable() {
+
+            public void run() {
+                mediaController.setEnabled(true);
+                mediaController.show();
+            }
+        });
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+
+    }
+
+    @Override
+    public void start() {
+        player.start();
+    }
+
+    @Override
+    public void pause() {
+        player.pause();
+    }
+
+    @Override
+    public int getDuration() {
+        return player.getDuration();
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        return player.getCurrentPosition();
+    }
+
+    @Override
+    public void seekTo(int i) {
+        player.seekTo(i);
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return player.isPlaying();
+    }
+
+    @Override
+    public int getBufferPercentage() {
+        return 0;
+    }
+
+    @Override
+    public boolean canPause() {
+        return true;
+    }
+
+    @Override
+    public boolean canSeekBackward() {
+        return true;
+    }
+
+    @Override
+    public boolean canSeekForward() {
+        return true;
+    }
+
+    @Override
+    public int getAudioSessionId() {
+        return player.getAudioSessionId();
     }
 }

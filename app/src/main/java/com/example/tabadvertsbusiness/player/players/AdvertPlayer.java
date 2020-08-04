@@ -25,6 +25,7 @@ import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.player.PlayerController;
 import com.example.tabadvertsbusiness.player.vision.AppFaceDetector;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -71,6 +72,8 @@ public class AdvertPlayer extends Fragment {
     }
 
     public void preparePlayList(List<AdvertRoom> adverts){
+        advertPlaylist.removeAll(advertPlaylist);
+
 
         advertPlaylist.addAll(adverts);
         AdvertRoom advertRoom = advertPlaylist.get(getRandomNumber());//findAdvertIdRecursively(getRandomNumber());
@@ -81,7 +84,13 @@ public class AdvertPlayer extends Fragment {
                                 if (advertViewsRooms.size()>=advertRooms.get(0).getMaximumViewPerDay()){
                                     prepareAdvertData();
                                 }else {
-                                    playRecursively(advertRoom.getFilePath(),advertRoom.getAdvertId());
+                                    File file = new File(advertRoom.getFilePath());
+                                    if (file.exists()){
+                                        playRecursively(advertRoom.getFilePath(),advertRoom.getAdvertId());
+                                    }else {
+                                        prepareAdvertData();
+                                    }
+
                                 }
                             });
                 });
