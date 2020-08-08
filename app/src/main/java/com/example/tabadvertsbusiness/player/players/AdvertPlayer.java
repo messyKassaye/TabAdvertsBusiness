@@ -3,7 +3,9 @@ package com.example.tabadvertsbusiness.player.players;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.media.MediaPlayer;
@@ -23,6 +25,7 @@ import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertRoomVIewModel;
 import com.example.tabadvertsbusiness.auth.roomDB.viewModel.AdvertViewsViewModel;
 import com.example.tabadvertsbusiness.constants.Constants;
 import com.example.tabadvertsbusiness.player.PlayerController;
+import com.example.tabadvertsbusiness.player.adverts.AdvertDialog;
 import com.example.tabadvertsbusiness.player.vision.AppFaceDetector;
 
 import java.io.File;
@@ -38,6 +41,7 @@ public class AdvertPlayer extends Fragment {
     private AdvertViewsViewModel vIewModel;
     private AdvertRoomVIewModel advertRoomVIewModel;
     private SurfaceView surfaceView;
+    private AdvertDialog advertDialog;
     public AdvertPlayer() {
     }
 
@@ -72,9 +76,6 @@ public class AdvertPlayer extends Fragment {
     }
 
     public void preparePlayList(List<AdvertRoom> adverts){
-        advertPlaylist.removeAll(advertPlaylist);
-
-
         advertPlaylist.addAll(adverts);
         AdvertRoom advertRoom = advertPlaylist.get(getRandomNumber());//findAdvertIdRecursively(getRandomNumber());
         advertRoomVIewModel.show(advertRoom.getId())
@@ -97,31 +98,6 @@ public class AdvertPlayer extends Fragment {
 
     }
 
-    public void findAdvertIdRecursively(int randomNumber){
-        /*AdvertRoom advertRoom = advertPlaylist.get(randomNumber);
-        int perDayAdvert = advertRoomVIewModel.show(advertRoom.getId()).getMaximumViewPerDay();
-        int todaysAdvertView = vIewModel.todayAdvert(Constants.currentDate(),advertRoom.getId()).size();
-        if (todaysAdvertView>=perDayAdvert){
-          return  findAdvertIdRecursively(getRandomNumber());
-        }else {
-            return  advertRoom;
-        }*/
-        AdvertRoom advertRoom = advertPlaylist.get(randomNumber);
-        advertRoomVIewModel.show(advertRoom.getId())
-                .observe(this,advertRooms -> {
-                    vIewModel.todayAdvert(Constants.currentDate(),advertRoom.getId())
-                            .observe(this,advertViewsRooms -> {
-                                if (advertViewsRooms.size()>=advertRooms.get(0).getMaximumViewPerDay()){
-                                    System.out.println("AdvertView: "+advertViewsRooms.size());
-                                    System.out.println("Advert: "+advertRooms.size());
-                                }else {
-                                    System.out.println("AdvertView: "+advertViewsRooms.size());
-                                    System.out.println("Advert: "+advertRooms.size());
-                                }
-                            });
-                });
-
-    }
 
     public int getRandomNumber(){
         Random random = new Random();
@@ -143,18 +119,17 @@ public class AdvertPlayer extends Fragment {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
                     saveAdvertViewData(advertId);
-
-                    //back to entertainment
-                    PlayerController controller = (PlayerController)getActivity();
-                    controller.showEntertainment();
-
                 }
             });
+
+            Constants.advertPlayTimer(getContext(),player.getDuration());
 
         }catch (Exception e){
 
         }
     }
+
+
 
     @Override
     public void onPause() {

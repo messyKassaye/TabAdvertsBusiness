@@ -186,4 +186,17 @@ public class Constants {
     }
 
 
+    public static  void advertPlayTimer(Context context,int id){
+        SharedPreferences preferences = context.getSharedPreferences("AdvertPlayTimerData",0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("AdvertPlayTimer",id);
+        editor.commit();
+    }
+
+    public static  int getAdvertPlayTimer(Context context){
+        SharedPreferences preferences = context.getSharedPreferences("AdvertPlayTimerData",0);
+        return   preferences.getInt("AdvertPlayTimer",0);
+    }
+
+
 }

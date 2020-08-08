@@ -133,7 +133,7 @@ public class BeforeStartingAdvertFindDataFragment extends Fragment {
         }
 
         final ImageCapture imageCapture = builder
-                .setTargetRotation(getActivity().getWindowManager().getDefaultDisplay().getRotation())
+                .setTargetRotation(preview.getTargetRotation())
                 .build();
 
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, preview, imageAnalysis, imageCapture);
@@ -182,7 +182,7 @@ public class BeforeStartingAdvertFindDataFragment extends Fragment {
       Constants.setImage(base64,getActivity());
 
         PlayerController controller = (PlayerController)getActivity();
-        controller.startAdvert();
+        //controller.startAdvert();
     }
 
     private boolean allPermissionsGranted(){

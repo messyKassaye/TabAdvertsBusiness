@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,6 +24,7 @@ public class PlayerController extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //create fullscreen activity
         setContentView(R.layout.activity_play_controller);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);//make screen open always
         showEntertainment();
     }
@@ -43,11 +45,5 @@ public class PlayerController extends AppCompatActivity {
         ft.commit();
     }
 
-    public void preparedAdvertData(){
-        Fragment newFragment = new BeforeStartingAdvertFindDataFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.player_content_frame, newFragment);
-        ft.addToBackStack(null);
-        ft.commit();
-    }
+
 }
