@@ -54,12 +54,6 @@
                 android:layout_height="40dp"/>
         </LinearLayout>
 
-        <androidx.camera.view.PreviewView
-            android:layout_alignParentLeft="true"
-            android:id="@+id/previewView"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            android:layout_marginBottom="8dp" />
     </RelativeLayout>
 
 </RelativeLayout>

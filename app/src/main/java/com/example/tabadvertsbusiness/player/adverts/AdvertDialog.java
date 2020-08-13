@@ -54,6 +54,7 @@ public class AdvertDialog extends DialogFragment {
     }
     public void display(FragmentManager fragmentManager, Fragment fragment) {
         this.fragment = fragment;
+
         this.show(fragmentManager,TAG);
     }
 

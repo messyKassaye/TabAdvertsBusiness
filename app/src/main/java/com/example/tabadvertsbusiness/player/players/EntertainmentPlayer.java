@@ -93,14 +93,8 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
     private RelativeLayout advertStartIndicator;
     private Button addCounterButton;
 
-    private Executor executor = Executors.newSingleThreadExecutor();
-    private int REQUEST_CODE_PERMISSIONS = 1001;
-    private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
-    private static final String IMAGE_NAME = "temp_image.jpg";
-
     private int advertStartingDelay = 0;
 
-    PreviewView mPreviewView;
 
 
     public EntertainmentPlayer() {
@@ -115,7 +109,7 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       View view = inflater.inflate(R.layout.entertainment_player,container,false);
+        View view = inflater.inflate(R.layout.entertainment_player,container,false);
 
         //land scape
         vIewModel = ViewModelProviders.of(this).get(AdvertViewsViewModel.class);
@@ -153,8 +147,6 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
         advertStartIndicator = view.findViewById(R.id.addStarterView);
         addCounterButton = view.findViewById(R.id.addCounterButton);
 
-        mPreviewView = view.findViewById(R.id.previewView);
-
 
 
 
@@ -173,6 +165,8 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
                     preparePlayList(entertainmentRooms);
                 });
 
+
+
     }
 
 
@@ -180,6 +174,8 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
     public void preparePlayList(List<EntertainmentRoom> entertainment){
         playList.addAll(entertainment);
         startPlaying(playList.get(getRandomPlayId()).getFilePath());
+        adverTimeCounter = new AdverTimeCounter(120000,1000);
+        adverTimeCounter.start();
 
 
     }
@@ -187,14 +183,6 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
 
     public void startPlaying(String path) {
 
-        adverTimeCounter = new AdverTimeCounter(20000,1000);
-        adverTimeCounter.start();
-
-        if(allPermissionsGranted()){
-            startCamera(); //start camera if permission has been granted by user
-        } else{
-            ActivityCompat.requestPermissions(getActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
-        }
 
         try {
             player.setDataSource(path);
@@ -233,7 +221,8 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
             long elapsedMinute = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished));
 
             long elapsedSecond = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished));
-            if (elapsedSecond<=15){
+            System.out.println("ELAPSED: "+elapsedSecond);
+            if (millisUntilFinished<=15000){
                 advertStartIndicator.setVisibility(View.VISIBLE);
                 addCounterButton.setText(""+elapsedSecond);
             }
@@ -251,6 +240,7 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
 
             AdvertDelayCounter advertCloseTimer =new AdvertDelayCounter(10000,1000);
             advertCloseTimer.start();
+            adverTimeCounter.cancel();
         }
     }
 
@@ -265,13 +255,13 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
         public void onTick(long millisUntilFinished) {
 
             long elapsedSecond = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished));
-            advertStartingDelay +=elapsedSecond;
+            advertStartingDelay +=millisUntilFinished;
             if (advertStartingDelay>0){
-                long delays = advertStartingDelay*1000;
                 AdvertCloseTimer advertCloseTimer= new AdvertCloseTimer(
-                                Constants.getAdvertPlayTimer(getContext())+delays,
-                                1000);
+                        Constants.getAdvertPlayTimer(getContext())+advertStartingDelay,
+                        1000);
                 advertCloseTimer.start();
+                advertStartingDelay = 0;
             }
         }
 
@@ -297,195 +287,12 @@ public class EntertainmentPlayer extends Fragment implements View.OnTouchListene
         public void onFinish() {
             advertDialog.closeDialog();
             player.start();
-            
-        }
-    }
-    private void startCamera() {
 
-        final ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(getActivity());
-
-        cameraProviderFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-
-                    ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                    bindPreview(cameraProvider);
-
-                } catch (ExecutionException | InterruptedException e) {
-                    // No errors need to be handled for this Future.
-                    // This should never be reached.
-                }
-            }
-        }, ContextCompat.getMainExecutor(getActivity()));
-    }
-
-    void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
-
-        Preview preview = new Preview.Builder()
-                .build();
-
-        CameraSelector cameraSelector = new CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
-                .build();
-
-        ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
-                .build();
-
-        ImageCapture.Builder builder = new ImageCapture.Builder();
-
-        //Vendor-Extensions (The CameraX extensions dependency in build.gradle)
-        HdrImageCaptureExtender hdrImageCaptureExtender = HdrImageCaptureExtender.create(builder);
-
-        // Query if extension is available (optional).
-        if (hdrImageCaptureExtender.isExtensionAvailable(cameraSelector)) {
-            // Enable the extension if available.
-            hdrImageCaptureExtender.enableExtension(cameraSelector);
-        }
-
-        final ImageCapture imageCapture = builder
-                .setTargetRotation(preview.getTargetRotation())
-                .build();
-
-        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, preview, imageAnalysis, imageCapture);
-
-        preview.setSurfaceProvider(mPreviewView.createSurfaceProvider(camera.getCameraInfo()));
-        File file = new File(getBatchDirectoryName(), IMAGE_NAME);
-
-        ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
-        imageCapture.takePicture(outputFileOptions, executor, new ImageCapture.OnImageSavedCallback () {
-            @Override
-            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        startAnalysisis(file.getAbsolutePath());
-                        CameraX.unbindAll();
-                        //
-                    }
-                });
-            }
-            @Override
-            public void onError(@NonNull ImageCaptureException error) {
-                error.printStackTrace();
-            }
-        });
-    }
-
-    public String getBatchDirectoryName() {
-
-        String app_folder_path = "";
-        app_folder_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/advertData";
-        File dir = new File(app_folder_path);
-        if (!dir.exists() && !dir.mkdirs()) {
+            //restart advert time counter
+            adverTimeCounter.cancel();
+            adverTimeCounter.start();
 
         }
-
-        return app_folder_path;
-    }
-
-    public void startAnalysisis(String path){
-        //startFaceDetection(path);
-        String decodedPath = decodeFile(path,640,480);
-        String base64 = getFileToByte(decodedPath);
-        Constants.setImage(base64,getActivity());
-
-        PlayerController controller = (PlayerController)getActivity();
-        //controller.startAdvert();
-    }
-
-    private boolean allPermissionsGranted(){
-
-        for(String permission : REQUIRED_PERMISSIONS){
-            if(ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED){
-                return false;
-            }
-        }
-        return true;
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        if(requestCode == REQUEST_CODE_PERMISSIONS){
-            if(allPermissionsGranted()){
-                startCamera();
-            } else{
-                Toast.makeText(getActivity(), "Permissions not granted by the user.", Toast.LENGTH_SHORT).show();
-                getActivity().finish();
-            }
-        }
-    }
-
-    public static String getFileToByte(String filePath){
-        Bitmap bmp = null;
-        ByteArrayOutputStream bos = null;
-        byte[] bt = null;
-        String encodeString = null;
-        try{
-            bmp = BitmapFactory.decodeFile(filePath);
-            bos = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-            bt = bos.toByteArray();
-            encodeString = Base64.encodeToString(bt, Base64.DEFAULT);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        return encodeString;
-    }
-
-    private String decodeFile(String path,int DESIREDWIDTH, int DESIREDHEIGHT) {
-        String strMyImagePath = null;
-        Bitmap scaledBitmap = null;
-
-        try {
-            // Part 1: Decode image
-            Bitmap unscaledBitmap = ScalingUtilities.decodeFile(path, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
-
-            if (!(unscaledBitmap.getWidth() <= DESIREDWIDTH && unscaledBitmap.getHeight() <= DESIREDHEIGHT)) {
-                // Part 2: Scale image
-                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
-            } else {
-                unscaledBitmap.recycle();
-                return path;
-            }
-
-            // Store to tmp file
-
-            String extr = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/advertData".toString();
-            File mFolder = new File(extr);
-            if (!mFolder.exists()) {
-                mFolder.mkdir();
-            }
-
-            File f = new File(mFolder.getAbsolutePath(), IMAGE_NAME);
-
-            strMyImagePath = f.getAbsolutePath();
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(f);
-                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, fos);
-                fos.flush();
-                fos.close();
-            } catch (FileNotFoundException e) {
-
-                e.printStackTrace();
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
-
-            scaledBitmap.recycle();
-        } catch (Throwable e) {
-        }
-
-        if (strMyImagePath == null) {
-            return path;
-        }
-        return strMyImagePath;
-
     }
 
     @Override

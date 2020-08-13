@@ -199,4 +199,16 @@ public class Constants {
     }
 
 
+    public static void advertFlipper(Context context,String flip){
+        SharedPreferences preferences = context.getSharedPreferences("AdvertFlip",0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Flip",flip);
+        editor.commit();
+    }
+
+    public static  String getAdvertFlipper(Context context){
+        SharedPreferences preferences = context.getSharedPreferences("AdvertFlip",0);
+        return   preferences.getString("Flip","");
+    }
+
 }
