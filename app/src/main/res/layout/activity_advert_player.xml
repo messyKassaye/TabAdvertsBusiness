@@ -12,6 +12,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <RelativeLayout
+        android:id="@+id/addStarterView"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_alignParentRight="true"
+            android:background="#99000000"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/adStartText"
+                android:textColor="@android:color/holo_orange_dark"
+                android:textSize="17sp"
+                android:text="Video will continue after"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/counterButton"
+                android:layout_marginLeft="5dp"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/holo_orange_dark"
+                android:textSize="17sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
     <androidx.camera.view.PreviewView
         android:layout_alignParentLeft="true"
         android:id="@+id/previewView"

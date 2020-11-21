@@ -26,12 +26,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.tabadvertsbusiness.R;
@@ -59,6 +61,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -74,7 +77,8 @@ public class AdvertPlayer extends Fragment {
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
     private static final String IMAGE_NAME = "temp_image.jpg";
     PreviewView mPreviewView;
-
+    private AdvertTimeElapsing timeElapsing;
+    private Button counterButton;
     public AdvertPlayer() {
     }
 
@@ -95,6 +99,7 @@ public class AdvertPlayer extends Fragment {
         surfaceView.setZOrderOnTop(false);
 
         mPreviewView = view.findViewById(R.id.previewView);
+        counterButton = view.findViewById(R.id.counterButton);
 
         if(allPermissionsGranted()){
             startCamera(); //start camera if permission has been granted by user
@@ -149,12 +154,15 @@ public class AdvertPlayer extends Fragment {
     public void playRecursively(String path,int advertId){
         try {
 
-
             player = new MediaPlayer();
             player.setDisplay(surfaceView.getHolder());
             player.setDataSource(path);
             player.prepare();
             player.start();
+
+            timeElapsing = new AdvertTimeElapsing(player.getDuration(),1000);
+            timeElapsing.start();
+
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
@@ -384,5 +392,28 @@ public class AdvertPlayer extends Fragment {
         advertViewsRoom.setPicture(Constants.getImage(getContext()));
         advertViewsRoom.setAdvertTime(advertTime);
         vIewModel.store(advertViewsRoom);
+    }
+
+
+    public class AdvertTimeElapsing extends CountDownTimer {
+
+        public AdvertTimeElapsing(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            long elapsedhour = TimeUnit.MILLISECONDS.toHours(millisUntilFinished) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(millisUntilFinished));
+
+            long elapsedMinute = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished));
+
+            long elapsedSecond = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished));
+            counterButton.setText(elapsedMinute+" : "+elapsedSecond);
+        }
+
+        @Override
+        public void onFinish() {
+
+        }
     }
 }

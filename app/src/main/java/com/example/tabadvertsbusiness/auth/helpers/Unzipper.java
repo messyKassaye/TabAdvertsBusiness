@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -173,18 +174,14 @@ public class Unzipper extends AsyncTask<Void, Integer, Integer>{
                 advertRoom.setPrivilege(advertJSON.getString("privilege"));
                 advertRoom.setFilePath(ROOT_LOCATION+"/"+advertJSON.getString("fileName"));
                 advertRoom.setMaximumViewPerDay(advertJSON.getInt("maximumViewPerDay"));
+
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
 
                         TabletAdsRoomDatabase tabletAdsRoomDatabase= TabletAdsRoomDatabase.getDatabase(context);
                         AdvertDAO advertDAO = tabletAdsRoomDatabase.getAdvertDAO();
-                        advertDAO.show(advertRoom.getId())
-                                .observe((AppCompatActivity)context,advertRooms -> {
-                                    if (advertRooms==null){
-                                        advertDAO.store(advertRoom);
-                                    }
-                                });
+                        advertDAO.store(advertRoom);
                     }
                 });
 

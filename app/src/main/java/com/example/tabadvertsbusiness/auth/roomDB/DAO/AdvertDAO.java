@@ -3,6 +3,7 @@ package com.example.tabadvertsbusiness.auth.roomDB.DAO;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.tabadvertsbusiness.auth.roomDB.entity.AdvertRoom;
@@ -19,7 +20,7 @@ public interface AdvertDAO {
 
 
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void store(AdvertRoom advertRoom);
 
     @Query("select * from adverts where id=:ids")
